@@ -6,20 +6,31 @@ import {
   FormError,
   FormSubmit,
 } from '@ariakit/react';
+import { useNavigate } from 'react-router-dom';
 import './Login.css';
+import useLogin from '@/hooks/useLogin';
 
-function App() {
+function Login() {
   const form = useFormStore({ defaultValues: { email: '', password: '' } });
+  const navigate = useNavigate();
+  const loginUser = useLogin();
 
   form.useSubmit(async (state) => {
     alert(JSON.stringify(state.values));
+
+    const success = await loginUser(state.values);
+
+    if (success) {
+      alert('login successful');
+      navigate('/');
+    } else alert('login failed');
   });
 
   return (
     <div className="wrapper">
       <Form store={form} aria-labelledby="register" className="form">
         <h2 id="register" className="heading">
-          Registrati
+          Accedi
         </h2>
         <div className="field">
           <FormLabel name={form.names.email} className="label">
@@ -48,10 +59,10 @@ function App() {
 
           <FormError name={form.names.password} className="error" />
         </div>
-        <FormSubmit className="button">Registrati</FormSubmit>
+        <FormSubmit className="button">Accedi</FormSubmit>
       </Form>
     </div>
   );
 }
 
-export default App;
+export default Login;
