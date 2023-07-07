@@ -1,18 +1,7 @@
 import useLogin from '@/hooks/useLogin';
+import { user_t } from '@/globals/types';
 
 const API_URL = import.meta.env.VITE_API_URL;
-
-export type user_t = {
-  id: string;
-  email: string;
-  username: string;
-  firstname: string;
-  lastname: string;
-  password: string;
-  type: 'standard' | 'professional' | 'moderator';
-  verified: false;
-  SMM: string | null;
-};
 
 export default function useRegister() {
   const loginUser = useLogin();

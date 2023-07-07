@@ -16,10 +16,11 @@ module.exports = {
   settings: {
     'import/resolver': {
       alias: {
-        extensions: ['.jsx', '.tsx', '.scss', '.d.ts'],
+        extensions: ['.jsx', '.tsx', ".ts", '.scss', '.d.ts'],
         map: [
           ['@/components', './src/components'],
           ['@/hooks', './src/hooks'],
+          ['@/types', './src/types'],
         ],
       },
     },

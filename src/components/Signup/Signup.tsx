@@ -7,7 +7,8 @@ import {
   FormSubmit,
 } from '@ariakit/react';
 import { useNavigate } from 'react-router-dom';
-import useRegister, { user_t } from '@/hooks/useRegister';
+import useRegister from '@/hooks/useRegister';
+import { user_t } from '@/globals/types';
 
 function Signup() {
   const form = useFormStore({
