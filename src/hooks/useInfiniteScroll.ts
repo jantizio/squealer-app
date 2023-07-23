@@ -1,12 +1,12 @@
 import { useRef } from 'react';
 import { useInfiniteQuery } from '@tanstack/react-query';
-import { post_t } from '@/globals/types';
+// import { post_t } from '@/globals/types';
 
-type options = {
-  fetchPage: (page: number) => Promise<post_t[]>;
+type options<T> = {
+  fetchPage: (page: number) => Promise<T[]>;
 };
 
-export default function ({ fetchPage }: options) {
+export default function useInfinteScroll<T>({ fetchPage }: options<T>) {
   const {
     fetchNextPage,
     hasNextPage,
@@ -24,7 +24,7 @@ export default function ({ fetchPage }: options) {
     }
   );
 
-  const intObserver = useRef<IntersectionObserver>();
+  const intObserver = useRef<IntersectionObserver | null>(null);
   const lastPostRef = (post: HTMLDivElement) => {
     if (isFetchingNextPage) return;
 
@@ -32,7 +32,7 @@ export default function ({ fetchPage }: options) {
 
     intObserver.current = new IntersectionObserver(
       (posts: IntersectionObserverEntry[]) => {
-        if (posts[0].isIntersecting && hasNextPage) {
+        if (posts[0]?.isIntersecting && hasNextPage) {
           console.log("vicini all'ultimo post");
           fetchNextPage();
         }

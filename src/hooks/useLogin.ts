@@ -1,29 +1,49 @@
 import { useSignIn } from 'react-auth-kit';
-
-const API_URL = import.meta.env.VITE_API_URL;
+import axios, { AxiosError } from 'axios';
+import { useMutation } from '@tanstack/react-query';
+import { useNavigate } from 'react-router-dom';
 
 type creds_t = {
-  email: string;
+  username: string;
   password: string;
+};
+
+type response_t = {
+  token: string;
+  expiresIn: number;
 };
 
 export default function useLogin() {
   const signIn = useSignIn();
+  const navigate = useNavigate();
+  const login = useMutation<response_t, AxiosError, creds_t>({
+    mutationKey: ['login'],
+    mutationFn: async (credentials) => {
+      const loginApi: string = `${import.meta.env.VITE_API_URL}/token`;
 
-  return async (credentials: creds_t) => {
-    const res = await fetch(`${API_URL}/login`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(credentials),
-    }).then((data) => data.json());
+      const { data } = await axios.post(loginApi, credentials);
+      return data;
+    },
+    onSuccess(data, variables) {
+      // questo viene chiamato per gli status code 2xx
+      console.log('SUCCESS!');
+      console.log('data:', data);
 
-    return signIn({
-      token: res.data.token,
-      expiresIn: res.data.expiresIn,
-      tokenType: 'Bearer',
-      authState: { id: res.data.userId, email: credentials.email },
-    });
-  };
+      // eseguo il login dell'utente
+      signIn({
+        token: data.token,
+        expiresIn: data.expiresIn,
+        tokenType: 'Bearer',
+        authState: { username: variables.username },
+      });
+      navigate('/');
+    },
+    onError(error) {
+      if (error.response?.status === 401) {
+        console.log('credenziali errate');
+      }
+    },
+  });
+
+  return login.mutate;
 }

@@ -1,12 +1,12 @@
 type post_t = {
   id: number;
   title: string;
-  userId: number;
+  username: string;
   body: string;
 };
 
 type user_t = {
-  id: string;
+  // id: string;
   email: string;
   username: string;
   firstname: string;

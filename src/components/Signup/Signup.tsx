@@ -6,9 +6,11 @@ import {
   FormError,
   FormSubmit,
 } from '@ariakit/react';
-import { useNavigate } from 'react-router-dom';
 import useRegister from '@/hooks/useRegister';
 import { user_t } from '@/globals/types';
+
+// TODO: se vuoi migliorare la validazione del form, puoi usare zod (https://github.com/ariakit/ariakit/discussions/1925)
+// quella built-in è buona, però non ha un messaggio di errore personalizzato
 
 function Signup() {
   const form = useFormStore({
@@ -20,27 +22,18 @@ function Signup() {
       password: '',
     },
   });
-  const navigate = useNavigate();
   const registerUser = useRegister();
 
   form.useSubmit(async (state) => {
     const newUser: user_t = {
-      id: '0', // TODO
       type: 'standard',
       verified: false,
       SMM: null,
       ...state.values,
     };
 
-    alert(JSON.stringify(newUser));
-    const success = await registerUser(newUser);
-
-    if (success) {
-      alert('registration successful');
-      navigate('/');
-    } else {
-      alert('registration failed');
-    }
+    console.log('data', JSON.stringify(newUser));
+    registerUser(newUser);
   });
 
   return (
@@ -57,6 +50,9 @@ function Signup() {
             name={form.names.email}
             placeholder="Inserisci la tua email..."
             className="input"
+            minLength={3}
+            maxLength={20}
+            type="email"
             required
           />
 
@@ -70,6 +66,9 @@ function Signup() {
             name={form.names.username}
             placeholder="Inserisci il tuo username..."
             className="input"
+            minLength={3}
+            maxLength={20}
+            type="text"
             required
           />
 
@@ -83,6 +82,9 @@ function Signup() {
             name={form.names.firstname}
             placeholder="Inserisci il tuo nome..."
             className="input"
+            minLength={3}
+            maxLength={20}
+            type="text"
             required
           />
 
@@ -96,6 +98,9 @@ function Signup() {
             name={form.names.lastname}
             placeholder="Inserisci il tuo cognome..."
             className="input"
+            minLength={3}
+            maxLength={20}
+            type="text"
             required
           />
 
@@ -107,9 +112,12 @@ function Signup() {
           </FormLabel>
           <FormInput
             name={form.names.password}
-            type="password"
             placeholder="Inserisci la tua password..."
             className="input"
+            minLength={8}
+            maxLength={40}
+            type="password"
+            pattern="^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$ %^&*-]).{8,}$"
             required
           />
 
