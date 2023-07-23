@@ -9,18 +9,18 @@ type messageProps = {
 
 const Message = forwardRef<HTMLDivElement, messageProps>(
   ({ children }, ref) => {
-    const { title, body, userId } = children;
+    const { title, body, username } = children;
 
     return (
       <article
         className={
           'prose dark:prose-invert p-5 my-6 w-11/12 mx-auto border border-solid rounded border-neutral-500 shadow-md shadow-neutral-900 hover:shadow-xl'
         }
-        ref={ref ? ref : undefined}
+        ref={ref}
       >
         <HeadingLevel>
           <Heading>
-            {title} - [{userId}]
+            {title} - [{username}]
           </Heading>
           <p>{body}</p>
         </HeadingLevel>

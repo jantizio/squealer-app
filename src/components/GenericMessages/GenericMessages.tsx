@@ -5,11 +5,25 @@ import useInfiniteScroll from '@/hooks/useInfiniteScroll';
 import axios from 'axios';
 
 const fetchPostPage = async (page: number) => {
-  const postArray: post_t[] = await axios
+  type postResp = Omit<post_t, 'username'> & { userId: number };
+
+  const postArray: postResp[] = await axios
     .get(`https://jsonplaceholder.typicode.com/posts?_page=${page}`)
     .then((response) => response.data);
 
-  return postArray;
+  const outArray: post_t[] = [];
+
+  for (const post of postArray) {
+    let { username } = await axios
+      .get(`https://jsonplaceholder.typicode.com/users/${post.userId}`)
+      .then((response) => response.data);
+
+    const { userId: _, ...result } = post;
+    outArray.push({ username, ...result });
+  }
+
+  return outArray;
+  //        ^?
 };
 
 const GenericMessages = () => {
@@ -17,7 +31,6 @@ const GenericMessages = () => {
     useInfiniteScroll({ fetchPage: fetchPostPage });
 
   const posts = data?.pages.flat();
-
   const content = posts?.map((post, i) => {
     const isLast = posts.length - 1 === i;
     return (
