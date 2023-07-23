@@ -6,58 +6,53 @@ import {
   FormError,
   FormSubmit,
 } from '@ariakit/react';
-import { useNavigate } from 'react-router-dom';
 import './Login.css';
 import useLogin from '@/hooks/useLogin';
 
 function Login() {
-  const form = useFormStore({ defaultValues: { email: '', password: '' } });
-  const navigate = useNavigate();
+  const loginForm = useFormStore({
+    defaultValues: { username: '', password: '' },
+  });
   const loginUser = useLogin();
 
-  form.useSubmit(async (state) => {
-    alert(JSON.stringify(state.values));
+  loginForm.useSubmit(async (state) => {
+    console.log('data', JSON.stringify(state.values));
 
-    const success = await loginUser(state.values);
-
-    if (success) {
-      alert('login successful');
-      navigate('/');
-    } else alert('login failed');
+    loginUser(state.values);
   });
 
   return (
     <div className="wrapper">
-      <Form store={form} aria-labelledby="register" className="form">
+      <Form store={loginForm} aria-labelledby="register" className="form">
         <h2 id="register" className="heading">
           Accedi
         </h2>
         <div className="field">
-          <FormLabel name={form.names.email} className="label">
-            Email
+          <FormLabel name={loginForm.names.username} className="label">
+            Username
           </FormLabel>
           <FormInput
-            name={form.names.email}
-            placeholder="Inserisci la tua email..."
+            name={loginForm.names.username}
+            placeholder="Inserisci la tua username..."
             className="input"
             required
           />
 
-          <FormError name={form.names.email} className="error" />
+          <FormError name={loginForm.names.username} className="error" />
         </div>
         <div className="field">
-          <FormLabel name={form.names.password} className="label">
+          <FormLabel name={loginForm.names.password} className="label">
             Password
           </FormLabel>
           <FormInput
-            name={form.names.password}
+            name={loginForm.names.password}
             type="password"
             placeholder="Inserisci la tua password..."
             className="input"
             required
           />
 
-          <FormError name={form.names.password} className="error" />
+          <FormError name={loginForm.names.password} className="error" />
         </div>
         <FormSubmit className="button">Accedi</FormSubmit>
       </Form>
