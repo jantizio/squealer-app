@@ -4,6 +4,7 @@ export default {
     './index.html',
     './src/*.{js,ts,jsx,tsx,css}',
     './src/components/**/*.{js,ts,jsx,tsx,css}',
+    './src/styles/*.{js,ts,jsx,tsx,css}',
   ],
   theme: {
     container: {

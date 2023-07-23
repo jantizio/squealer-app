@@ -16,11 +16,12 @@ module.exports = {
   settings: {
     'import/resolver': {
       alias: {
-        extensions: ['.jsx', '.tsx', ".ts", '.scss', '.d.ts'],
+        extensions: ['.jsx', '.tsx', ".ts", '.scss', '.d.ts', ".css", ".module.css"],
         map: [
           ['@/components', './src/components'],
           ['@/hooks', './src/hooks'],
-          ['@/types', './src/types'],
+          ['@/globals', './src/globals'],
+          ['@/styles', './src/styles'],
         ],
       },
     },
