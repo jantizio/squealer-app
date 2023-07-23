@@ -8,12 +8,22 @@ import {
 } from '@ariakit/react';
 import useRegister from '@/hooks/useRegister';
 import { user_t } from '@/globals/types';
+import {
+  form,
+  button,
+  error,
+  field,
+  heading,
+  input,
+  label,
+  wrapper,
+} from '../../styles/form.module.css';
 
 // TODO: se vuoi migliorare la validazione del form, puoi usare zod (https://github.com/ariakit/ariakit/discussions/1925)
 // quella built-in è buona, però non ha un messaggio di errore personalizzato
 
 function Signup() {
-  const form = useFormStore({
+  const signupForm = useFormStore({
     defaultValues: {
       email: '',
       username: '',
@@ -24,7 +34,7 @@ function Signup() {
   });
   const registerUser = useRegister();
 
-  form.useSubmit(async (state) => {
+  signupForm.useSubmit(async (state) => {
     const newUser: user_t = {
       type: 'standard',
       verified: false,
@@ -37,83 +47,83 @@ function Signup() {
   });
 
   return (
-    <div className="wrapper">
-      <Form store={form} aria-labelledby="register" className="form">
-        <h2 id="register" className="heading">
+    <div className={wrapper}>
+      <Form store={signupForm} aria-labelledby="register" className={form}>
+        <h2 id="register" className={heading}>
           Registrati
         </h2>
-        <div className="field">
-          <FormLabel name={form.names.email} className="label">
+        <div className={field}>
+          <FormLabel name={signupForm.names.email} className={label}>
             Email
           </FormLabel>
           <FormInput
-            name={form.names.email}
+            name={signupForm.names.email}
             placeholder="Inserisci la tua email..."
-            className="input"
+            className={input}
             minLength={3}
             maxLength={20}
             type="email"
             required
           />
 
-          <FormError name={form.names.email} className="error" />
+          <FormError name={signupForm.names.email} className={error} />
         </div>
-        <div className="field">
-          <FormLabel name={form.names.username} className="label">
+        <div className={field}>
+          <FormLabel name={signupForm.names.username} className={label}>
             Username
           </FormLabel>
           <FormInput
-            name={form.names.username}
+            name={signupForm.names.username}
             placeholder="Inserisci il tuo username..."
-            className="input"
+            className={input}
             minLength={3}
             maxLength={20}
             type="text"
             required
           />
 
-          <FormError name={form.names.username} className="error" />
+          <FormError name={signupForm.names.username} className={error} />
         </div>
-        <div className="field">
-          <FormLabel name={form.names.firstname} className="label">
+        <div className={field}>
+          <FormLabel name={signupForm.names.firstname} className={label}>
             Nome
           </FormLabel>
           <FormInput
-            name={form.names.firstname}
+            name={signupForm.names.firstname}
             placeholder="Inserisci il tuo nome..."
-            className="input"
+            className={input}
             minLength={3}
             maxLength={20}
             type="text"
             required
           />
 
-          <FormError name={form.names.firstname} className="error" />
+          <FormError name={signupForm.names.firstname} className={error} />
         </div>
-        <div className="field">
-          <FormLabel name={form.names.lastname} className="label">
+        <div className={field}>
+          <FormLabel name={signupForm.names.lastname} className={label}>
             Cognome
           </FormLabel>
           <FormInput
-            name={form.names.lastname}
+            name={signupForm.names.lastname}
             placeholder="Inserisci il tuo cognome..."
-            className="input"
+            className={input}
             minLength={3}
             maxLength={20}
             type="text"
             required
           />
 
-          <FormError name={form.names.lastname} className="error" />
+          <FormError name={signupForm.names.lastname} className={error} />
         </div>
-        <div className="field">
-          <FormLabel name={form.names.password} className="label">
+        <div className={field}>
+          <FormLabel name={signupForm.names.password} className={label}>
             Password
           </FormLabel>
           <FormInput
-            name={form.names.password}
+            name={signupForm.names.password}
             placeholder="Inserisci la tua password..."
-            className="input"
+            className={input}
             minLength={8}
             maxLength={40}
             type="password"
@@ -121,9 +131,9 @@ function Signup() {
             required
           />
 
-          <FormError name={form.names.password} className="error" />
+          <FormError name={signupForm.names.password} className={error} />
         </div>
-        <FormSubmit className="button">Registrati</FormSubmit>
+        <FormSubmit className={button}>Registrati</FormSubmit>
       </Form>
     </div>
   );
