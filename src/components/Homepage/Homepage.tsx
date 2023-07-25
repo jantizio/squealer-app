@@ -6,12 +6,12 @@ function Homepage() {
   const authHeader = useAuthHeader();
   const auth = useAuthUser();
 
-  // console.log(auth()?.email ?? 'guest');
+  // console.log(auth()?.username ?? 'guest');
 
   if (isAuthenticated())
     return (
       <div>
-        Homepage loggato, {authHeader()}, {auth()?.email ?? 'guest'}
+        Homepage loggato, {authHeader()}, {auth()?.username ?? 'guest'}
       </div>
     );
   else return <AnonymousHome />;
