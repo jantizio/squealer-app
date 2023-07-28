@@ -161,7 +161,7 @@ function Signup() {
             <FormInput
               name={signupForm.names.password}
               placeholder="Inserisci la tua password..."
-              className="input"
+              className={formCSS.input}
               minLength={8}
               maxLength={40}
               type="password"
@@ -169,12 +169,15 @@ function Signup() {
               required
             />
 
-            <FormError name={signupForm.names.password} className="error" />
+            <FormError
+              name={signupForm.names.password}
+              className={formCSS.error}
+            />
           </div>
-          <div className="field">
+          <div className={formCSS.field}>
             <FormLabel
               name={signupForm.names.confirmPassword}
-              className="label"
+              className={formCSS.label}
             >
               Conferma Password
             </FormLabel>
