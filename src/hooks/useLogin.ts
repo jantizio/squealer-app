@@ -8,20 +8,20 @@ type creds_t = {
   password: string;
 };
 
-type response_t = {
-  token: string;
-  expiresIn: number;
-};
+// type response_t = {
+//   token: string;
+//   expiresIn: number;
+// };
 
 export default function useLogin() {
   const signIn = useSignIn();
   const navigate = useNavigate();
-  const login = useMutation<response_t, AxiosError, creds_t>({
+  const login = useMutation<string, AxiosError, creds_t>({
     mutationKey: ['login'],
     mutationFn: async (credentials) => {
       const loginApi: string = `${import.meta.env.VITE_API_URL}/token`;
 
-      const { data } = await axios.post(loginApi, credentials);
+      const { data } = await axios.post<string>(loginApi, credentials);
       return data;
     },
     onSuccess(data, variables) {
@@ -31,8 +31,8 @@ export default function useLogin() {
 
       // eseguo il login dell'utente
       signIn({
-        token: data.token,
-        expiresIn: data.expiresIn,
+        token: data,
+        expiresIn: 3600,
         tokenType: 'Bearer',
         authState: { username: variables.username },
       });
