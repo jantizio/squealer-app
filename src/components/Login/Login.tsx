@@ -5,9 +5,10 @@ import {
   FormInput,
   FormError,
   FormSubmit,
+  HeadingLevel,
+  Heading,
 } from '@ariakit/react';
 import formCSS from '../../styles/form.module.css';
-
 import useLogin from '@/hooks/useLogin';
 
 function Login() {
@@ -29,43 +30,51 @@ function Login() {
         aria-labelledby="register"
         className={formCSS.form}
       >
-        <h2 id="register" className={formCSS.heading}>
-          Accedi
-        </h2>
-        <div className={formCSS.field}>
-          <FormLabel name={loginForm.names.username} className={formCSS.label}>
-            Username
-          </FormLabel>
-          <FormInput
-            name={loginForm.names.username}
-            placeholder="Inserisci la tua username..."
-            className={formCSS.input}
-            required
-          />
+        <HeadingLevel>
+          <Heading id="register" className={formCSS.heading}>
+            Accedi
+          </Heading>
+          <div className={formCSS.field}>
+            <FormLabel
+              name={loginForm.names.username}
+              className={formCSS.label}
+            >
+              Username
+            </FormLabel>
+            <FormInput
+              name={loginForm.names.username}
+              placeholder="Inserisci la tua username..."
+              className={formCSS.input}
+              required
+            />
 
-          <FormError
-            name={loginForm.names.username}
-            className={formCSS.error}
-          />
-        </div>
-        <div className={formCSS.field}>
-          <FormLabel name={loginForm.names.password} className={formCSS.label}>
-            Password
-          </FormLabel>
-          <FormInput
-            name={loginForm.names.password}
-            type="password"
-            placeholder="Inserisci la tua password..."
-            className={formCSS.input}
-            required
-          />
+            <FormError
+              name={loginForm.names.username}
+              className={formCSS.error}
+            />
+          </div>
+          <div className={formCSS.field}>
+            <FormLabel
+              name={loginForm.names.password}
+              className={formCSS.label}
+            >
+              Password
+            </FormLabel>
+            <FormInput
+              name={loginForm.names.password}
+              type="password"
+              placeholder="Inserisci la tua password..."
+              className={formCSS.input}
+              required
+            />
 
-          <FormError
-            name={loginForm.names.password}
-            className={formCSS.error}
-          />
-        </div>
-        <FormSubmit className={formCSS.button}>Accedi</FormSubmit>
+            <FormError
+              name={loginForm.names.password}
+              className={formCSS.error}
+            />
+          </div>
+          <FormSubmit className={formCSS.button}>Accedi</FormSubmit>
+        </HeadingLevel>
       </Form>
     </div>
   );

@@ -5,6 +5,8 @@ import {
   FormInput,
   FormError,
   FormSubmit,
+  HeadingLevel,
+  Heading,
 } from '@ariakit/react';
 import formCSS from '../../styles/form.module.css';
 import useRegister from '@/hooks/useRegister';
@@ -60,123 +62,140 @@ function Signup() {
         aria-labelledby="register"
         className={formCSS.form}
       >
-        <h2 id="register" className={formCSS.heading}>
-          Registrati
-        </h2>
-        <div className={formCSS.field}>
-          <FormLabel name={signupForm.names.email} className={formCSS.label}>
-            Email
-          </FormLabel>
-          <FormInput
-            name={signupForm.names.email}
-            placeholder="Inserisci la tua email..."
-            className={formCSS.input}
-            minLength={3}
-            maxLength={20}
-            type="email"
-            required
-          />
+        <HeadingLevel>
+          <Heading id="register" className={formCSS.heading}>
+            Registrati
+          </Heading>
+          <div className={formCSS.field}>
+            <FormLabel name={signupForm.names.email} className={formCSS.label}>
+              Email
+            </FormLabel>
+            <FormInput
+              name={signupForm.names.email}
+              placeholder="Inserisci la tua email..."
+              className={formCSS.input}
+              minLength={3}
+              maxLength={20}
+              type="email"
+              required
+            />
 
-          <FormError name={signupForm.names.email} className={formCSS.error} />
-        </div>
-        <div className={formCSS.field}>
-          <FormLabel name={signupForm.names.username} className={formCSS.label}>
-            Username
-          </FormLabel>
-          <FormInput
-            name={signupForm.names.username}
-            placeholder="Inserisci il tuo username..."
-            className={formCSS.input}
-            minLength={3}
-            maxLength={20}
-            type="text"
-            required
-          />
+            <FormError
+              name={signupForm.names.email}
+              className={formCSS.error}
+            />
+          </div>
+          <div className={formCSS.field}>
+            <FormLabel
+              name={signupForm.names.username}
+              className={formCSS.label}
+            >
+              Username
+            </FormLabel>
+            <FormInput
+              name={signupForm.names.username}
+              placeholder="Inserisci il tuo username..."
+              className={formCSS.input}
+              minLength={3}
+              maxLength={20}
+              type="text"
+              required
+            />
 
-          <FormError
-            name={signupForm.names.username}
-            className={formCSS.error}
-          />
-        </div>
-        <div className={formCSS.field}>
-          <FormLabel
-            name={signupForm.names.firstname}
-            className={formCSS.label}
-          >
-            Nome
-          </FormLabel>
-          <FormInput
-            name={signupForm.names.firstname}
-            placeholder="Inserisci il tuo nome..."
-            className={formCSS.input}
-            minLength={3}
-            maxLength={20}
-            type="text"
-            required
-          />
+            <FormError
+              name={signupForm.names.username}
+              className={formCSS.error}
+            />
+          </div>
+          <div className={formCSS.field}>
+            <FormLabel
+              name={signupForm.names.firstname}
+              className={formCSS.label}
+            >
+              Nome
+            </FormLabel>
+            <FormInput
+              name={signupForm.names.firstname}
+              placeholder="Inserisci il tuo nome..."
+              className={formCSS.input}
+              minLength={3}
+              maxLength={20}
+              type="text"
+              required
+            />
 
-          <FormError
-            name={signupForm.names.firstname}
-            className={formCSS.error}
-          />
-        </div>
-        <div className={formCSS.field}>
-          <FormLabel name={signupForm.names.lastname} className={formCSS.label}>
-            Cognome
-          </FormLabel>
-          <FormInput
-            name={signupForm.names.lastname}
-            placeholder="Inserisci il tuo cognome..."
-            className={formCSS.input}
-            minLength={3}
-            maxLength={20}
-            type="text"
-            required
-          />
+            <FormError
+              name={signupForm.names.firstname}
+              className={formCSS.error}
+            />
+          </div>
+          <div className={formCSS.field}>
+            <FormLabel
+              name={signupForm.names.lastname}
+              className={formCSS.label}
+            >
+              Cognome
+            </FormLabel>
+            <FormInput
+              name={signupForm.names.lastname}
+              placeholder="Inserisci il tuo cognome..."
+              className={formCSS.input}
+              minLength={3}
+              maxLength={20}
+              type="text"
+              required
+            />
 
-          <FormError
-            name={signupForm.names.lastname}
-            className={formCSS.error}
-          />
-        </div>
-        <div className={formCSS.field}>
-          <FormLabel name={signupForm.names.password} className={formCSS.label}>
-            Password
-          </FormLabel>
-          <FormInput
-            name={signupForm.names.password}
-            placeholder="Inserisci la tua password..."
-            className="input"
-            minLength={8}
-            maxLength={40}
-            type="password"
-            pattern="^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$ %^&*-]).{8,}$"
-            required
-          />
+            <FormError
+              name={signupForm.names.lastname}
+              className={formCSS.error}
+            />
+          </div>
+          <div className={formCSS.field}>
+            <FormLabel
+              name={signupForm.names.password}
+              className={formCSS.label}
+            >
+              Password
+            </FormLabel>
+            <FormInput
+              name={signupForm.names.password}
+              placeholder="Inserisci la tua password..."
+              className="input"
+              minLength={8}
+              maxLength={40}
+              type="password"
+              pattern="^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$ %^&*-]).{8,}$"
+              required
+            />
 
-          <FormError name={signupForm.names.password} className="error" />
-        </div>
-        <div className="field">
-          <FormLabel name={signupForm.names.confirmPassword} className="label">
-            Conferma Password
-          </FormLabel>
-          <FormInput
-            name={signupForm.names.confirmPassword}
-            placeholder="Conferma la tua password..."
-            className={formCSS.input}
-            minLength={8}
-            maxLength={40}
-            type="password"
-            pattern="^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$ %^&*-]).{8,}$"
-            required
-          />
+            <FormError name={signupForm.names.password} className="error" />
+          </div>
+          <div className="field">
+            <FormLabel
+              name={signupForm.names.confirmPassword}
+              className="label"
+            >
+              Conferma Password
+            </FormLabel>
+            <FormInput
+              name={signupForm.names.confirmPassword}
+              placeholder="Conferma la tua password..."
+              className={formCSS.input}
+              minLength={8}
+              maxLength={40}
+              type="password"
+              pattern="^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$ %^&*-]).{8,}$"
+              required
+            />
 
-          <FormError
-            name={signupForm.names.confirmPassword}
-            className={formCSS.error}
-          />
-        </div>
-        <FormSubmit className={formCSS.button}>Registrati</FormSubmit>
+            <FormError
+              name={signupForm.names.confirmPassword}
+              className={formCSS.error}
+            />
+          </div>
+          <FormSubmit className={formCSS.button}>Registrati</FormSubmit>
+        </HeadingLevel>
       </Form>
     </div>
   );
