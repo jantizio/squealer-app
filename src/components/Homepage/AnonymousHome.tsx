@@ -1,6 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import { Button, Heading, HeadingLevel } from '@ariakit/react';
 import GenericMessages from '@/components/GenericMessages';
+import ChannelList from '@/components/ChannelList';
 
 function AnonymousHome() {
   const navigate = useNavigate();
@@ -8,7 +9,11 @@ function AnonymousHome() {
     <HeadingLevel>
       <Heading>Homepage non loggato</Heading>
 
-      <GenericMessages />
+      <div className="flex">
+        <div></div>
+        <GenericMessages />
+        <ChannelList />
+      </div>
 
       <div className="h-36"></div>
       {/* spacing needed for eventual bottom bar */}
