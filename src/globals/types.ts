@@ -1,11 +1,11 @@
-type post_t = {
+export type post_t = {
   id: number;
   title: string;
   username: string;
   body: string;
 };
 
-type user_t = {
+export type user_t = {
   // id: string;
   email: string;
   username: string;
@@ -17,4 +17,12 @@ type user_t = {
   SMM: string | null;
 };
 
-export type { post_t, user_t };
+// export type channel_t = {
+//   name: string;
+// };
+
+export type channel_t = {
+  userId: number;
+  id: number;
+  title: string;
+};

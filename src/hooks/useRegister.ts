@@ -15,7 +15,7 @@ export default function useRegister() {
         newUser.username
       }`;
 
-      const { data } = await axios.put(registerApi, newUser);
+      const { data } = await axios.put<user_t>(registerApi, newUser);
       return data;
     },
     onSuccess(data) {
