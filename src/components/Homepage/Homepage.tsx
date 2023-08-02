@@ -1,19 +1,11 @@
-import { useIsAuthenticated, useAuthHeader, useAuthUser } from 'react-auth-kit';
+import { useIsAuthenticated } from 'react-auth-kit';
 import AnonymousHome from './AnonymousHome';
+import LoggedHome from './LoggedHome';
 
 function Homepage() {
   const isAuthenticated = useIsAuthenticated();
-  const authHeader = useAuthHeader();
-  const auth = useAuthUser();
 
-  // console.log(auth()?.username ?? 'guest');
-
-  if (isAuthenticated())
-    return (
-      <div>
-        Homepage loggato, {authHeader()}, {auth()?.username ?? 'guest'}
-      </div>
-    );
+  if (isAuthenticated()) return <LoggedHome />;
   else return <AnonymousHome />;
 }
 

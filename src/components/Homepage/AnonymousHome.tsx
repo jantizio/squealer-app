@@ -1,17 +1,43 @@
 import { useNavigate } from 'react-router-dom';
 import { Button, Heading, HeadingLevel } from '@ariakit/react';
-import GenericMessages from '@/components/GenericMessages';
+import MessageScroller from '@/components/MessageScroller';
 import ChannelList from '@/components/ChannelList';
+import HeaderLogo from '@/components/HeaderLogo';
+import { post_t } from '@/globals/types';
+import axios from 'axios';
+
+const fetchPostPage = async (page: number) => {
+  type postResp = Omit<post_t, 'username'> & { userId: number };
+
+  const postArray: postResp[] = await axios
+    .get(`https://jsonplaceholder.typicode.com/posts?_page=${page}`)
+    .then((response) => response.data);
+
+  const outArray: post_t[] = [];
+
+  for (const post of postArray) {
+    let { username } = await axios
+      .get(`https://jsonplaceholder.typicode.com/users/${post.userId}`)
+      .then((response) => response.data);
+
+    const { userId: _, ...result } = post;
+    outArray.push({ username, ...result });
+  }
+
+  return outArray;
+  //        ^?
+};
 
 function AnonymousHome() {
   const navigate = useNavigate();
   return (
     <HeadingLevel>
+      <HeaderLogo />
       <Heading>Homepage non loggato</Heading>
 
       <div className="flex">
         <div></div>
-        <GenericMessages />
+        <MessageScroller fetchPostPage={fetchPostPage} />
         <ChannelList />
       </div>
 
