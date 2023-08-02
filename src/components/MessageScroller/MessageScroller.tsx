@@ -2,31 +2,12 @@ import Message from '@/components/Message';
 import { post_t } from '@/globals/types';
 import { errorCheck } from '@/globals/utility';
 import useInfiniteScroll from '@/hooks/useInfiniteScroll';
-import axios from 'axios';
 
-const fetchPostPage = async (page: number) => {
-  type postResp = Omit<post_t, 'username'> & { userId: number };
-
-  const postArray: postResp[] = await axios
-    .get(`https://jsonplaceholder.typicode.com/posts?_page=${page}`)
-    .then((response) => response.data);
-
-  const outArray: post_t[] = [];
-
-  for (const post of postArray) {
-    let { username } = await axios
-      .get(`https://jsonplaceholder.typicode.com/users/${post.userId}`)
-      .then((response) => response.data);
-
-    const { userId: _, ...result } = post;
-    outArray.push({ username, ...result });
-  }
-
-  return outArray;
-  //        ^?
+type MessageScrollerProps = {
+  fetchPostPage: (page: number) => Promise<post_t[]>;
 };
 
-const GenericMessages = () => {
+const MessageScroller = ({ fetchPostPage }: MessageScrollerProps) => {
   const { data, error, isError, isFetchingNextPage, lastPostRef } =
     useInfiniteScroll({ fetchPage: fetchPostPage });
 
@@ -48,4 +29,4 @@ const GenericMessages = () => {
     </>
   );
 };
-export default GenericMessages;
+export default MessageScroller;

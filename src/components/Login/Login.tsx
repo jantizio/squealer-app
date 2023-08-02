@@ -25,11 +25,7 @@ function Login() {
 
   return (
     <div className={formCSS.wrapper}>
-      <Form
-        store={loginForm}
-        aria-labelledby="register"
-        className={formCSS.form}
-      >
+      <Form store={loginForm} aria-labelledby="login" className={formCSS.form}>
         <HeadingLevel>
           <Heading id="register" className={formCSS.heading}>
             Accedi
