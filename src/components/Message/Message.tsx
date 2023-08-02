@@ -1,7 +1,10 @@
-import { Heading, HeadingLevel } from '@ariakit/react';
+import { Button, Heading, HeadingLevel } from '@ariakit/react';
 import { forwardRef } from 'react';
 import { post_t } from '@/globals/types';
-// import './Message.css';
+import { useIsAuthenticated } from 'react-auth-kit';
+import { ReactComponent as ArrowDown } from '@/assets/arrow-down.svg';
+import { ReactComponent as ArrowUp } from '@/assets/arrow-up.svg';
+import { updateSqueal } from '@/globals/utility';
 
 type messageProps = {
   children: post_t;
@@ -9,7 +12,9 @@ type messageProps = {
 
 const Message = forwardRef<HTMLDivElement, messageProps>(
   ({ children }, ref) => {
-    const { title, body, username } = children;
+    const { id, title, body, username } = children;
+    const isAuthenticated = useIsAuthenticated();
+    const buttonSide = 40;
 
     return (
       <article
@@ -23,6 +28,22 @@ const Message = forwardRef<HTMLDivElement, messageProps>(
             {title} - [{username}]
           </Heading>
           <p>{body}</p>
+          {isAuthenticated() && (
+            <>
+              <Button
+                className="m-2"
+                onClick={() => updateSqueal('upvote', id)}
+              >
+                <ArrowUp width={buttonSide} height={buttonSide} />
+              </Button>
+              <Button
+                className="m-2"
+                onClick={() => updateSqueal('downvote', id)}
+              >
+                <ArrowDown width={buttonSide} height={buttonSide} />
+              </Button>
+            </>
+          )}
         </HeadingLevel>
       </article>
     );
