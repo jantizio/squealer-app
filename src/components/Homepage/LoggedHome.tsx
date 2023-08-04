@@ -2,36 +2,37 @@ import { Form, FormInput, useFormStore, Button } from '@ariakit/react';
 import MessageScroller from '@/components/MessageScroller';
 import HeaderLogo from '@/components/HeaderLogo';
 import { post_t } from '@/globals/types';
-import axios from 'axios';
 import { ReactComponent as Pencil } from '@/assets/pencil.svg';
 import { ReactComponent as Settings } from '@/assets/settings.svg';
 import { useNavigate } from 'react-router-dom';
-
-const fetchPostPage = async (page: number) => {
-  type postResp = Omit<post_t, 'username'> & { userId: number };
-
-  const postArray: postResp[] = await axios
-    .get(`https://jsonplaceholder.typicode.com/posts?_page=${page}`)
-    .then((response) => response.data);
-
-  const outArray: post_t[] = [];
-
-  for (const post of postArray) {
-    let { username } = await axios
-      .get(`https://jsonplaceholder.typicode.com/users/${post.userId}`)
-      .then((response) => response.data);
-
-    const { userId: _, ...result } = post;
-    outArray.push({ username, ...result });
-  }
-
-  return outArray;
-  //        ^?
-};
+import useAxios from '@/hooks/useAxios';
 
 const LoggedHome = () => {
   const form = useFormStore({ defaultValues: { search: '' } });
   const navigate = useNavigate();
+  const privateBackendApi = useAxios();
+
+  const fetchPostPage = async (page: number) => {
+    type postResp = Omit<post_t, 'username'> & { userId: number };
+
+    const postArray: postResp[] = await privateBackendApi
+      .get(`https://jsonplaceholder.typicode.com/posts?_page=${page}`)
+      .then((response) => response.data);
+
+    const outArray: post_t[] = [];
+
+    for (const post of postArray) {
+      let { username } = await privateBackendApi
+        .get(`https://jsonplaceholder.typicode.com/users/${post.userId}`)
+        .then((response) => response.data);
+
+      const { userId: _, ...result } = post;
+      outArray.push({ username, ...result });
+    }
+
+    return outArray;
+    //        ^?
+  };
 
   return (
     <>

@@ -1,5 +1,6 @@
 import { useSignIn } from 'react-auth-kit';
-import axios, { AxiosError } from 'axios';
+import { AxiosError } from 'axios';
+import { backendApi } from '@/globals/utility';
 import { useMutation } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
 
@@ -19,9 +20,7 @@ export default function useLogin() {
   const login = useMutation<string, AxiosError, creds_t>({
     mutationKey: ['login'],
     mutationFn: async (credentials) => {
-      const loginApi: string = `${import.meta.env.VITE_API_URL}/token`;
-
-      const { data } = await axios.post<string>(loginApi, credentials);
+      const { data } = await backendApi.post<string>('/token', credentials);
       return data;
     },
     onSuccess(data, variables) {

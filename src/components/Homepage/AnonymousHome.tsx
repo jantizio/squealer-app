@@ -4,19 +4,19 @@ import MessageScroller from '@/components/MessageScroller';
 import ChannelList from '@/components/ChannelList';
 import HeaderLogo from '@/components/HeaderLogo';
 import { post_t } from '@/globals/types';
-import axios from 'axios';
+import { backendApi } from '@/globals/utility';
 
 const fetchPostPage = async (page: number) => {
   type postResp = Omit<post_t, 'username'> & { userId: number };
 
-  const postArray: postResp[] = await axios
+  const postArray: postResp[] = await backendApi
     .get(`https://jsonplaceholder.typicode.com/posts?_page=${page}`)
     .then((response) => response.data);
 
   const outArray: post_t[] = [];
 
   for (const post of postArray) {
-    let { username } = await axios
+    let { username } = await backendApi
       .get(`https://jsonplaceholder.typicode.com/users/${post.userId}`)
       .then((response) => response.data);
 

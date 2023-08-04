@@ -1,6 +1,7 @@
 import useLogin from '@/hooks/useLogin';
 import { user_t } from '@/globals/types';
-import axios, { AxiosError } from 'axios';
+import { AxiosError } from 'axios';
+import { backendApi } from '@/globals/utility';
 import { useMutation } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
@@ -11,11 +12,10 @@ export default function useRegister() {
   const register = useMutation<user_t, AxiosError, user_t>({
     mutationKey: ['register'],
     mutationFn: async (newUser) => {
-      const registerApi: string = `${import.meta.env.VITE_API_URL}/users/${
-        newUser.username
-      }`;
-
-      const { data } = await axios.put<user_t>(registerApi, newUser);
+      const { data } = await backendApi.put<user_t>(
+        `/users/${newUser.username}`,
+        newUser
+      );
       return data;
     },
     onSuccess(data) {

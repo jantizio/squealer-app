@@ -1,15 +1,14 @@
 import { useQuery } from '@tanstack/react-query';
-import axios, { AxiosError } from 'axios';
+import { AxiosError } from 'axios';
+import { backendApi } from '@/globals/utility';
 import { channel_t } from '@/globals/types';
 
 const ChannelList = () => {
   const { data } = useQuery<channel_t[], AxiosError>(['channels'], async () => {
-    // const channelsApi: string = `${
-    //   import.meta.env.VITE_API_URL
-    // }/squeals/?category=public`;
+    // const channelsApi: string = `/squeals/?category=public`;
 
     const channelsApi: string = 'https://jsonplaceholder.typicode.com/albums';
-    const res = await axios.get<channel_t[]>(channelsApi);
+    const res = await backendApi.get<channel_t[]>(channelsApi);
     return res.data;
   });
 
