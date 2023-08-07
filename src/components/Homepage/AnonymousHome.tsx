@@ -3,7 +3,7 @@ import { Button, Heading, HeadingLevel } from '@ariakit/react';
 import MessageScroller from '@/components/MessageScroller';
 import ChannelList from '@/components/ChannelList';
 import HeaderLogo from '@/components/HeaderLogo';
-import { post_t } from '@/globals/types';
+import { channel_t, post_t } from '@/globals/types';
 import { backendApi } from '@/globals/utility';
 
 const fetchPostPage = async (page: number) => {
@@ -28,6 +28,14 @@ const fetchPostPage = async (page: number) => {
   //        ^?
 };
 
+const fetchChannels = async () => {
+  // const channelsApi: string = `/channels/?category=public`;
+
+  const channelsApi: string = 'https://jsonplaceholder.typicode.com/albums';
+  const res = await backendApi.get<channel_t[]>(channelsApi);
+  return res.data;
+};
+
 function AnonymousHome() {
   const navigate = useNavigate();
   return (
@@ -38,7 +46,7 @@ function AnonymousHome() {
       <div className="flex">
         <div></div>
         <MessageScroller fetchPostPage={fetchPostPage} />
-        <ChannelList />
+        <ChannelList fetchChannels={fetchChannels} />
       </div>
 
       <div className="h-36"></div>
