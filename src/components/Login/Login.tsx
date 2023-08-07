@@ -10,6 +10,7 @@ import {
 } from '@ariakit/react';
 import formCSS from '../../styles/form.module.css';
 import useLogin from '@/hooks/useLogin';
+import { passwRegex } from '@/globals/utility';
 
 function Login() {
   const loginForm = useFormStore({
@@ -41,6 +42,8 @@ function Login() {
               name={loginForm.names.username}
               placeholder="Inserisci la tua username..."
               className={formCSS.input}
+              minLength={3}
+              maxLength={20}
               required
             />
 
@@ -59,6 +62,9 @@ function Login() {
             <FormInput
               name={loginForm.names.password}
               type="password"
+              minLength={8}
+              maxLength={40}
+              // pattern={passwRegex} // TODO: riattivare questa regex
               placeholder="Inserisci la tua password..."
               className={formCSS.input}
               required

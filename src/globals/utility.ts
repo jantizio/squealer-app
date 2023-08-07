@@ -15,4 +15,7 @@ function updateSqueal(operation: op, id: number) {
   backendApi.patch(`/squeals/${id}`, { op: operation });
 }
 
-export { errorCheck, backendApi, updateSqueal };
+const passwRegex =
+  '^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$ %^&*-]).{8,}$';
+
+export { errorCheck, backendApi, updateSqueal, passwRegex };

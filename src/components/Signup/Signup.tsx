@@ -11,6 +11,7 @@ import {
 import formCSS from '../../styles/form.module.css';
 import useRegister from '@/hooks/useRegister';
 import { user_t } from '@/globals/types';
+import { passwRegex } from '@/globals/utility';
 
 // TODO: se vuoi migliorare la validazione del form, puoi usare zod (https://github.com/ariakit/ariakit/discussions/1925)
 // quella built-in è buona, però non ha un messaggio di errore personalizzato
@@ -165,7 +166,7 @@ function Signup() {
               minLength={8}
               maxLength={40}
               type="password"
-              pattern="^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$ %^&*-]).{8,}$"
+              pattern={passwRegex}
               required
             />
 
@@ -188,7 +189,7 @@ function Signup() {
               minLength={8}
               maxLength={40}
               type="password"
-              pattern="^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$ %^&*-]).{8,}$"
+              pattern={passwRegex}
               required
             />
 
