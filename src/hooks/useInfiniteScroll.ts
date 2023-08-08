@@ -4,9 +4,10 @@ import { useInfiniteQuery } from '@tanstack/react-query';
 
 type options<T> = {
   fetchPage: (page: number) => Promise<T[]>;
+  filter: string;
 };
 
-export default function useInfinteScroll<T>({ fetchPage }: options<T>) {
+export default function useInfinteScroll<T>({ fetchPage, filter }: options<T>) {
   const {
     fetchNextPage,
     hasNextPage,
@@ -15,7 +16,7 @@ export default function useInfinteScroll<T>({ fetchPage }: options<T>) {
     isError,
     error,
   } = useInfiniteQuery(
-    ['message'],
+    ['message', filter],
     ({ pageParam = 1 }) => fetchPage(pageParam),
     {
       getNextPageParam: (lastPage, allPages) => {

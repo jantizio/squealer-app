@@ -1,20 +1,25 @@
-import { Form, FormInput, useFormStore, Button } from '@ariakit/react';
+import { useState } from 'react';
+import useAxios from '@/hooks/useAxios';
+import { useDebounce } from 'usehooks-ts';
+import { useNavigate } from 'react-router-dom';
+import { Button } from '@ariakit/react';
 import MessageScroller from '@/components/MessageScroller';
 import HeaderLogo from '@/components/HeaderLogo';
+import SearchBar from '@/components/SearchBar';
 import { post_t } from '@/globals/types';
 import { ReactComponent as Pencil } from '@/assets/pencil.svg';
 import { ReactComponent as Settings } from '@/assets/settings.svg';
-import { useNavigate } from 'react-router-dom';
-import useAxios from '@/hooks/useAxios';
 
 const LoggedHome = () => {
-  const form = useFormStore({ defaultValues: { search: '' } });
+  const [filter, setFilter] = useState<string>('');
+  const debouncedFilter = useDebounce<string>(filter, 500);
   const navigate = useNavigate();
   const privateBackendApi = useAxios();
 
   const fetchPostPage = async (page: number) => {
     type postResp = Omit<post_t, 'username'> & { userId: number };
 
+    // TODO: use the `filter` to filter the posts from backend
     const postArray: postResp[] = await privateBackendApi
       .get(`https://jsonplaceholder.typicode.com/posts?_page=${page}`)
       .then((response) => response.data);
@@ -36,20 +41,14 @@ const LoggedHome = () => {
 
   return (
     <>
-      <nav className="flex items-center  justify-around">
+      <nav className="flex items-center justify-around">
         <HeaderLogo />
-        <Form store={form}>
-          <FormInput
-            name={form.names.search}
-            type="search"
-            placeholder="Cerca..."
-          />
-        </Form>
+        <SearchBar setFilter={setFilter} />
         <Button onClick={() => navigate('/settings')}>
           <Settings width={30} height={30} className="fill-amber-600" />
         </Button>
       </nav>
-      <MessageScroller fetchPostPage={fetchPostPage} />
+      <MessageScroller fetchPostPage={fetchPostPage} filter={debouncedFilter} />
       <Button
         className="fixed bottom-0 right-0"
         onClick={() => navigate('/create')}

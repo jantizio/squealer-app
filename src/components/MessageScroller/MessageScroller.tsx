@@ -5,11 +5,12 @@ import useInfiniteScroll from '@/hooks/useInfiniteScroll';
 
 type MessageScrollerProps = {
   fetchPostPage: (page: number) => Promise<post_t[]>;
+  filter: string;
 };
 
-const MessageScroller = ({ fetchPostPage }: MessageScrollerProps) => {
+const MessageScroller = ({ fetchPostPage, filter }: MessageScrollerProps) => {
   const { data, error, isError, isFetchingNextPage, lastPostRef } =
-    useInfiniteScroll({ fetchPage: fetchPostPage });
+    useInfiniteScroll({ fetchPage: fetchPostPage, filter });
 
   const posts = data?.pages.flat();
   const content = posts?.map((post, i) => {
