@@ -1,10 +1,4 @@
-import {
-  Button,
-  Form,
-  FormInput,
-  useFormStore,
-  FormSubmit,
-} from '@ariakit/react';
+import { Form, FormInput, useFormStore, FormSubmit } from '@ariakit/react';
 import { useAuthUser } from 'react-auth-kit';
 
 const SocialMediaManager = () => {

@@ -4,7 +4,7 @@ import { useInfiniteQuery } from '@tanstack/react-query';
 
 type options<T> = {
   fetchPage: (page: number) => Promise<T[]>;
-  filter: string;
+  filter?: string;
 };
 
 export default function useInfinteScroll<T>({ fetchPage, filter }: options<T>) {

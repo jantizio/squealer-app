@@ -5,7 +5,7 @@ import useInfiniteScroll from '@/hooks/useInfiniteScroll';
 
 type MessageScrollerProps = {
   fetchPostPage: (page: number) => Promise<post_t[]>;
-  filter: string;
+  filter?: string;
 };
 
 const MessageScroller = ({ fetchPostPage, filter }: MessageScrollerProps) => {
