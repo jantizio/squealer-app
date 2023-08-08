@@ -32,6 +32,8 @@ const fetchFollowedChannels = async () => {
 
 const Settings = () => {
   const authUser = useAuthUser()();
+  if (!authUser) return <div>Errore utente non definito</div>; //Should never happen
+
   const settings: settingsPage[] = [
     {
       category: 'Account',
@@ -49,7 +51,7 @@ const Settings = () => {
     {
       category: 'SMM',
       component: <SocialMediaManager />,
-      hasPermission: authUser?.type === 'professional',
+      hasPermission: authUser.type === 'professional',
     },
   ];
 
