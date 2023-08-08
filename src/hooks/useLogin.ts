@@ -3,6 +3,7 @@ import { AxiosError } from 'axios';
 import { backendApi } from '@/globals/utility';
 import { useMutation } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
+import jwt_decode from 'jwt-decode';
 
 type creds_t = {
   username: string;
@@ -13,6 +14,12 @@ type creds_t = {
 //   token: string;
 //   expiresIn: number;
 // };
+
+type token_payload_t = {
+  name: string;
+  exp: number;
+  iat: number;
+};
 
 export default function useLogin() {
   const signIn = useSignIn();
@@ -28,10 +35,17 @@ export default function useLogin() {
       console.log('SUCCESS!');
       console.log('data:', data);
 
+      const token_payload = jwt_decode<token_payload_t>(data);
+
+      // calculate expiration time in minutes
+      const expiresIn = Math.floor(
+        (token_payload.exp - token_payload.iat) / 60
+      );
+
       // eseguo il login dell'utente
       signIn({
         token: data,
-        expiresIn: 3600,
+        expiresIn: expiresIn,
         tokenType: 'Bearer',
         authState: { username: variables.username },
       });
@@ -40,6 +54,8 @@ export default function useLogin() {
     onError(error) {
       if (error.response?.status === 401) {
         console.log('credenziali errate');
+      } else {
+        console.log('altro errore');
       }
     },
   });
