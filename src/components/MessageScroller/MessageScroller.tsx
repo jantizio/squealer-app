@@ -1,6 +1,6 @@
 import Message from '@/components/Message';
-import { post_t } from '@/globals/types';
-import { errorCheck } from '@/globals/utility';
+import { post_t } from '@/lib/types';
+import { errorCheck } from '@/lib/utils';
 import useInfiniteScroll from '@/hooks/useInfiniteScroll';
 
 type MessageScrollerProps = {

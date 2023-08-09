@@ -1,6 +1,6 @@
 import { useSignIn } from 'react-auth-kit';
 import { AxiosError } from 'axios';
-import { backendApi } from '@/globals/utility';
+import { backendApi } from '@/lib/utils';
 import { useMutation } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
 import jwt_decode from 'jwt-decode';

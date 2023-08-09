@@ -3,8 +3,8 @@ import { Button, Heading, HeadingLevel } from '@ariakit/react';
 import MessageScroller from '@/components/MessageScroller';
 import ChannelList from '@/components/ChannelList';
 import HeaderLogo from '@/components/HeaderLogo';
-import { channel_t, post_t } from '@/globals/types';
-import { backendApi } from '@/globals/utility';
+import { channel_t, post_t } from '@/lib/types';
+import { backendApi } from '@/lib/utils';
 
 const fetchPostPage = async (page: number) => {
   type postResp = Omit<post_t, 'username'> & { userId: number };

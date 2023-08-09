@@ -1,20 +1,28 @@
 import { Button, Heading, HeadingLevel } from '@ariakit/react';
 import { forwardRef } from 'react';
-import { post_t } from '@/globals/types';
+import { post_t } from '@/lib/types';
 import { useIsAuthenticated } from 'react-auth-kit';
 import { ReactComponent as ArrowDown } from '@/assets/arrow-down.svg';
 import { ReactComponent as ArrowUp } from '@/assets/arrow-up.svg';
-import { updateSqueal } from '@/globals/utility';
+import useAxios from '@/hooks/useAxios';
 
 type messageProps = {
   children: post_t;
 };
+
+type op = 'viewed' | 'upvote' | 'downvote';
 
 const Message = forwardRef<HTMLDivElement, messageProps>(
   ({ children }, ref) => {
     const { id, title, body, username } = children;
     const isAuthenticated = useIsAuthenticated();
     const buttonSide = 40;
+    const privateApi = useAxios();
+
+    const updateSqueal = (operation: op, id: number) => {
+      // TODO: response and error handling
+      privateApi.patch(`/squeals/${id}`, { op: operation });
+    };
 
     return (
       <article

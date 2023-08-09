@@ -1,6 +1,6 @@
 import { useRef } from 'react';
 import { useInfiniteQuery } from '@tanstack/react-query';
-// import { post_t } from '@/globals/types';
+// import { post_t } from '@/lib/types';
 
 type options<T> = {
   fetchPage: (page: number) => Promise<T[]>;

@@ -10,7 +10,7 @@ import {
 } from '@ariakit/react';
 import formCSS from '../../styles/form.module.css';
 import useLogin from '@/hooks/useLogin';
-import { passwRegex } from '@/globals/utility';
+import { passwRegex } from '@/lib/utils';
 
 function Login() {
   const loginForm = useFormStore({

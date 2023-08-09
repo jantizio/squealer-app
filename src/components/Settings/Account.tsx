@@ -12,7 +12,7 @@ import {
 } from '@ariakit/react';
 import { useAuthUser, useSignOut } from 'react-auth-kit';
 import useAxios from '@/hooks/useAxios';
-import { passwRegex } from '@/globals/utility';
+import { passwRegex } from '@/lib/utils';
 import formCSS from '../../styles/form.module.css';
 
 const Account = () => {

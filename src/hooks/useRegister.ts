@@ -1,7 +1,7 @@
 import useLogin from '@/hooks/useLogin';
-import { user_t } from '@/globals/types';
+import { user_t } from '@/lib/types';
 import { AxiosError } from 'axios';
-import { backendApi } from '@/globals/utility';
+import { backendApi } from '@/lib/utils';
 import { useMutation } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';

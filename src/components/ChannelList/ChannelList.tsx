@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
-import { channel_t } from '@/globals/types';
+import { channel_t } from '@/lib/types';
 import { Button } from '@ariakit/react';
 
 type ChannelListReqProps = {

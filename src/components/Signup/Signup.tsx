@@ -10,8 +10,8 @@ import {
 } from '@ariakit/react';
 import formCSS from '../../styles/form.module.css';
 import useRegister from '@/hooks/useRegister';
-import { user_t } from '@/globals/types';
-import { passwRegex } from '@/globals/utility';
+import { user_t } from '@/lib/types';
+import { passwRegex } from '@/lib/utils';
 
 // TODO: se vuoi migliorare la validazione del form, puoi usare zod (https://github.com/ariakit/ariakit/discussions/1925)
 // quella built-in è buona, però non ha un messaggio di errore personalizzato

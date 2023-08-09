@@ -11,8 +11,8 @@ import {
 import Account from './Account';
 import SocialMediaManager from './SocialMediaManager';
 import ChannelList from '@/components/ChannelList';
-import { backendApi } from '@/globals/utility';
-import { channel_t } from '@/globals/types';
+import { backendApi } from '@/lib/utils';
+import { channel_t } from '@/lib/types';
 import { useAuthUser } from 'react-auth-kit';
 
 type settingsPage = {

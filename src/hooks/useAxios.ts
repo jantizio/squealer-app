@@ -1,5 +1,5 @@
 import { useAuthHeader, useIsAuthenticated } from 'react-auth-kit';
-import { backendApi } from '@/globals/utility';
+import { backendApi } from '@/lib/utils';
 
 export default function useAxios() {
   const authHeader = useAuthHeader();

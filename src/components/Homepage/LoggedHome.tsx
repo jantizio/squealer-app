@@ -6,7 +6,7 @@ import { Button } from '@ariakit/react';
 import MessageScroller from '@/components/MessageScroller';
 import HeaderLogo from '@/components/HeaderLogo';
 import SearchBar from '@/components/SearchBar';
-import { post_t } from '@/globals/types';
+import { post_t } from '@/lib/types';
 import { ReactComponent as Pencil } from '@/assets/pencil.svg';
 import { ReactComponent as Settings } from '@/assets/settings.svg';
 
