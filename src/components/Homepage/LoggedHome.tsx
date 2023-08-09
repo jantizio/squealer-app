@@ -6,9 +6,10 @@ import { Button } from '@ariakit/react';
 import MessageScroller from '@/components/MessageScroller';
 import HeaderLogo from '@/components/HeaderLogo';
 import SearchBar from '@/components/SearchBar';
+import ModeToggle from '@/components/ModeToggle';
 import { post_t } from '@/lib/types';
 import { ReactComponent as Pencil } from '@/assets/pencil.svg';
-import { ReactComponent as Settings } from '@/assets/settings.svg';
+import { Settings } from 'lucide-react';
 
 const LoggedHome = () => {
   const [filter, setFilter] = useState<string>('');
@@ -45,8 +46,9 @@ const LoggedHome = () => {
         <HeaderLogo />
         <SearchBar setFilter={setFilter} />
         <Button onClick={() => navigate('/settings')}>
-          <Settings width={30} height={30} className="fill-amber-600" />
+          <Settings className="stroke-primary" />
         </Button>
+        <ModeToggle />
       </nav>
       <MessageScroller fetchPostPage={fetchPostPage} filter={debouncedFilter} />
       <Button

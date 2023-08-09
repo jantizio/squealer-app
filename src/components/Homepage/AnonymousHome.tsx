@@ -5,6 +5,7 @@ import ChannelList from '@/components/ChannelList';
 import HeaderLogo from '@/components/HeaderLogo';
 import { channel_t, post_t } from '@/lib/types';
 import { backendApi } from '@/lib/utils';
+import ModeToggle from '@/components/ModeToggle';
 
 const fetchPostPage = async (page: number) => {
   type postResp = Omit<post_t, 'username'> & { userId: number };
@@ -41,6 +42,7 @@ function AnonymousHome() {
   return (
     <HeadingLevel>
       <HeaderLogo />
+      <ModeToggle />
       <Heading>Homepage non loggato</Heading>
 
       <div className="flex">
