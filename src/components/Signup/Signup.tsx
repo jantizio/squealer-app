@@ -35,6 +35,7 @@ function Signup() {
       type: 'standard',
       verified: false,
       SMM: null,
+      quota: { day: 0, week: 0, month: 0 },
       ...rest,
     };
 

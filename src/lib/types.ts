@@ -15,6 +15,11 @@ export type user_t = {
   type: 'standard' | 'professional' | 'moderator';
   verified: false;
   SMM: string | null;
+  quota: {
+    day: number;
+    week: number;
+    month: number;
+  }
 };
 
 // export type channel_t = {
