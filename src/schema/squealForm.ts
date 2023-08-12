@@ -1,6 +1,12 @@
 import { z } from 'zod';
 
 const squealSchemaBase = z.object({
+  receiver: z
+    .string()
+    .regex(/^$|^((@|#|§).+)$/, {
+      message: 'Il destinatario non è valido, deve iniziare con @, # o §',
+    })
+    .optional(),
   receivers: z
     .array(z.string())
     .nonempty({
@@ -38,11 +44,3 @@ export const squealSchema = z.discriminatedUnion('bodyType', [
     .merge(squealSchemaBase),
 ]);
 export type squealSchema_t = z.infer<typeof squealSchema>;
-
-export const receiversSchema = z.object({
-  receiver: z.string().regex(/^(@|#|§).+$/, {
-    message: 'Il destinatario non è valido, deve iniziare con @, # o §',
-  }),
-});
-
-export type receiversSchema_t = z.infer<typeof receiversSchema>;

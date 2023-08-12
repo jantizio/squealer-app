@@ -3,35 +3,30 @@ import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { Button } from '@/components/ui/button';
 import { Form, FormField, FormItem, FormMessage } from '@/components/ui/form';
-import useAxios from '@/hooks/useAxios';
-import { squealIn_t } from '@/lib/types';
-import {
-  receiversSchema,
-  receiversSchema_t,
-  squealSchema,
-  squealSchema_t,
-} from '@/schema/squealForm';
+// import useAxios from '@/hooks/useAxios';
+// import { squealIn_t } from '@/lib/types';
+import { squealSchema, squealSchema_t } from '@/schema/squealForm';
 import { useQuery } from '@tanstack/react-query';
-import { useAuthUser } from 'react-auth-kit';
+// import { useAuthUser } from 'react-auth-kit';
 import ReceiverInput from './ReceiverInput';
 import TypeSelect from './TypeSelect';
 import BodyTextArea from './BodyTextArea';
 import MediaInput from './MediaInput';
 import ReceiversCheckbox from './ReceiversCheckbox';
 
-type receiver_t = `@${string}` | `#${string}` | `§${string}`;
+// type receiver_t = `@${string}` | `#${string}` | `§${string}`;
 
-const nonTextQuota = 1000;
+const nonTextQuota = 125;
 
 const NewSqueal = () => {
-  const privateApi = useAxios();
-  const user = useAuthUser();
+  // const privateApi = useAxios();
+  // const user = useAuthUser();
   const { data } = useQuery(['dailyQuota'], async () => {
     // TODO: get the quota from the server
     // const response = await privateApi.get<user_t>(`/users/${user()?.username}`);
     // if (response.data === undefined) return 0;
     // return response.data.quota;
-    await new Promise((resolve) => setTimeout(resolve, 10 * 1000));
+    await new Promise((resolve) => setTimeout(resolve, 3 * 1000));
     const day = 1000,
       week = 7 * day - 5,
       month = 4 * week - 5;
@@ -88,52 +83,53 @@ const NewSqueal = () => {
 
   type updatedSquealSchema_t = z.infer<typeof updatedsquealSchema>;
 
-  const receiversform = useForm<receiversSchema_t>({
-    resolver: zodResolver(receiversSchema),
-    defaultValues: { receiver: '' },
-  });
-
   const squealform = useForm<updatedSquealSchema_t>({
     resolver: zodResolver(updatedsquealSchema),
     defaultValues: {
+      receiver: '',
       txt: '',
       bodyType: 'text',
       receivers: [],
     },
   });
 
-  function addReceiver(values: receiversSchema_t) {
-    receiversform.reset();
+  function addReceiver() {
+    const recv = squealform.getValues('receiver');
+    if (recv === undefined) return;
+
+    squealform.resetField('receiver');
     squealform.setValue('receivers', [
       ...squealform.getValues('receivers'),
-      values.receiver,
+      recv,
     ]);
 
     squealform.trigger('receivers');
   }
+
   function createSqueal(values: squealSchema_t) {
     console.log('result', values);
 
-    let body: squealIn_t['body'];
-    if (values.bodyType === 'text') {
-      body = values.txt;
-    } else if (values.bodyType === 'media') {
-      body = values.media;
-    } else if (values.bodyType === 'geolocation') {
-      // body = values.geo;
-      body = 'TODO: geolocation';
-    } else {
-      throw new Error('Invalid body type');
-    }
+    // let body: squealIn_t['body'];
+
+    // if (values.bodyType === 'text') {
+    //   body = values.txt;
+    // } else if (values.bodyType === 'media') {
+    //   body = values.media;
+    // } else if (values.bodyType === 'geolocation') {
+    //   // body = values.geo;
+    //   body = 'TODO: geolocation';
+    // } else {
+    //   throw new Error('Invalid body type');
+    // }
 
     // TODO: create the squeal
-    const newSqueal: squealIn_t = {
-      body,
-      receivers: values.receivers,
-      author: user()?.username,
-      automatic_receiver: [''],
-      category: [''],
-    };
+    // const newSqueal: squealIn_t = {
+    //   body,
+    //   receivers: values.receivers,
+    //   author: user()?.username,
+    //   automatic_receiver: [''],
+    //   category: [''],
+    // };
 
     // privateApi.post('/squeals/', newSqueal);
   }
@@ -142,24 +138,19 @@ const NewSqueal = () => {
 
   return (
     <>
-      <Form {...receiversform}>
-        <form
-          onSubmit={receiversform.handleSubmit(addReceiver)}
-          className="container grid w-full gap-2"
-        >
-          <FormField
-            control={receiversform.control}
-            name="receiver"
-            render={({ field }) => <ReceiverInput field={field} />}
-          />
-        </form>
-      </Form>
-
       <Form {...squealform}>
         <form
           onSubmit={squealform.handleSubmit(createSqueal)}
           className="container grid w-full gap-2"
         >
+          <FormField
+            control={squealform.control}
+            name="receiver"
+            render={({ field }) => (
+              <ReceiverInput field={field} onClick={addReceiver} />
+            )}
+          />
+
           <FormField
             control={squealform.control}
             name="receivers"

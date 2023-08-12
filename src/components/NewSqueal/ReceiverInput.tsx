@@ -15,23 +15,27 @@ type receiverInputProp<
   TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>
 > = {
   field: ControllerRenderProps<TFieldValues, TName>;
+  onClick: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
 };
 
 const ReceiverInput = <
-TFieldValues extends FieldValues,
-TName extends FieldPath<TFieldValues>
->({ field }: receiverInputProp<TFieldValues, TName>) => {
+  TFieldValues extends FieldValues,
+  TName extends FieldPath<TFieldValues>
+>({
+  field,
+  onClick,
+}: receiverInputProp<TFieldValues, TName>) => {
   return (
     <FormItem>
       <FormLabel>Destinatari</FormLabel>
-      <div className="flex space-x-2">
+      <section className="flex space-x-2">
         <FormControl>
           <Input {...field} />
         </FormControl>
-        <Button type="submit">
+        <Button type="button" onClick={onClick}>
           <Plus />
         </Button>
-      </div>
+      </section>
       <FormDescription>Inserisci i destinatari del tuo Squeal</FormDescription>
       <FormMessage />
     </FormItem>
