@@ -4,6 +4,11 @@ export type post_t = {
   username: string;
   body: string;
 };
+export type quota_t = {
+  day: number;
+  week: number;
+  month: number;
+};
 
 export type user_t = {
   // id: string;
@@ -15,11 +20,7 @@ export type user_t = {
   type: 'standard' | 'professional' | 'moderator';
   verified: false;
   SMM: string | null;
-  quota: {
-    day: number;
-    week: number;
-    month: number;
-  }
+  quota: quota_t;
 };
 
 // export type channel_t = {
@@ -30,4 +31,25 @@ export type channel_t = {
   userId: number;
   id: number;
   title: string;
+};
+
+export type squealIn_t = {
+  receivers: string[];
+  author: string;
+  body: string | File; //TODO: aggiungere il tipo per la geolocation
+  category: string[];
+  automatic_receiver: string[];
+};
+
+export type squealOut_t = {
+  id: number;
+  receivers: string[];
+  author: string;
+  body: string | File; //TODO: aggiungere il tipo per la geolocation
+  datetime: Date;
+  impressions: number;
+  positive_reactions: number;
+  negative_reactions: number;
+  category: string[];
+  automatic_receiver: string[];
 };

@@ -1,147 +1,92 @@
-import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useForm } from 'react-hook-form';
 import { z } from 'zod';
-
 import { Button } from '@/components/ui/button';
-import {
-  Form,
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from '@/components/ui/form';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
-import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
-import { Plus } from 'lucide-react';
-import { Checkbox } from '@/components/ui/checkbox';
+import { Form, FormField, FormItem, FormMessage } from '@/components/ui/form';
 import useAxios from '@/hooks/useAxios';
-import { useAuthUser } from 'react-auth-kit';
+import { squealIn_t } from '@/lib/types';
+import {
+  receiversSchema,
+  receiversSchema_t,
+  squealSchema,
+  squealSchema_t,
+} from '@/schema/squealForm';
 import { useQuery } from '@tanstack/react-query';
-
-const squealSchemaBase = z.object({
-  receivers: z
-    .array(z.string())
-    .nonempty({
-      message: 'Devi inserire almeno un destinatario',
-    })
-    .refine((items) => new Set(items).size === items.length, {
-      message: 'Non puoi inserire destinatari duplicati',
-    }),
-});
-
-const squealSchema = z.discriminatedUnion('bodyType', [
-  z
-    .object({
-      bodyType: z.literal('text'),
-      txt: z.string().min(1),
-    })
-    .merge(squealSchemaBase),
-  z
-    .object({
-      bodyType: z.literal('media'),
-      media: z.instanceof(File, {
-        message: "Devi caricare un'immagine o un video",
-      }), //TODO: aggiungere validazione sul tipo di file
-    })
-    .merge(squealSchemaBase),
-  z
-    .object({
-      bodyType: z.literal('geolocation'),
-      geo: z.object({
-        //TODO: definire meglio lo schema
-        latitude: z.number(),
-        longitude: z.number(),
-      }),
-    })
-    .merge(squealSchemaBase),
-]);
-// TODO: provare ad usare transform per modificare i 3 campi diversi in body
+import { useAuthUser } from 'react-auth-kit';
+import ReceiverInput from './ReceiverInput';
+import TypeSelect from './TypeSelect';
+import BodyTextArea from './BodyTextArea';
+import MediaInput from './MediaInput';
+import ReceiversCheckbox from './ReceiversCheckbox';
 
 type receiver_t = `@${string}` | `#${string}` | `§${string}`;
 
-const receiversSchema = z.object({
-  receiver: z.string().regex(/^(@|#|§).+$/, {
-    message: 'Il destinatario non è valido, deve iniziare con @, # o §',
-  }),
-});
-
-type squealSchema_t = z.infer<typeof squealSchema>;
-
-type receiversSchema_t = z.infer<typeof receiversSchema>;
+const nonTextQuota = 1000;
 
 const NewSqueal = () => {
   const privateApi = useAxios();
   const user = useAuthUser();
-  const { data: quota } = useQuery(['dailyQuota'], async () => {
+  const { data } = useQuery(['dailyQuota'], async () => {
+    // TODO: get the quota from the server
     // const response = await privateApi.get<user_t>(`/users/${user()?.username}`);
     // if (response.data === undefined) return 0;
     // return response.data.quota;
-    await new Promise((resolve) => setTimeout(resolve, 10* 1000));
-    const day = 1000, week = (7*day)-5, month = (4*week)-5;
-    return {day, week, month};
+    await new Promise((resolve) => setTimeout(resolve, 10 * 1000));
+    const day = 1000,
+      week = 7 * day - 5,
+      month = 4 * week - 5;
+    return { day, week, month };
   });
 
-  const aQuota = {
-    day: quota?.day ?? 0,
-    week: quota?.week ?? 0,
-    month: quota?.month ?? 0,
-  }
+  // Set the quota to 0 while loading
+  const quota = {
+    day: data?.day ?? 0,
+    week: data?.week ?? 0,
+    month: data?.month ?? 0,
+  };
 
-  // const updatedsquealSchema = z.intersection(
-  //   squealSchema,
-  //   z.object({ body: z.string().max(data ?? 0) })
-  // );
-  // type updatedSquealSchema_t = z.infer<typeof updatedsquealSchema>;
-
-  const updatedsquealSchema = squealSchema.refine(
-    (data) => {
-      if (data.bodyType === 'text') {
-        return data.txt.length <= (aQuota.day);
+  // modify the schema to check the quota
+  const updatedsquealSchema = squealSchema
+    .refine(
+      (data) => {
+        if (data.bodyType === 'text') {
+          return data.txt.length <= quota.day;
+        }
+        return true;
+      },
+      {
+        message: 'Hai superato la quota giornaliera',
+        path: ['txt'],
       }
-    },
-    {
-      message: 'Hai superato la quota giornaliera',
-      path: ['txt'],
-    }
-  ).refine((data) => {
-    if (data.bodyType === 'media') {
-      return 1000 <= (aQuota.day);
-    }
-    return true;
-  },
-  {
-    message: 'Per le immagini o i video hai bisogno di 1000 caratteri di quota',
-    path: ['media'],
-  }
-  ).refine((data) => {
-    if (data.bodyType === 'geolocation') {
-      return 1000 <= (aQuota.day);
-    }
-    return true;
-  }
-  ,
-    {
-      message: 'Per la geolocalizzazione hai bisogno di 1000 caratteri di quota',
-      path: ['geolocation'],
-    }
-  );
+    )
+    .refine(
+      (data) => {
+        if (data.bodyType === 'media') {
+          return nonTextQuota <= quota.day;
+        }
+        return true;
+      },
+      {
+        message:
+          'Per le immagini o i video hai bisogno di 1000 caratteri di quota',
+        path: ['media'],
+      }
+    )
+    .refine(
+      (data) => {
+        if (data.bodyType === 'geolocation') {
+          return nonTextQuota <= quota.day;
+        }
+        return true;
+      },
+      {
+        message:
+          'Per la geolocalizzazione hai bisogno di 1000 caratteri di quota',
+        path: ['geolocation'],
+      }
+    );
 
   type updatedSquealSchema_t = z.infer<typeof updatedsquealSchema>;
-
-  // console.log(updatedsquealSchema.safeParse({
-  //   bodyType: 'text',
-  //   txt: 'ciaoasda',
-  //   receivers: ['@pippo'],
-  // }))
 
   const receiversform = useForm<receiversSchema_t>({
     resolver: zodResolver(receiversSchema),
@@ -169,9 +114,26 @@ const NewSqueal = () => {
   function createSqueal(values: squealSchema_t) {
     console.log('result', values);
 
-    // TODO: create the squeal
+    let body: squealIn_t['body'];
+    if (values.bodyType === 'text') {
+      body = values.txt;
+    } else if (values.bodyType === 'media') {
+      body = values.media;
+    } else if (values.bodyType === 'geolocation') {
+      // body = values.geo;
+      body = 'TODO: geolocation';
+    } else {
+      throw new Error('Invalid body type');
+    }
 
-    const newSqueal = {};
+    // TODO: create the squeal
+    const newSqueal: squealIn_t = {
+      body,
+      receivers: values.receivers,
+      author: user()?.username,
+      automatic_receiver: [''],
+      category: [''],
+    };
 
     // privateApi.post('/squeals/', newSqueal);
   }
@@ -188,23 +150,7 @@ const NewSqueal = () => {
           <FormField
             control={receiversform.control}
             name="receiver"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Destinatari</FormLabel>
-                <div className="flex space-x-2">
-                  <FormControl>
-                    <Input {...field} />
-                  </FormControl>
-                  <Button type="submit">
-                    <Plus />
-                  </Button>
-                </div>
-                <FormDescription>
-                  Inserisci i destinatari del tuo Squeal
-                </FormDescription>
-                <FormMessage />
-              </FormItem>
-            )}
+            render={({ field }) => <ReceiverInput field={field} />}
           />
         </form>
       </Form>
@@ -225,33 +171,9 @@ const NewSqueal = () => {
                       key={id}
                       control={squealform.control}
                       name="receivers"
-                      render={({ field }) => {
-                        return (
-                          <FormItem
-                            key={id}
-                            className="flex flex-row items-center space-x-3 space-y-0"
-                          >
-                            <FormControl>
-                              <Checkbox
-                                checked={field.value?.includes(receiver)}
-                                onCheckedChange={(checked) => {
-                                  return checked
-                                    ? field.onChange([...field.value, receiver])
-                                    : field.onChange(
-                                        ((arr) => {
-                                          arr.splice(id, 1);
-                                          return arr;
-                                        })(field.value)
-                                      );
-                                }}
-                              />
-                            </FormControl>
-                            <FormLabel className="font-normal">
-                              {receiver}
-                            </FormLabel>
-                          </FormItem>
-                        );
-                      }}
+                      render={({ field }) => (
+                        <ReceiversCheckbox field={field} receiver={receiver} />
+                      )}
                     />
                   ))}
                   <FormMessage />
@@ -263,30 +185,7 @@ const NewSqueal = () => {
           <FormField
             control={squealform.control}
             name="bodyType"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Tipo</FormLabel>
-                <Select
-                  onValueChange={field.onChange}
-                  defaultValue={field.value}
-                >
-                  <FormControl>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Scegli un tipo" />
-                    </SelectTrigger>
-                  </FormControl>
-                  <SelectContent>
-                    <SelectItem value="text">Testo</SelectItem>
-                    <SelectItem value="media">Immagine/Video</SelectItem>
-                    <SelectItem value="geolocation">Geolocazione</SelectItem>
-                  </SelectContent>
-                </Select>
-                <FormDescription>
-                  Scegli il tipo di Squeal che vuoi inviare
-                </FormDescription>
-                <FormMessage />
-              </FormItem>
-            )}
+            render={({ field }) => <TypeSelect field={field} />}
           />
 
           {currType === 'text' && (
@@ -294,28 +193,9 @@ const NewSqueal = () => {
               control={squealform.control}
               shouldUnregister={true}
               name="txt"
-              render={({ field }) => {
-                // console.log(field);
-
-                const { value, ...rest } = field;
-                return (
-                  <FormItem>
-                    <FormLabel>Squeal</FormLabel>
-                    <FormControl>
-                      <Textarea
-                        placeholder="Hello world!"
-                        {...field}
-                        // value={value as string}
-                      />
-                    </FormControl>
-                    <FormDescription>
-                      Hai a disposizione {aQuota.day} caratteri per il tuo
-                      Squeal
-                    </FormDescription>
-                    <FormMessage />
-                  </FormItem>
-                );
-              }}
+              render={({ field }) => (
+                <BodyTextArea field={field} quota={quota} />
+              )}
             />
           )}
 
@@ -324,26 +204,7 @@ const NewSqueal = () => {
               name="media"
               control={squealform.control}
               shouldUnregister={true}
-              render={({ field }) => {
-                const { value, onChange, ...rest } = field;
-                return (
-                  <FormItem>
-                    <FormLabel>Immagine/Video</FormLabel>
-                    <FormControl>
-                      <Input
-                        type="file"
-                        accept="image/*,video/*"
-                        {...rest}
-                        onChange={(e) => field.onChange(e.target.files?.[0])}
-                      />
-                    </FormControl>
-                    <FormDescription>
-                      Carica un'immagine o un video per il tuo Squeal
-                    </FormDescription>
-                    <FormMessage />
-                  </FormItem>
-                );
-              }}
+              render={({ field }) => <MediaInput field={field} />}
             />
           )}
 
