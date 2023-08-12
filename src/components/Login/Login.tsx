@@ -64,7 +64,7 @@ function Login() {
               type="password"
               minLength={8}
               maxLength={40}
-              // pattern={passwRegex} // TODO: riattivare questa regex
+              pattern={passwRegex}
               placeholder="Inserisci la tua password..."
               className={formCSS.input}
               required
