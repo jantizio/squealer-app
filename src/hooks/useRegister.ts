@@ -1,14 +1,12 @@
 import useLogin from '@/hooks/useLogin';
-import { user_t } from '@/lib/types';
+import { error_t, user_t } from '@/lib/types';
 import { AxiosError } from 'axios';
 import { backendApi } from '@/lib/utils';
 import { useMutation } from '@tanstack/react-query';
-import { useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
 
 export default function useRegister() {
   const loginUser = useLogin();
-  const navigate = useNavigate();
   const register = useMutation<user_t, AxiosError, user_t>({
     mutationKey: ['register'],
     mutationFn: async (newUser) => {
@@ -18,23 +16,28 @@ export default function useRegister() {
       );
       return data;
     },
-    onSuccess(data) {
+    onSuccess(data, variables) {
       // questo viene chiamato per gli status code 2xx
-      console.log('SUCCESS!');
+      console.log('Registration SUCCESS!');
       console.log('data:', data);
       // eseguo il login dell'utente
       const creds = {
         username: data.username,
-        password: data.password,
+        password: variables.password,
       };
 
       loginUser(creds);
-      // TODO: potrebbe essere necessario fare il redirect alla pagina da cui l'utente è arrivato
-      navigate('/');
     },
     onError(error) {
       // questo viene chiamato per gli status code che non sono 2xx
       // console.log('error:', error);
+      const errorLog: error_t = {
+        path: error.config?.url ?? '/users/${username}',
+        method: 'PUT',
+        message: error.message,
+      };
+
+      backendApi.put('/logs', errorLog);
 
       if (error.response?.status === 409) {
         console.log('utente già registrato');
@@ -47,6 +50,7 @@ export default function useRegister() {
         return toast.error('Errore di validazione dei dati');
       } else {
         console.log('errore sconosciuto');
+
         return toast.error('Qualcosa è andato storto, riprova più tardi');
       }
     },

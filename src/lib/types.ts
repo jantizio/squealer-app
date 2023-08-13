@@ -53,3 +53,9 @@ export type squealOut_t = {
   category: string[];
   automatic_receiver: string[];
 };
+
+export type error_t = {
+  path: string;
+  method: 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH';
+  message: string;
+};

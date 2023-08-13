@@ -1,6 +1,7 @@
 import { useSignIn } from 'react-auth-kit';
 import { AxiosError } from 'axios';
 import { backendApi } from '@/lib/utils';
+import { error_t } from '@/lib/types';
 import { useMutation } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
 import jwt_decode from 'jwt-decode';
@@ -32,7 +33,7 @@ export default function useLogin() {
     },
     onSuccess(data, variables) {
       // questo viene chiamato per gli status code 2xx
-      console.log('SUCCESS!');
+      console.log('Login SUCCESS!');
       console.log('data:', data);
 
       const token_payload = jwt_decode<token_payload_t>(data);
@@ -50,12 +51,22 @@ export default function useLogin() {
         authState: { username: variables.username },
       });
       navigate('/');
+      // TODO: potrebbe essere necessario fare il redirect alla pagina da cui l'utente è arrivato
     },
     onError(error) {
+      const errorLog: error_t = {
+        path: error.config?.url ?? '/token',
+        method: 'POST',
+        message: error.message,
+      };
+
+      console.log(errorLog);
       if (error.response?.status === 401) {
         console.log('credenziali errate');
       } else {
         console.log('altro errore');
+
+        backendApi.put('/logs', errorLog);
       }
     },
   });
