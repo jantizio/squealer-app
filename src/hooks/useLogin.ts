@@ -36,7 +36,7 @@ export default function useLogin() {
       console.log('Login SUCCESS!');
       console.log('data:', data);
 
-      const token_payload = jwt_decode<token_payload_t>(data);
+      const token_payload = jwt_decode<token_payload_t>(data); //TODO: forse try catch per token non valido
 
       // calculate expiration time in minutes
       const expiresIn = Math.floor(

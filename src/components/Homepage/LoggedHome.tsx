@@ -2,14 +2,13 @@ import { useState } from 'react';
 import useAxios from '@/hooks/useAxios';
 import { useDebounce } from 'usehooks-ts';
 import { useNavigate } from 'react-router-dom';
-import { Button } from '@ariakit/react';
+import { Button } from '@/components/ui/button';
 import MessageScroller from '@/components/MessageScroller';
 import HeaderLogo from '@/components/HeaderLogo';
 import SearchBar from '@/components/SearchBar';
 import ModeToggle from '@/components/ModeToggle';
 import { post_t } from '@/lib/types';
-import { ReactComponent as Pencil } from '@/assets/pencil.svg';
-import { Settings } from 'lucide-react';
+import { PenSquare, Settings } from 'lucide-react';
 
 const LoggedHome = () => {
   const [filter, setFilter] = useState<string>('');
@@ -42,20 +41,29 @@ const LoggedHome = () => {
 
   return (
     <>
-      <nav className="flex items-center justify-around">
+      <nav className="flex items-center justify-around my-3">
         <HeaderLogo />
         <SearchBar setFilter={setFilter} />
-        <Button onClick={() => navigate('/settings')}>
-          <Settings className="stroke-primary" />
-        </Button>
-        <ModeToggle />
+        <section>
+          <Button
+            onClick={() => navigate('/settings')}
+            variant="outline"
+            size="icon"
+            className="mx-2"
+          >
+            <Settings className="h-icon-sm w-icon-sm" />
+          </Button>
+          <ModeToggle />
+        </section>
       </nav>
       <MessageScroller fetchPostPage={fetchPostPage} filter={debouncedFilter} />
       <Button
-        className="fixed bottom-0 right-0"
+        className="fixed bottom-3 right-3"
+        variant="unstyled"
+        size="icon"
         onClick={() => navigate('/create')}
       >
-        <Pencil width={60} height={60} className="fill-amber-500" />
+        <PenSquare className="h-icon-lg w-icon-lg" />
       </Button>
     </>
   );

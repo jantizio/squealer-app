@@ -51,6 +51,16 @@ export default {
           foreground: 'hsl(var(--card-foreground))',
         },
       },
+      width: {
+        'icon-sm': '1.2rem',
+        'icon-md': '1.6rem',
+        'icon-lg': '2rem',
+      },
+      height: {
+        'icon-sm': '1.2rem',
+        'icon-md': '1.6rem',
+        'icon-lg': '2rem',
+      },
       borderRadius: {
         lg: 'var(--radius)',
         md: 'calc(var(--radius) - 2px)',

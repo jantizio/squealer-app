@@ -1,27 +1,48 @@
-import { Button, Form, FormInput, useFormStore } from '@ariakit/react';
 import { SetStateAction } from 'react';
+import { useForm } from 'react-hook-form';
+import { Form, FormControl, FormField, FormItem } from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
+import { Search } from 'lucide-react';
 
 type SearchBarProps = {
   setFilter: React.Dispatch<SetStateAction<string>>;
 };
 
 const SearchBar = ({ setFilter }: SearchBarProps) => {
-  const searchForm = useFormStore({ defaultValues: { search: '' } });
-
-  const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFilter(e.target.value);
-  };
+  const searchForm = useForm<{ search: string }>({
+    defaultValues: { search: '' },
+  });
 
   return (
-    <Form store={searchForm} resetOnSubmit={false}>
-      <FormInput
-        name={searchForm.names.search}
-        type="search"
-        placeholder="Cerca..."
-        onChange={handleSearch}
-      />
-      <Button>Search</Button>
-      {/* TODO: cambiare con un icona */}
+    <Form {...searchForm}>
+      <form onSubmit={searchForm.handleSubmit(() => {})}>
+        <FormField
+          name="search"
+          control={searchForm.control}
+          render={({ field }) => {
+            return (
+              <FormItem>
+                <FormControl>
+                  <section className="flex items-center justify-center w-full">
+                    <Search className="h-icon-md w-icon-md" />
+
+                    <Input
+                      {...field}
+                      type="search"
+                      placeholder="Cerca..."
+                      onChange={(e) => {
+                        setFilter(e.target.value);
+                        field.onChange(e.target.value);
+                      }}
+                      className="w-full ml-2 text-center text-lg"
+                    />
+                  </section>
+                </FormControl>
+              </FormItem>
+            );
+          }}
+        ></FormField>
+      </form>
     </Form>
   );
 };
