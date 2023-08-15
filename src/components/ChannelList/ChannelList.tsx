@@ -1,24 +1,24 @@
 import { useQuery } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
 import { channel_t } from '@/lib/types';
-import { Button } from '@ariakit/react';
+import { Button } from '@/components/ui/button';
+import { cn } from '@/lib/utils';
+import { X } from 'lucide-react';
 
 type ChannelListReqProps = {
   fetchChannels: () => Promise<channel_t[]>;
 };
 type ChannelListOptProps = {
   removeButton: boolean;
+  className: string;
 };
 
 type ChannelListProps = ChannelListReqProps & ChannelListOptProps;
 
-const defaultProps: ChannelListOptProps = {
-  removeButton: false,
-};
-
 const ChannelList = ({
   fetchChannels,
-  removeButton = false,
+  removeButton,
+  className,
 }: ChannelListProps) => {
   const { data } = useQuery<channel_t[], AxiosError>(
     ['channels'],
@@ -30,25 +30,33 @@ const ChannelList = ({
   };
 
   return (
-    <ul>
+    <ul className={cn(className)}>
       {data?.map((channel) => (
-        <li className="p-3 m-2 border rounded border-gray-200" key={channel.id}>
+        <li
+          key={channel.id}
+          className="flex items-center p-2 m-2 space-x-1 border-b"
+        >
           <p>{channel.title}</p>
           {removeButton && (
             <Button
               onClick={() => channelUnsub()}
-              className="border border-red-900 rounded p-1"
+              variant="outline"
+              size="icon"
+              className="border-destructive "
             >
-              R
+              <X />
             </Button>
           )}
-          {/*Sostituire con un'icona*/}
         </li>
       ))}
     </ul>
   );
 };
 
+const defaultProps: ChannelListOptProps = {
+  removeButton: false,
+  className: '',
+};
 ChannelList.defaultProps = defaultProps;
 
 export default ChannelList;

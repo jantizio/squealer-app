@@ -15,7 +15,7 @@ const SearchBar = ({ setFilter }: SearchBarProps) => {
 
   return (
     <Form {...searchForm}>
-      <form onSubmit={searchForm.handleSubmit(() => {})}>
+      <form onSubmit={searchForm.handleSubmit(() => {})} className="relative">
         <FormField
           name="search"
           control={searchForm.control}
@@ -24,7 +24,7 @@ const SearchBar = ({ setFilter }: SearchBarProps) => {
               <FormItem>
                 <FormControl>
                   <section className="flex items-center justify-center w-full">
-                    <Search className="h-icon-md w-icon-md" />
+                    <Search className="h-icon-md w-icon-md absolute right-[13rem]" />
 
                     <Input
                       {...field}

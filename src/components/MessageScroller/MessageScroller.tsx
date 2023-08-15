@@ -24,7 +24,7 @@ const MessageScroller = ({ fetchPostPage, filter }: MessageScrollerProps) => {
 
   return (
     <>
-      <div className="container">{content}</div>
+      <div>{content}</div>
       {isFetchingNextPage && <p>Loading more posts...</p>}
       {isError && errorCheck(error) && <p>Error: {error.message}</p>}
     </>
