@@ -8,14 +8,7 @@ type options<T> = {
 };
 
 export default function useInfinteScroll<T>({ fetchPage, filter }: options<T>) {
-  const {
-    fetchNextPage,
-    hasNextPage,
-    isFetchingNextPage,
-    data,
-    isError,
-    error,
-  } = useInfiniteQuery(
+  const queryObj = useInfiniteQuery(
     ['message', filter],
     ({ pageParam = 1 }) => fetchPage(pageParam),
     {
@@ -27,20 +20,20 @@ export default function useInfinteScroll<T>({ fetchPage, filter }: options<T>) {
 
   const intObserver = useRef<IntersectionObserver | null>(null);
   const lastPostRef = (post: HTMLDivElement) => {
-    if (isFetchingNextPage) return;
+    if (queryObj.isFetchingNextPage) return;
 
     if (intObserver.current) intObserver.current.disconnect();
 
     intObserver.current = new IntersectionObserver(
       (posts: IntersectionObserverEntry[]) => {
-        if (posts[0]?.isIntersecting && hasNextPage) {
+        if (posts[0]?.isIntersecting && queryObj.hasNextPage) {
           console.log("vicini all'ultimo post");
-          fetchNextPage();
+          queryObj.fetchNextPage();
         }
       }
     );
     if (post) intObserver.current.observe(post);
   };
 
-  return { data, isError, error, isFetchingNextPage, lastPostRef };
+  return { ...queryObj, lastPostRef };
 }
