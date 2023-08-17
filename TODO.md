@@ -1,0 +1,15 @@
+- fare il menù a panino
+- fare lo slider
+- progettare l'app dell'utente loggato
+    - [x] homepage
+    - [x] menù impostazioni
+    - [ ] scrivere messaggi
+- aggiungere la data di scadenza al token
+- reset della password per utente non loggato
+- salvare il tipo di account e il SMM nel'auth state
+- capire come implementare il filtro sui destinatari
+- per risposta si può usare [questo](https://ariakit.org/examples/dialog-react-router)
+- capire come implementare l'upload di immagini e video e geolocazione
+- aggiungere una loading animation nella registrazione e nel login
+- fare una sezione per le notifiche
+- provare a far usare la scrollbar del browser per la colonna centrale
