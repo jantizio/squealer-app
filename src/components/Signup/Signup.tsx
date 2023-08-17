@@ -167,7 +167,7 @@ function Signup() {
               minLength={8}
               maxLength={40}
               type="password"
-              pattern={passwRegex}
+              pattern={passwRegex.source}
               required
             />
 
@@ -190,7 +190,7 @@ function Signup() {
               minLength={8}
               maxLength={40}
               type="password"
-              pattern={passwRegex}
+              pattern={passwRegex.source}
               required
             />
 

@@ -106,7 +106,7 @@ const NewSqueal = () => {
     squealform.trigger('receivers');
   }
 
-  function createSqueal(values: squealSchema_t) {
+  const createSqueal = squealform.handleSubmit((values) => {
     console.log('result', values);
 
     // let body: squealIn_t['body'];
@@ -132,17 +132,14 @@ const NewSqueal = () => {
     // };
 
     // privateApi.post('/squeals/', newSqueal);
-  }
+  });
 
   const currType = squealform.watch('bodyType');
 
   return (
     <>
       <Form {...squealform}>
-        <form
-          onSubmit={squealform.handleSubmit(createSqueal)}
-          className="container grid w-full gap-2"
-        >
+        <form onSubmit={createSqueal} className="container grid w-full gap-2">
           <FormField
             control={squealform.control}
             name="receiver"

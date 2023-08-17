@@ -1,84 +1,83 @@
+import useLogin from '@/hooks/useLogin';
 import {
   Form,
-  useFormStore,
+  FormControl,
+  FormField,
+  FormItem,
   FormLabel,
-  FormInput,
-  FormError,
-  FormSubmit,
-  HeadingLevel,
-  Heading,
-} from '@ariakit/react';
-import formCSS from '../../styles/form.module.css';
-import useLogin from '@/hooks/useLogin';
-import { passwRegex } from '@/lib/utils';
+  FormMessage,
+} from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useForm } from 'react-hook-form';
+import { Button } from '@/components/ui/button';
+import { TypographyH1 } from '@/components/ui/TypographyH1';
+import { loginSchema, loginSchema_t } from '@/schema/loginForm';
 
 function Login() {
-  const loginForm = useFormStore({
-    defaultValues: { username: '', password: '' },
+  const loginForm = useForm<loginSchema_t>({
+    resolver: zodResolver(loginSchema),
+    defaultValues: {
+      username: '',
+      password: '',
+    },
   });
   const loginUser = useLogin();
 
-  loginForm.useSubmit(async (state) => {
-    console.log('data', JSON.stringify(state.values));
+  const loginUserHandler = loginForm.handleSubmit((values) => {
+    console.log('data', JSON.stringify(values)); //TODO: remove log
 
-    loginUser(state.values);
+    loginUser(values);
   });
 
   return (
-    <div className={formCSS.wrapper}>
-      <Form store={loginForm} aria-labelledby="login" className={formCSS.form}>
-        <HeadingLevel>
-          <Heading id="register" className={formCSS.heading}>
+    <main className="container my-14">
+      <Form {...loginForm}>
+        <form
+          onSubmit={loginUserHandler}
+          className="flex flex-col mx-auto max-w-lg border rounded-md bg-accent [&>*]:p-4"
+        >
+          <TypographyH1>Accedi</TypographyH1>
+          <FormField
+            control={loginForm.control}
+            name="username"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Nome Utente</FormLabel>
+                <FormControl>
+                  <Input
+                    {...field}
+                    placeholder="Inserisci la tua username..."
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={loginForm.control}
+            name="password"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Password</FormLabel>
+                <FormControl>
+                  <Input
+                    {...field}
+                    type="password"
+                    placeholder="Inserisci la tua password..."
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <Button type="submit" className="w-5/12 mx-auto mb-4">
             Accedi
-          </Heading>
-          <div className={formCSS.field}>
-            <FormLabel
-              name={loginForm.names.username}
-              className={formCSS.label}
-            >
-              Username
-            </FormLabel>
-            <FormInput
-              name={loginForm.names.username}
-              placeholder="Inserisci la tua username..."
-              className={formCSS.input}
-              minLength={3}
-              maxLength={20}
-              required
-            />
-
-            <FormError
-              name={loginForm.names.username}
-              className={formCSS.error}
-            />
-          </div>
-          <div className={formCSS.field}>
-            <FormLabel
-              name={loginForm.names.password}
-              className={formCSS.label}
-            >
-              Password
-            </FormLabel>
-            <FormInput
-              name={loginForm.names.password}
-              type="password"
-              minLength={8}
-              maxLength={40}
-              pattern={passwRegex}
-              placeholder="Inserisci la tua password..."
-              className={formCSS.input}
-              required
-            />
-
-            <FormError
-              name={loginForm.names.password}
-              className={formCSS.error}
-            />
-          </div>
-          <FormSubmit className={formCSS.button}>Accedi</FormSubmit>
-        </HeadingLevel>
+          </Button>
+        </form>
       </Form>
-    </div>
+    </main>
   );
 }
 
