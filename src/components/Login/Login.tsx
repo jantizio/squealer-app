@@ -11,7 +11,7 @@ import { Input } from '@/components/ui/input';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { Button } from '@/components/ui/button';
-import { TypographyH1 } from '@/components/ui/TypographyH1';
+import { H1 } from '@/components/ui/typography';
 import { loginSchema, loginSchema_t } from '@/schema/loginForm';
 
 function Login() {
@@ -37,7 +37,7 @@ function Login() {
           onSubmit={loginUserHandler}
           className="flex flex-col mx-auto max-w-lg border rounded-md bg-accent [&>*]:p-4"
         >
-          <TypographyH1>Accedi</TypographyH1>
+          <H1>Accedi</H1>
           <FormField
             control={loginForm.control}
             name="username"

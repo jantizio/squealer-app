@@ -4,6 +4,7 @@ import { channel_t } from '@/lib/types';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { X } from 'lucide-react';
+import { P, A } from '@/components/ui/typography';
 
 type ChannelListReqProps = {
   fetchChannels: () => Promise<channel_t[]>;
@@ -36,7 +37,9 @@ const ChannelList = ({
           key={channel.id}
           className="flex items-center p-2 m-2 space-x-1 border-b"
         >
-          <p>{channel.title}</p>
+          <P>
+            <A href={`/channels/${channel.title}`}>{channel.title}</A>
+          </P>
           {removeButton && (
             <Button
               onClick={() => channelUnsub()}

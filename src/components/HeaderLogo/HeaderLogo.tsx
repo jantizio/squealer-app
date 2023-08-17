@@ -1,6 +1,7 @@
 import { ReactComponent as SquealerLogo } from '@/assets/vulture.svg';
 import { cn } from '@/lib/utils';
 import { Link } from 'react-router-dom';
+import { Large } from '@/components/ui/typography';
 
 type HeaderLogoProps = {
   responsive?: boolean;
@@ -13,7 +14,7 @@ const HeaderLogo = ({ responsive }: HeaderLogoProps) => {
     <Link to="/">
       <div className="flex items-center">
         <SquealerLogo className="w-12 h-12" />
-        <p className={cn('m-2', responsiveClass)}>Squealer</p>
+        <Large className={cn('m-2', responsiveClass)}>Squealer</Large>
       </div>
     </Link>
   );

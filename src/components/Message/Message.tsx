@@ -1,10 +1,9 @@
-import { Button, Heading, HeadingLevel } from '@ariakit/react';
-import { forwardRef } from 'react';
+import { forwardRef, useEffect } from 'react';
 import { post_t } from '@/lib/types';
 import { useIsAuthenticated } from 'react-auth-kit';
-import { ReactComponent as ArrowDown } from '@/assets/arrow-down.svg';
-import { ReactComponent as ArrowUp } from '@/assets/arrow-up.svg';
 import useAxios from '@/hooks/useAxios';
+import { Button } from '@/components/ui/button';
+import { ArrowUpCircle, ArrowDownCircle } from 'lucide-react';
 
 type messageProps = {
   children: post_t;
@@ -16,43 +15,59 @@ const Message = forwardRef<HTMLDivElement, messageProps>(
   ({ children }, ref) => {
     const { id, title, body, username } = children;
     const isAuthenticated = useIsAuthenticated();
-    const buttonSide = 40;
     const privateApi = useAxios();
 
     const updateSqueal = (operation: op, id: number) => {
+      switch (operation) {
+        case 'downvote':
+          console.log('downvote');
+
+          break;
+        case 'upvote':
+          console.log('upvote');
+
+          break;
+
+        case 'viewed':
+          console.log('plus one views');
+          break;
+      }
       // TODO: response and error handling
-      privateApi.patch(`/squeals/${id}`, { op: operation });
+      // privateApi.patch(`/squeals/${id}`, { op: operation });
     };
+
+    useEffect(() => {
+      // when the component is mounted count one view
+      updateSqueal('viewed', id);
+    }, []);
 
     return (
       <article
-        className={
-          'prose dark:prose-invert p-5 my-6 w-11/12 mx-auto border border-solid rounded border-neutral-500 shadow-md shadow-neutral-900 hover:shadow-xl'
-        }
+        className="prose prose-custom md:prose-lg lg:prose-xl border rounded p-5 mb-6 mx-auto"
         ref={ref}
       >
-        <HeadingLevel>
-          <Heading>
-            {title} - [{username}]
-          </Heading>
-          <p>{body}</p>
-          {isAuthenticated() && (
-            <>
-              <Button
-                className="m-2"
-                onClick={() => updateSqueal('upvote', id)}
-              >
-                <ArrowUp width={buttonSide} height={buttonSide} />
-              </Button>
-              <Button
-                className="m-2"
-                onClick={() => updateSqueal('downvote', id)}
-              >
-                <ArrowDown width={buttonSide} height={buttonSide} />
-              </Button>
-            </>
-          )}
-        </HeadingLevel>
+        <h2>
+          {title} - [{username}]
+        </h2>
+        <p>{body}</p>
+        {isAuthenticated() && (
+          <>
+            <Button
+              className="mx-2"
+              size="icon"
+              onClick={() => updateSqueal('upvote', id)}
+            >
+              <ArrowUpCircle />
+            </Button>
+            <Button
+              className="mx-2"
+              size="icon"
+              onClick={() => updateSqueal('downvote', id)}
+            >
+              <ArrowDownCircle />
+            </Button>
+          </>
+        )}
       </article>
     );
   }
