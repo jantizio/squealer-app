@@ -3,12 +3,12 @@ import { passwRegex } from '@/lib/utils';
 
 const standardString = z
   .string()
-  .min(3, { message: 'Il nome utente deve essere di almeno 3 caratteri' })
-  .max(20, { message: 'Il nome utente deve essere al massimo 20 caratteri' });
+  .min(3, { message: 'Devi inserire almeno 3 caratteri' })
+  .max(20, { message: 'Devi inserire al massimo 20 caratteri' });
 
 export const registerSchema = z
   .object({
-    email: standardString,
+    email: standardString.email({ message: "L'email non è valida" }),
     firstname: standardString,
     lastname: standardString,
     username: standardString,
@@ -22,7 +22,7 @@ export const registerSchema = z
       }),
     confirmPassword: z.string(),
   })
-  .refine((values) => values.password === values.password, {
+  .refine((values) => values.password === values.confirmPassword, {
     path: ['confirmPassword'],
     message: 'Le password non coincidono',
   });

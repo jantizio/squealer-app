@@ -1,4 +1,4 @@
-import useLogin from '@/hooks/useLogin';
+import { Button } from '@/components/ui/button';
 import {
   Form,
   FormControl,
@@ -8,11 +8,11 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
+import { H1 } from '@/components/ui/typography';
+import useLogin from '@/hooks/useLogin';
+import { loginSchema, loginSchema_t } from '@/schema/loginForm';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
-import { Button } from '@/components/ui/button';
-import { H1 } from '@/components/ui/typography';
-import { loginSchema, loginSchema_t } from '@/schema/loginForm';
 
 function Login() {
   const loginForm = useForm<loginSchema_t>({
@@ -47,7 +47,7 @@ function Login() {
                 <FormControl>
                   <Input
                     {...field}
-                    placeholder="Inserisci la tua username..."
+                    placeholder="Inserisci il tuo username..."
                   />
                 </FormControl>
                 <FormMessage />
