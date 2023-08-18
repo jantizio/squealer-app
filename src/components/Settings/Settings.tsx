@@ -1,19 +1,12 @@
 import HeaderLogo from '@/components/HeaderLogo';
-import {
-  Heading,
-  HeadingLevel,
-  useTabStore,
-  TabList,
-  Tab,
-  TabPanel,
-  Separator,
-} from '@ariakit/react';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { H1, Large } from '@/components/ui/typography';
+import ChannelList from '@/components/ChannelList';
+import { channel_t } from '@/lib/types';
+import { backendApi } from '@/lib/utils';
+import { useAuthUser } from 'react-auth-kit';
 import Account from './Account';
 import SocialMediaManager from './SocialMediaManager';
-import ChannelList from '@/components/ChannelList';
-import { backendApi } from '@/lib/utils';
-import { channel_t } from '@/lib/types';
-import { useAuthUser } from 'react-auth-kit';
 
 type settingsPage = {
   category: string;
@@ -37,80 +30,62 @@ const Settings = () => {
   const settings: settingsPage[] = [
     {
       category: 'Account',
-      component: <Account />,
+      // component: <Account />,
+      component: <div>Account</div>,
       hasPermission: true,
     },
     {
       category: 'Canali',
-      component: (
-        <ChannelList fetchChannels={fetchFollowedChannels} removeButton />
-      ),
+      // component: (
+      //   <ChannelList fetchChannels={fetchFollowedChannels} removeButton />
+      // ),
+      component: <div>Canali</div>,
       hasPermission: true,
       // aggiungere in qualche modo la possiblità di rimuovere i canali dai seguiti
     },
     {
       category: 'SMM',
-      component: <SocialMediaManager />,
-      hasPermission: authUser.type === 'professional',
+      // component: <SocialMediaManager />,
+      component: <div>Social Media Manager</div>,
+      // hasPermission: authUser.type === 'professional',
+      hasPermission: true,
     },
   ];
 
-  const defaultSelectedId = 'default-selected-tab';
-  const tab = useTabStore({ defaultSelectedId, orientation: 'vertical' });
-
-  // console.log(tab.getState().selectedId);
-  // provare ad attivare una tab solo se è selezionata
-
   return (
     <>
-      <header className="flex items-center">
-        <HeadingLevel>
-          <HeaderLogo />
-          <Heading>- Settings</Heading>
-        </HeadingLevel>
+      <header className="w-full order-first flex items-center justify-around my-3">
+        <HeaderLogo />
       </header>
-      <main className="flex h-full">
-        <TabList store={tab} className="flex flex-col px-3">
+
+      <H1 className="pl-2 mb-4 w-[80vw] max-w-md mx-auto">Impostazioni</H1>
+      <Tabs
+        defaultValue={settings[0]?.category}
+        className="w-[80vw] max-w-md mx-auto"
+      >
+        <TabsList className="w-full">
           {settings.map((page, i) => {
             if (!page.hasPermission) return undefined;
 
-            let idAttr = {};
-            if (i == 0)
-              idAttr = {
-                id: defaultSelectedId,
-              };
-
             return (
-              <Tab
-                key={i}
-                {...idAttr}
-                className="p-2 m-2 aria-selected:bg-amber-700 rounded"
-              >
+              <TabsTrigger key={i} value={page.category} className="grow">
                 {page.category}
-              </Tab>
+              </TabsTrigger>
             );
           })}
-        </TabList>
-        <Separator
-          orientation="vertical"
-          className="mx-2 w-0 h-full border-l"
-        />
+        </TabsList>
         <div className="p-1 w-full">
           {settings.map((page, i) => {
             if (!page.hasPermission) return undefined;
 
             return (
-              <TabPanel
-                key={i}
-                // tabId={i == 0 ? defaultSelectedId : undefined}
-                store={tab}
-              >
+              <TabsContent key={i} value={page.category}>
                 {page.component}
-              </TabPanel>
+              </TabsContent>
             );
           })}
         </div>
-      </main>
+      </Tabs>
     </>
   );
 };
