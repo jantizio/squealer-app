@@ -4,7 +4,7 @@ import { BrowserRouter } from 'react-router-dom';
 import { AuthProvider } from 'react-auth-kit';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ThemeProvider } from '@/components/ThemeProvider';
-import { Toaster } from 'react-hot-toast';
+import { Toaster } from '@/components/ui/toaster';
 import App from './App.tsx';
 import './index.css';
 
@@ -23,7 +23,7 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
           <ThemeProvider>
             <App />
           </ThemeProvider>
-          <Toaster position="bottom-left" />
+          <Toaster />
         </QueryClientProvider>
       </BrowserRouter>
     </AuthProvider>

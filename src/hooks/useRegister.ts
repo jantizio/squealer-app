@@ -3,10 +3,11 @@ import { error_t, user_t } from '@/lib/types';
 import { AxiosError } from 'axios';
 import { backendApi } from '@/lib/utils';
 import { useMutation } from '@tanstack/react-query';
-import toast from 'react-hot-toast';
+import { useToast } from '@/hooks/useToast';
 
 export default function useRegister() {
   const loginUser = useLogin();
+  const { toast } = useToast();
   const register = useMutation<user_t, AxiosError, user_t>({
     mutationKey: ['register'],
     mutationFn: async (newUser) => {
@@ -41,17 +42,28 @@ export default function useRegister() {
 
       if (error.response?.status === 409) {
         console.log('utente già registrato');
-        return toast.error('Utente già registrato');
+        toast({
+          variant: 'destructive',
+          title: 'Uh oh! Qualcosa è andato storto.',
+          description: 'Utente già registrato',
+        });
       } else if (
         error.response?.status === 400 ||
         error.response?.status === 422
       ) {
         console.log('errore di validazione');
-        return toast.error('Errore di validazione dei dati');
+        toast({
+          variant: 'destructive',
+          title: 'Uh oh! Qualcosa è andato storto.',
+          description: 'Errore di validazione dei dati',
+        });
       } else {
         console.log('errore sconosciuto');
-
-        return toast.error('Qualcosa è andato storto, riprova più tardi');
+        toast({
+          variant: 'destructive',
+          title: 'Uh oh! Qualcosa è andato storto.',
+          description: 'Qualcosa è andato storto, riprova più tardi',
+        });
       }
     },
   });

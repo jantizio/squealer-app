@@ -1,4 +1,5 @@
 import { useSignIn } from 'react-auth-kit';
+import { useToast } from '@/hooks/useToast';
 import { AxiosError } from 'axios';
 import { backendApi } from '@/lib/utils';
 import { error_t } from '@/lib/types';
@@ -25,6 +26,7 @@ type token_payload_t = {
 export default function useLogin() {
   const signIn = useSignIn();
   const navigate = useNavigate();
+  const { toast } = useToast();
   const login = useMutation<string, AxiosError, creds_t>({
     mutationKey: ['login'],
     mutationFn: async (credentials) => {
@@ -63,8 +65,18 @@ export default function useLogin() {
       console.log(errorLog);
       if (error.response?.status === 401) {
         console.log('credenziali errate');
+        toast({
+          variant: 'destructive',
+          title: 'Uh oh! Qualcosa è andato storto.',
+          description: 'Credenziali errate',
+        });
       } else {
         console.log('altro errore');
+        toast({
+          variant: 'destructive',
+          title: 'Uh oh! Qualcosa è andato storto.',
+          description: "C'è stato un problema, riprova",
+        });
 
         backendApi.put('/logs', errorLog);
       }
