@@ -135,7 +135,7 @@ export function Lead({ children, className }: Props_t) {
 
 export function Large({ children, className }: Props_t) {
   return (
-    <div className={cn('text-lg font-semibold', className)}>{children}</div>
+    <span className={cn('text-lg font-semibold', className)}>{children}</span>
   );
 }
 
