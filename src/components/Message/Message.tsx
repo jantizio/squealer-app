@@ -43,7 +43,7 @@ const Message = forwardRef<HTMLDivElement, messageProps>(
 
     return (
       <article
-        className="prose prose-custom md:prose-lg lg:prose-xl border rounded p-5 mb-6 mx-auto"
+        className="prose prose-custom md:prose-lg lg:prose-xl border rounded p-5 mb-6 mx-auto bg-card"
         ref={ref}
       >
         <h2>

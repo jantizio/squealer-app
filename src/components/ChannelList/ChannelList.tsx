@@ -35,7 +35,7 @@ const ChannelList = ({
       {data?.map((channel) => (
         <li
           key={channel.id}
-          className="flex items-center p-2 m-2 space-x-1 border-b"
+          className="flex items-center p-3 m-1 space-x-1 border-2 rounded-sm"
         >
           <P>
             <A href={`/channels/${channel.title}`}>{channel.title}</A>
