@@ -1,148 +1,154 @@
+import { Button } from '@/components/ui/button';
 import {
-  Button,
-  Separator,
-  useFormStore,
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@/components/ui/dialog';
+import {
   Form,
-  FormInput,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
   FormLabel,
-  FormSubmit,
-  FormError,
-  HeadingLevel,
-  Heading,
-} from '@ariakit/react';
-import { useAuthUser, useSignOut } from 'react-auth-kit';
+  FormMessage,
+} from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
+import { H2, H3 } from '@/components/ui/typography';
 import useAxios from '@/hooks/useAxios';
-import { passwRegex } from '@/lib/utils';
-import formCSS from '../../styles/form.module.css';
+import { userCheck } from '@/lib/utils';
+import { changepswSchema, changepswSchema_t } from '@/schema/changepswForm';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useAuthUser, useSignOut } from 'react-auth-kit';
+import { useForm } from 'react-hook-form';
 
 const Account = () => {
   const privateApi = useAxios();
-  const authUser = useAuthUser()();
+  const user = useAuthUser()();
   const logout = useSignOut();
 
-  const changePswd = useFormStore({
+  if (!userCheck(user)) return <div>Errore utente non definito</div>; //Should never happen
+
+  const changePswdForm = useForm<changepswSchema_t>({
+    resolver: zodResolver(changepswSchema),
     defaultValues: { oldPassword: '', password: '', confirmPassword: '' },
   });
 
-  changePswd.useSubmit(async (state) => {
-    alert(JSON.stringify(state.values));
-  });
-
-  changePswd.useValidate(() => {
-    const password = changePswd.getValue(changePswd.names.password);
-    const confirmPassword = changePswd.getValue(
-      changePswd.names.confirmPassword
-    );
-
-    if (password !== confirmPassword) {
-      changePswd.setError(
-        changePswd.names.confirmPassword,
-        'Le password non coincidono'
-      );
-    }
+  const changepwsdHandler = changePswdForm.handleSubmit(async (values) => {
+    alert(JSON.stringify(values));
   });
 
   const deleteAccount = async () => {
-    if (authUser) privateApi.delete(`/users/${authUser.username}`);
-    else console.error('User non trovato');
+    privateApi.delete(`/users/${user.username}`);
     // TODO: gestire meglio l'errore
     // forse devo usare useMutation?
   };
 
   return (
     <>
-      <HeadingLevel>
-        <Heading>Benvenuto {authUser?.username ?? 'guest'}</Heading>
-        <Form
-          store={changePswd}
-          aria-labelledby="change-psw"
-          className={formCSS.wrapper}
-        >
-          <HeadingLevel>
-            <Heading id="change-psw" className={formCSS.heading}>
-              Cambia password
-            </Heading>
-          </HeadingLevel>
+      <H2>Gestisci il tuo account</H2>
+      <section className="mt-6 space-y-7">
+        <section className="flex items-center flex-wrap gap-3">
+          <H3>Cambio password</H3>
+          <Dialog>
+            <DialogTrigger asChild>
+              <Button variant="default">Cambia</Button>
+            </DialogTrigger>
+            <DialogContent className="sm:max-w-md">
+              <DialogHeader>
+                <DialogTitle>Cambia Password</DialogTitle>
+                <DialogDescription>
+                  Inserisci la tua nuova password, clicca salva quando hai
+                  finito
+                </DialogDescription>
+              </DialogHeader>
+              <Form {...changePswdForm}>
+                <form
+                  onSubmit={changepwsdHandler}
+                  className="flex flex-col gap-4 py-4"
+                >
+                  <FormField
+                    control={changePswdForm.control}
+                    name="oldPassword"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Vecchia Password</FormLabel>
+                        <FormControl>
+                          <Input
+                            {...field}
+                            type="password"
+                            placeholder="Inserisci la vecchia password..."
+                          />
+                        </FormControl>
 
-          <div className={formCSS.field}>
-            <FormLabel name={changePswd.names.oldPassword}>
-              Vecchia Password
-            </FormLabel>
-            <FormInput
-              name={changePswd.names.oldPassword}
-              className={formCSS.input}
-              minLength={8}
-              maxLength={40}
-              type="password"
-              pattern={passwRegex}
-              required
-            />
-            <FormError
-              name={changePswd.names.oldPassword}
-              className={formCSS.error}
-            />
-          </div>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={changePswdForm.control}
+                    name="password"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Nuova Password</FormLabel>
+                        <FormControl>
+                          <Input
+                            {...field}
+                            type="password"
+                            placeholder="Inserisci la nuova password..."
+                          />
+                        </FormControl>
+                        <FormDescription>
+                          La password deve essere di almeno 8 caratteri. Deve
+                          avere un carattere maiuscolo, un numero e un simbolo
+                          speciale.
+                        </FormDescription>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={changePswdForm.control}
+                    name="confirmPassword"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Conferma nuova password</FormLabel>
+                        <FormControl>
+                          <Input
+                            {...field}
+                            type="password"
+                            placeholder="Conferma la nuova password..."
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <DialogFooter>
+                    <Button type="submit">Salva</Button>
+                  </DialogFooter>
+                </form>
+              </Form>
+            </DialogContent>
+          </Dialog>
+        </section>
 
-          <div className={formCSS.field}>
-            <FormLabel name={changePswd.names.password}>
-              Nuova Password
-            </FormLabel>
-            <FormInput
-              name={changePswd.names.password}
-              className={formCSS.input}
-              minLength={8}
-              maxLength={40}
-              type="password"
-              pattern={passwRegex}
-              required
-            />
-            <FormError
-              name={changePswd.names.password}
-              className={formCSS.error}
-            />
-          </div>
+        <section className="flex items-center flex-wrap gap-3">
+          <H3>Logout</H3>
+          <Button onClick={() => logout()}>Logout</Button>
+        </section>
 
-          <div className={formCSS.field}>
-            <FormLabel name={changePswd.names.confirmPassword}>
-              Vecchia Password
-            </FormLabel>
-            <FormInput
-              name={changePswd.names.confirmPassword}
-              className={formCSS.input}
-              minLength={8}
-              maxLength={40}
-              type="password"
-              pattern={passwRegex}
-              required
-            />
-            <FormError
-              name={changePswd.names.confirmPassword}
-              className={formCSS.error}
-            />
-          </div>
-
-          <FormSubmit className={formCSS.button}>Cambia</FormSubmit>
-        </Form>
-      </HeadingLevel>
-
-      <Separator className="my-2 h-0 w-full border-t" />
-
-      <Button
-        className="border-2 border-red-800 rounded p-2 hover:bg-red-800/25 disabled:bg-orange-950"
-        onClick={deleteAccount}
-        disabled
-      >
-        Elimina Account
-      </Button>
-
-      <Separator className="my-2 h-0 w-full border-t" />
-
-      <Button
-        className="border-2 border-red-800 rounded p-2 hover:bg-red-800/25"
-        onClick={() => logout()}
-      >
-        Logout
-      </Button>
+        <section className="flex items-center flex-wrap gap-3">
+          <H3>Elimina Account</H3>
+          <Button variant="destructive" onClick={deleteAccount}>
+            Elimina Account
+          </Button>
+        </section>
+      </section>
     </>
   );
 };

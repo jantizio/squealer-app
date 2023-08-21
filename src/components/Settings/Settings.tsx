@@ -1,9 +1,8 @@
 import HeaderLogo from '@/components/HeaderLogo';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { H1, Large } from '@/components/ui/typography';
-import ChannelList from '@/components/ChannelList';
+import { H1 } from '@/components/ui/typography';
 import { channel_t } from '@/lib/types';
-import { backendApi } from '@/lib/utils';
+import { backendApi, userCheck } from '@/lib/utils';
 import { useAuthUser } from 'react-auth-kit';
 import Account from './Account';
 import SocialMediaManager from './SocialMediaManager';
@@ -24,31 +23,30 @@ const fetchFollowedChannels = async () => {
 };
 
 const Settings = () => {
-  const authUser = useAuthUser()();
-  if (!authUser) return <div>Errore utente non definito</div>; //Should never happen
+  const user = useAuthUser()();
+
+  if (!userCheck(user)) return <div>Errore utente non definito</div>; //Should never happen
 
   const settings: settingsPage[] = [
     {
       category: 'Account',
-      // component: <Account />,
-      component: <div>Account</div>,
+      component: <Account />,
       hasPermission: true,
     },
-    {
-      category: 'Canali',
-      // component: (
-      //   <ChannelList fetchChannels={fetchFollowedChannels} removeButton />
-      // ),
-      component: <div>Canali</div>,
-      hasPermission: true,
-      // aggiungere in qualche modo la possiblità di rimuovere i canali dai seguiti
-    },
+    // {
+    //   category: 'Canali',
+    //   // component: (
+    //   //   <ChannelList fetchChannels={fetchFollowedChannels} removeButton />
+    //   // ),
+    //   component: <div>Canali</div>,
+    //   hasPermission: true,
+    //   // TODO: aggiungere in qualche modo la possiblità di rimuovere i canali dai seguiti
+    // },
     {
       category: 'SMM',
-      // component: <SocialMediaManager />,
-      component: <div>Social Media Manager</div>,
-      // hasPermission: authUser.type === 'professional',
-      hasPermission: true,
+      component: <SocialMediaManager />,
+      hasPermission: user.type === 'professional',
+      // hasPermission: true,
     },
   ];
 
