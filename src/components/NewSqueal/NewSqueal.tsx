@@ -13,6 +13,7 @@ import TypeSelect from './TypeSelect';
 import BodyTextArea from './BodyTextArea';
 import MediaInput from './MediaInput';
 import ReceiversCheckbox from './ReceiversCheckbox';
+// import { userCheck } from '@/lib/utils';
 
 // type receiver_t = `@${string}` | `#${string}` | `§${string}`;
 
@@ -20,10 +21,12 @@ const nonTextQuota = 125;
 
 const NewSqueal = () => {
   // const privateApi = useAxios();
-  // const user = useAuthUser();
+  // const user = useAuthUser()();
+  // if (!userCheck(user)) return <div>Errore utente non definito</div>; //Should never happen
+
   const { data } = useQuery(['dailyQuota'], async () => {
     // TODO: get the quota from the server
-    // const response = await privateApi.get<user_t>(`/users/${user()?.username}`);
+    // const response = await privateApi.get<user_t>(`/users/${user.username}`);
     // if (response.data === undefined) return 0;
     // return response.data.quota;
     await new Promise((resolve) => setTimeout(resolve, 3 * 1000));

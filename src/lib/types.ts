@@ -59,3 +59,9 @@ export type error_t = {
   method: 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH';
   message: string;
 };
+
+export type authUser_t = {
+  username: string;
+  SMM: string | null;
+  type: 'standard' | 'professional' | 'moderator';
+};

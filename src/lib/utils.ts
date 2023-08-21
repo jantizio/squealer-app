@@ -14,9 +14,17 @@ export const backendApi = axios.create({
   // headers: { Authorization: authHeader() },
 });
 
-// Error handling
+// Type guards
 export function errorCheck(error: unknown): error is Error {
   return error instanceof Error;
+}
+
+import { AuthStateUserObject } from 'react-auth-kit/dist/types';
+import { authUser_t } from '@/lib/types';
+export function userCheck(
+  user: AuthStateUserObject | null
+): user is authUser_t {
+  return user !== null;
 }
 
 // global variables

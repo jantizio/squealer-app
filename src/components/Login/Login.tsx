@@ -2,6 +2,7 @@ import { Button } from '@/components/ui/button';
 import {
   Form,
   FormControl,
+  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -67,6 +68,10 @@ function Login() {
                     placeholder="Inserisci la tua password..."
                   />
                 </FormControl>
+                <FormDescription>
+                  La password deve essere di almeno 8 caratteri. Deve avere un
+                  carattere maiuscolo, un numero e un simbolo speciale.
+                </FormDescription>
                 <FormMessage />
               </FormItem>
             )}
