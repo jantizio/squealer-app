@@ -1,42 +1,44 @@
-import { SetStateAction } from 'react';
-import { useForm } from 'react-hook-form';
 import { Form, FormControl, FormField, FormItem } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
+import { cn } from '@/lib/utils';
 import { Search } from 'lucide-react';
+import { SetStateAction } from 'react';
+import { useForm } from 'react-hook-form';
 
 type SearchBarProps = {
   setFilter: React.Dispatch<SetStateAction<string>>;
+  className?: string;
 };
 
-const SearchBar = ({ setFilter }: SearchBarProps) => {
+const SearchBar = ({ setFilter, className }: SearchBarProps) => {
   const searchForm = useForm<{ search: string }>({
     defaultValues: { search: '' },
   });
 
   return (
     <Form {...searchForm}>
-      <form onSubmit={searchForm.handleSubmit(() => {})} className="relative">
+      <form
+        onSubmit={searchForm.handleSubmit(() => {})}
+        className={cn('-ml-6', className)}
+      >
         <FormField
           name="search"
           control={searchForm.control}
           render={({ field }) => {
             return (
-              <FormItem>
+              <FormItem className="flex items-center w-full space-y-0">
+                <Search className="h-icon-md w-icon-md z-10 relative left-10" />
                 <FormControl>
-                  <section className="flex items-center justify-center w-full">
-                    <Search className="h-icon-md w-icon-md absolute right-[13rem]" />
-
-                    <Input
-                      {...field}
-                      type="search"
-                      placeholder="Cerca..."
-                      onChange={(e) => {
-                        setFilter(e.target.value);
-                        field.onChange(e.target.value);
-                      }}
-                      className="w-full ml-2 text-center text-lg"
-                    />
-                  </section>
+                  <Input
+                    {...field}
+                    type="search"
+                    placeholder="Cerca..."
+                    onChange={(e) => {
+                      setFilter(e.target.value);
+                      field.onChange(e.target.value);
+                    }}
+                    className="w-full text-center text-lg"
+                  />
                 </FormControl>
               </FormItem>
             );

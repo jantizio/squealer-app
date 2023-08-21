@@ -1,13 +1,15 @@
-import { useState } from 'react';
-import useAxios from '@/hooks/useAxios';
-import { useDebounce } from 'usehooks-ts';
-import { useNavigate } from 'react-router-dom';
-import { Button } from '@/components/ui/button';
-import MessageScroller from '@/components/MessageScroller';
 import HeaderLogo from '@/components/HeaderLogo';
+import MessageScroller from '@/components/MessageScroller';
 import SearchBar from '@/components/SearchBar';
-import { post_t, channel_t } from '@/lib/types';
-import { Menu, PenSquare, Settings } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 import {
   Sheet,
   SheetContent,
@@ -16,8 +18,16 @@ import {
   SheetTitle,
   SheetTrigger,
 } from '@/components/ui/sheet';
-import { backendApi } from '@/lib/utils';
+import useAxios from '@/hooks/useAxios';
+import { channel_t, post_t } from '@/lib/types';
+import { LogOut, Menu, PenSquare, Settings, User } from 'lucide-react';
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useDebounce } from 'usehooks-ts';
 import ChannelList from '@/components/ChannelList';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { backendApi, userCheck } from '@/lib/utils';
+import { useAuthUser, useSignOut } from 'react-auth-kit';
 
 const fetchChannels = async () => {
   // const channelsApi: string = `/channels/?category=public`;
@@ -32,6 +42,11 @@ const LoggedHome = () => {
   const debouncedFilter = useDebounce<string>(filter, 500);
   const navigate = useNavigate();
   const privateBackendApi = useAxios();
+
+  const user = useAuthUser()();
+  const logout = useSignOut();
+
+  if (!userCheck(user)) return <div>Errore utente non definito</div>; //Should never happen
 
   const fetchPostPage = async (page: number) => {
     type postResp = Omit<post_t, 'username'> & { userId: number };
@@ -57,8 +72,8 @@ const LoggedHome = () => {
   };
   return (
     <>
-      <header className="w-full order-first flex items-center justify-around my-3">
-        <section className="flex items-center space-x-2">
+      <header className="order-first flex items-center flex-wrap justify-between w-4/5 mx-auto md:w-10/12 lg:justify-around my-3">
+        <section className="flex items-center space-x-2 md:order-first">
           {/* Hamburger menu for mobile */}
           <Sheet>
             <SheetTrigger asChild>
@@ -84,16 +99,47 @@ const LoggedHome = () => {
           <HeaderLogo responsive />
         </section>
 
-        <SearchBar setFilter={setFilter} />
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <section className="flex items-center md:order-last">
+              <Button variant="link" size="sm">
+                {user.username}
+              </Button>
+              <Avatar>
+                <AvatarImage
+                  src="https://github.com/shadcn.png" // TODO: implementare l'immagine dell'utente
+                  alt="user icon"
+                />
+                <AvatarFallback>User</AvatarFallback>
+              </Avatar>
+            </section>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent>
+            <DropdownMenuLabel>Il mio Account</DropdownMenuLabel>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem>
+              <User className="mr-2 h-4 w-4" />
+              <span>Profilo</span>
+            </DropdownMenuItem>
+            <DropdownMenuItem
+              onClick={() => {
+                navigate('/settings');
+              }}
+            >
+              <Settings className="mr-2 h-4 w-4" />
+              <span>Impostazioni</span>
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={logout}>
+              <LogOut className="mr-2 h-4 w-4" />
+              <span>Esci</span>
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
 
-        <Button
-          onClick={() => navigate('/settings')}
-          variant="outline"
-          size="icon"
-          className="mx-2"
-        >
-          <Settings className="h-icon-sm w-icon-sm" />
-        </Button>
+        <SearchBar
+          setFilter={setFilter}
+          className="w-full grow md:w-auto md:order-2 md:max-w-md"
+        />
       </header>
 
       <div className="flex overflow-hidden">
