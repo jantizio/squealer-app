@@ -1,3 +1,0 @@
-[submodule "src/schema"]
-	path = src/schema
-	url = git@github.com:bugboy-20/squealer-schema.git
