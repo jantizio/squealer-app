@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { passwRegex } from '@/lib/utils';
+import { passwRegex } from './utils/global';
 
 export const loginSchema = z.object({
   username: z

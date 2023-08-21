@@ -21,7 +21,10 @@ import { Input } from '@/components/ui/input';
 import { H2, H3 } from '@/components/ui/typography';
 import useAxios from '@/hooks/useAxios';
 import { userCheck } from '@/lib/utils';
-import { changepswSchema, changepswSchema_t } from '@/schema/changepswForm';
+import {
+  changepswSchema,
+  changepswSchema_t,
+} from '@/schema/changepswValidator';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useAuthUser, useSignOut } from 'react-auth-kit';
 import { useForm } from 'react-hook-form';

@@ -26,8 +26,3 @@ export function userCheck(
 ): user is authUser_t {
   return user !== null;
 }
-
-// global variables
-
-export const passwRegex =
-  /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$ %^&*-.]).{8,}$/;

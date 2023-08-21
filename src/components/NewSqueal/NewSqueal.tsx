@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Form, FormField, FormItem, FormMessage } from '@/components/ui/form';
 // import useAxios from '@/hooks/useAxios';
 // import { squealIn_t } from '@/lib/types';
-import { squealSchema } from '@/schema/squealForm';
+import { squealSchema } from '@/schema/squealValidator';
 import { useQuery } from '@tanstack/react-query';
 // import { useAuthUser } from 'react-auth-kit';
 import ReceiverInput from './ReceiverInput';

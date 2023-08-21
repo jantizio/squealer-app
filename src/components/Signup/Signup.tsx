@@ -11,7 +11,7 @@ import { Input } from '@/components/ui/input';
 import { H1 } from '@/components/ui/typography';
 import useRegister from '@/hooks/useRegister';
 import { user_t } from '@/lib/types';
-import { registerSchema, registerSchema_t } from '@/schema/registerForm';
+import { registerSchema, registerSchema_t } from '@/schema/registerValidator';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 
