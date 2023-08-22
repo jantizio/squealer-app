@@ -10,7 +10,7 @@ import {
 import { Input } from '@/components/ui/input';
 import { H1 } from '@/components/ui/typography';
 import useRegister from '@/hooks/useRegister';
-import { user_t } from '@/lib/types';
+import { userWrite_t } from '@/lib/types';
 import { registerFormSchema, registerForm_t } from '@/schema/registerValidator';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
@@ -31,14 +31,13 @@ function Signup() {
 
   const signupHandler = signupForm.handleSubmit((values) => {
     const { confirmPassword, ...rest } = values;
-    const newUser: user_t = {
+    const newUser: userWrite_t = {
       type: 'standard',
-      verified: false,
       SMM: null,
-      quota: { day: 0, week: 0, month: 0 },
       ...rest,
     };
 
+    // TODO: handle zod validation
     console.log('data', newUser);
     registerUser(newUser);
   });

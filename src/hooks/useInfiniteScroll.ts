@@ -8,12 +8,12 @@ type options<T> = {
 };
 
 export default function useInfinteScroll<T>({ fetchPage, filter }: options<T>) {
-  const queryObj = useInfiniteQuery(
+  const queryObj = useInfiniteQuery<T[], Error>(
     ['message', filter],
-    ({ pageParam = 1 }) => fetchPage(pageParam),
+    ({ pageParam = 0 }) => fetchPage(pageParam),
     {
       getNextPageParam: (lastPage, allPages) => {
-        return lastPage.length ? allPages.length + 1 : undefined;
+        return lastPage.length ? allPages.length : undefined;
       },
     }
   );

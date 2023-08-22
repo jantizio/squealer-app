@@ -1,19 +1,18 @@
-import HeaderLogo from '@/components/HeaderLogo';
 import ChannelList from '@/components/ChannelList';
-import { channel_t } from '@/lib/types';
-import useAxios from '@/hooks/useAxios';
-import { useNavigate } from 'react-router-dom';
-import { Settings } from 'lucide-react';
+import HeaderLogo from '@/components/HeaderLogo';
 import { Button } from '@/components/ui/button';
+import useAxios from '@/hooks/useAxios';
+import { channel_t } from '@/lib/types';
+import { Settings } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 const Discover = () => {
   const privateAPI = useAxios();
   const navigate = useNavigate();
 
   const fetchEveryChannel = async () => {
-    const channelsApi: string = 'https://jsonplaceholder.typicode.com/albums';
-    const res = await privateAPI.get<channel_t[]>(channelsApi);
-    // const channels = await privateAPI.get<channel_t[]>('/channels/');
+    const res = await privateAPI.get<channel_t[]>('/channels/');
+    // TODO: handle zod validation
     return res.data;
   };
 

@@ -1,63 +1,20 @@
-export type post_t = {
-  id: number;
-  title: string;
-  username: string;
-  body: string;
-};
-export type quota_t = {
-  day: number;
-  week: number;
-  month: number;
-};
+import { quota_t } from '@/schema/shared-schema/quotaValidator';
+import { userRead_t, userWrite_t } from '@/schema/shared-schema/userValidators';
+import { channel_t } from '@/schema/shared-schema/channelValidator';
+import {
+  squealRead_t,
+  squealWrite_t,
+} from '@/schema/shared-schema/squealValidators';
+import { log_t } from '@/schema/shared-schema/logValidator';
 
-export type user_t = {
-  // id: string;
-  email: string;
-  username: string;
-  firstname: string;
-  lastname: string;
-  password: string;
-  type: 'standard' | 'professional' | 'moderator';
-  verified: false;
-  SMM: string | null;
-  quota: quota_t;
-};
-
-// export type channel_t = {
-//   name: string;
-// };
-
-export type channel_t = {
-  userId: number;
-  id: number;
-  title: string;
-};
-
-export type squealIn_t = {
-  receivers: string[];
-  author: string;
-  body: string | File; //TODO: aggiungere il tipo per la geolocation
-  category: string[];
-  automatic_receiver: string[];
-};
-
-export type squealOut_t = {
-  id: number;
-  receivers: string[];
-  author: string;
-  body: string | File; //TODO: aggiungere il tipo per la geolocation
-  datetime: Date;
-  impressions: number;
-  positive_reactions: number;
-  negative_reactions: number;
-  category: string[];
-  automatic_receiver: string[];
-};
-
-export type error_t = {
-  path: string;
-  method: 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH';
-  message: string;
+export type {
+  quota_t,
+  userRead_t,
+  userWrite_t,
+  channel_t,
+  squealRead_t, //TODO: aggiungere il tipo per la geolocation
+  squealWrite_t, //TODO: aggiungere il tipo per la geolocation
+  log_t,
 };
 
 export type authUser_t = {

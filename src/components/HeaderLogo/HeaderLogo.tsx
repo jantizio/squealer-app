@@ -1,7 +1,7 @@
 import { ReactComponent as SquealerLogo } from '@/assets/vulture.svg';
+import { Large } from '@/components/ui/typography';
 import { cn } from '@/lib/utils';
 import { Link } from 'react-router-dom';
-import { Large } from '@/components/ui/typography';
 
 type HeaderLogoProps = {
   responsive?: boolean;

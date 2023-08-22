@@ -19,23 +19,15 @@ import {
   SheetTrigger,
 } from '@/components/ui/sheet';
 import useAxios from '@/hooks/useAxios';
-import { channel_t, post_t } from '@/lib/types';
+import { channel_t, squealRead_t } from '@/lib/types';
 import { LogOut, Menu, PenSquare, Settings, User } from 'lucide-react';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDebounce } from 'usehooks-ts';
 import ChannelList from '@/components/ChannelList';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { backendApi, userCheck } from '@/lib/utils';
+import { userCheck } from '@/lib/utils';
 import { useAuthUser, useSignOut } from 'react-auth-kit';
-
-const fetchChannels = async () => {
-  // const channelsApi: string = `/channels/?category=public`;
-
-  const channelsApi: string = 'https://jsonplaceholder.typicode.com/albums';
-  const res = await backendApi.get<channel_t[]>(channelsApi);
-  return res.data;
-};
 
 const LoggedHome = () => {
   const [filter, setFilter] = useState<string>('');
@@ -48,28 +40,22 @@ const LoggedHome = () => {
 
   if (!userCheck(user)) return <div>Errore utente non definito</div>; //Should never happen
 
-  const fetchPostPage = async (page: number) => {
-    type postResp = Omit<post_t, 'username'> & { userId: number };
-
-    // TODO: use the `filter` to filter the posts from backend
-    const postArray: postResp[] = await privateBackendApi
-      .get(`https://jsonplaceholder.typicode.com/posts?_page=${page}`)
-      .then((response) => response.data);
-
-    const outArray: post_t[] = [];
-
-    for (const post of postArray) {
-      let { username } = await privateBackendApi
-        .get(`https://jsonplaceholder.typicode.com/users/${post.userId}`)
-        .then((response) => response.data);
-
-      const { userId: _, ...result } = post;
-      outArray.push({ username, ...result });
-    }
-
-    return outArray;
-    //        ^?
+  const fetchChannels = async () => {
+    const res = await privateBackendApi.get<channel_t[]>(
+      `/channels/?category=public`
+    );
+    // TODO: handle zod validation
+    return res.data;
   };
+
+  const fetchSquealsPage = async (page: number): Promise<squealRead_t[]> => {
+    const response = await privateBackendApi.get<squealRead_t[]>(
+      `/squeals/?page=${page}`
+    );
+    // TODO: handle zod validation
+    return response.data;
+  };
+
   return (
     <>
       <header className="order-first flex items-center flex-wrap justify-between w-4/5 mx-auto md:w-10/12 lg:justify-around my-3">
@@ -146,7 +132,7 @@ const LoggedHome = () => {
         {/* Main content */}
         <main className="w-full order-2 overflow-auto overflow-x-hidden md:w-4/6 lg:w-1/2">
           <MessageScroller
-            fetchPostPage={fetchPostPage}
+            fetchPage={fetchSquealsPage}
             filter={debouncedFilter}
           />
         </main>

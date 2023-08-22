@@ -11,38 +11,27 @@ import {
   SheetTitle,
   SheetTrigger,
 } from '@/components/ui/sheet';
-import { channel_t, post_t } from '@/lib/types';
+import { channel_t, squealRead_t } from '@/lib/types';
 import { backendApi } from '@/lib/utils';
 import { Menu } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import z from 'zod';
 
-const fetchPostPage = async (page: number) => {
-  type postResp = Omit<post_t, 'username'> & { userId: number };
+const fetchPublicSquealsPage = async (page: number) => {
+  const squealArray = await backendApi.get<squealRead_t[]>(
+    `/squeals/?page=${page}`
+  );
 
-  const postArray: postResp[] = await backendApi
-    .get(`https://jsonplaceholder.typicode.com/posts?_page=${page}`)
-    .then((response) => response.data);
-
-  const outArray: post_t[] = [];
-
-  for (const post of postArray) {
-    let { username } = await backendApi
-      .get(`https://jsonplaceholder.typicode.com/users/${post.userId}`)
-      .then((response) => response.data);
-
-    const { userId: _, ...result } = post;
-    outArray.push({ username, ...result });
-  }
-
-  return outArray;
-  //        ^?
+  // TODO: handle zod validation and remove this workaround
+  return squealArray.data.map((squeal) => {
+    squeal.datetime = new Date(squeal.datetime);
+    return squeal;
+  });
 };
 
-const fetchChannels = async () => {
-  // const channelsApi: string = `/channels/?category=public`;
-
-  const channelsApi: string = 'https://jsonplaceholder.typicode.com/albums';
-  const res = await backendApi.get<channel_t[]>(channelsApi);
+const fetchPublicChannels = async () => {
+  const res = await backendApi.get<channel_t[]>(`/channels/?type=public`);
+  // TODO: handle zod validation
   return res.data;
 };
 
@@ -68,7 +57,7 @@ const AnonymousHome = () => {
                 </SheetDescription>
               </SheetHeader>
               <ChannelList
-                fetchChannels={fetchChannels}
+                fetchChannels={fetchPublicChannels}
                 className="h-[83vh] overflow-auto"
               />
             </SheetContent>
@@ -90,12 +79,12 @@ const AnonymousHome = () => {
       <div className="flex overflow-hidden">
         {/* Main content */}
         <main className="w-full order-2 overflow-auto md:w-4/6 lg:w-1/2">
-          <MessageScroller fetchPostPage={fetchPostPage} />
+          <MessageScroller fetchPage={fetchPublicSquealsPage} />
         </main>
 
         {/* Left sidebar */}
         <aside className="w-full hidden order-1 overflow-auto md:block md:w-2/6 lg:w-1/4">
-          <ChannelList fetchChannels={fetchChannels} />
+          <ChannelList fetchChannels={fetchPublicChannels} />
         </aside>
 
         {/* Right sidebar */}

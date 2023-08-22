@@ -1,23 +1,31 @@
-import { forwardRef, useEffect } from 'react';
-import { post_t } from '@/lib/types';
-import { useIsAuthenticated } from 'react-auth-kit';
-import useAxios from '@/hooks/useAxios';
 import { Button } from '@/components/ui/button';
-import { ArrowUpCircle, ArrowDownCircle } from 'lucide-react';
+import useAxios from '@/hooks/useAxios';
+import { squealRead_t } from '@/lib/types';
+import { ArrowDownCircle, ArrowUpCircle } from 'lucide-react';
+import { forwardRef, useEffect } from 'react';
+import { useIsAuthenticated } from 'react-auth-kit';
 
 type messageProps = {
-  children: post_t;
+  children: squealRead_t;
 };
 
 type op = 'viewed' | 'upvote' | 'downvote';
 
 const Message = forwardRef<HTMLDivElement, messageProps>(
   ({ children }, ref) => {
-    const { id, title, body, username } = children;
+    const {
+      _id,
+      author,
+      body,
+      impressions,
+      negative_reaction,
+      positive_reaction,
+      datetime,
+    } = children;
     const isAuthenticated = useIsAuthenticated();
     const privateApi = useAxios();
 
-    const updateSqueal = (operation: op, id: number) => {
+    const updateSqueal = (operation: op, id: string) => {
       switch (operation) {
         case 'downvote':
           console.log('downvote');
@@ -33,41 +41,52 @@ const Message = forwardRef<HTMLDivElement, messageProps>(
           break;
       }
       // TODO: response and error handling
-      // privateApi.patch(`/squeals/${id}`, { op: operation });
+      privateApi.patch(`/squeals/${id}`, { op: operation });
     };
 
     useEffect(() => {
       // when the component is mounted count one view
-      updateSqueal('viewed', id);
+      updateSqueal('viewed', _id);
     }, []);
+
+    // let bodyContent: JSX.Element;
+
+    // if (typeof body == 'string') bodyContent = <p>{body}</p>;
+    // // else if (body instanceof File) bodyContent = <p>{body.name}</p>;
+    // else bodyContent = <p>Errore</p>;
+
+    const date = `${datetime.getHours()}:${datetime.getMinutes()} ${datetime.getDay()}/${datetime.getDate()}/${datetime.getFullYear()}`;
 
     return (
       <article
         className="prose prose-custom md:prose-lg lg:prose-xl border rounded p-5 mb-6 mx-auto bg-card"
         ref={ref}
       >
-        <h2>
-          {title} - [{username}]
-        </h2>
+        <p>
+          {author} - {date}
+        </p>
+        {impressions}
+        {/* {bodyContent} */}
         <p>{body}</p>
-        {isAuthenticated() && (
-          <>
-            <Button
-              className="mx-2"
-              size="icon"
-              onClick={() => updateSqueal('upvote', id)}
-            >
-              <ArrowUpCircle />
-            </Button>
-            <Button
-              className="mx-2"
-              size="icon"
-              onClick={() => updateSqueal('downvote', id)}
-            >
-              <ArrowDownCircle />
-            </Button>
-          </>
-        )}
+
+        <Button
+          className="mx-2"
+          size="icon"
+          onClick={() => updateSqueal('upvote', _id)}
+          disabled={!isAuthenticated()}
+        >
+          <ArrowUpCircle />
+          {positive_reaction}
+        </Button>
+        <Button
+          className="mx-2"
+          size="icon"
+          onClick={() => updateSqueal('downvote', _id)}
+          disabled={!isAuthenticated()}
+        >
+          <ArrowDownCircle />
+          {negative_reaction}
+        </Button>
       </article>
     );
   }
