@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Form, FormField, FormItem, FormMessage } from '@/components/ui/form';
 // import useAxios from '@/hooks/useAxios';
 // import { squealIn_t } from '@/lib/types';
-import { squealSchema } from '@/schema/squealValidator';
+import { squealFormSchema } from '@/schema/squealValidator';
 import { useQuery } from '@tanstack/react-query';
 // import { useAuthUser } from 'react-auth-kit';
 import ReceiverInput from './ReceiverInput';
@@ -44,7 +44,7 @@ const NewSqueal = () => {
   };
 
   // modify the schema to check the quota
-  const updatedsquealSchema = squealSchema
+  const updatedsquealSchema = squealFormSchema
     .refine(
       (data) => {
         if (data.bodyType === 'text') {

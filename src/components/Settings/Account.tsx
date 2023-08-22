@@ -22,8 +22,8 @@ import { H2, H3 } from '@/components/ui/typography';
 import useAxios from '@/hooks/useAxios';
 import { userCheck } from '@/lib/utils';
 import {
-  changepswSchema,
-  changepswSchema_t,
+  changepswFormSchema,
+  changepswForm_t,
 } from '@/schema/changepswValidator';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useAuthUser, useSignOut } from 'react-auth-kit';
@@ -36,8 +36,8 @@ const Account = () => {
 
   if (!userCheck(user)) return <div>Errore utente non definito</div>; //Should never happen
 
-  const changePswdForm = useForm<changepswSchema_t>({
-    resolver: zodResolver(changepswSchema),
+  const changePswdForm = useForm<changepswForm_t>({
+    resolver: zodResolver(changepswFormSchema),
     defaultValues: { oldPassword: '', password: '', confirmPassword: '' },
   });
 

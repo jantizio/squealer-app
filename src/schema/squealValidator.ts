@@ -17,7 +17,7 @@ const squealSchemaBase = z.object({
     }),
 });
 
-export const squealSchema = z.discriminatedUnion('bodyType', [
+export const squealFormSchema = z.discriminatedUnion('bodyType', [
   z
     .object({
       bodyType: z.literal('text'),
@@ -43,4 +43,4 @@ export const squealSchema = z.discriminatedUnion('bodyType', [
     })
     .merge(squealSchemaBase),
 ]);
-export type squealSchema_t = z.infer<typeof squealSchema>;
+export type squealSchema_t = z.infer<typeof squealFormSchema>;
