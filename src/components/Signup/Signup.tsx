@@ -30,10 +30,10 @@ function Signup() {
   const registerUser = useRegister();
 
   const signupHandler = signupForm.handleSubmit((values) => {
-    const { confirmPassword, ...rest } = values;
+    const { confirmPassword, username, ...rest } = values;
     const newUser: userWrite_t = {
       type: 'standard',
-      SMM: null,
+      username: `@${username}`,
       ...rest,
     };
 
@@ -47,7 +47,7 @@ function Signup() {
       <Form {...signupForm}>
         <form
           onSubmit={signupHandler}
-          className="flex flex-col mx-auto max-w-lg border rounded-md bg-accent [&>*]:p-4"
+          className="mx-auto flex max-w-lg flex-col rounded-md border bg-accent [&>*]:p-4"
         >
           <H1>Registrati</H1>
 
@@ -141,7 +141,7 @@ function Signup() {
               </FormItem>
             )}
           />
-          <Button type="submit" className="w-5/12 mx-auto mb-4">
+          <Button type="submit" className="mx-auto mb-4 w-5/12">
             Registrati
           </Button>
         </form>

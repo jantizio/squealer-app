@@ -2,20 +2,10 @@ import { useSignIn } from 'react-auth-kit';
 import { useToast } from '@/hooks/useToast';
 import { AxiosError } from 'axios';
 import { backendApi } from '@/lib/utils';
-import { error_t } from '@/lib/types';
+import { log_t, login_t } from '@/lib/types';
 import { useMutation } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
 import jwt_decode from 'jwt-decode';
-
-type creds_t = {
-  username: string;
-  password: string;
-};
-
-// type response_t = {
-//   token: string;
-//   expiresIn: number;
-// };
 
 type token_payload_t = {
   name: string;
@@ -27,7 +17,7 @@ export default function useLogin() {
   const signIn = useSignIn();
   const navigate = useNavigate();
   const { toast } = useToast();
-  const login = useMutation<string, AxiosError, creds_t>({
+  const login = useMutation<string, AxiosError, login_t>({
     mutationKey: ['login'],
     mutationFn: async (credentials) => {
       const { data } = await backendApi.post<string>('/token', credentials);
@@ -42,7 +32,7 @@ export default function useLogin() {
 
       // calculate expiration time in minutes
       const expiresIn = Math.floor(
-        (token_payload.exp - token_payload.iat) / 60
+        (token_payload.exp - token_payload.iat) / 60,
       );
 
       // eseguo il login dell'utente
@@ -56,7 +46,7 @@ export default function useLogin() {
       // TODO: potrebbe essere necessario fare il redirect alla pagina da cui l'utente è arrivato
     },
     onError(error) {
-      const errorLog: error_t = {
+      const errorLog: log_t = {
         path: error.config?.url ?? '/token',
         method: 'POST',
         message: error.message,

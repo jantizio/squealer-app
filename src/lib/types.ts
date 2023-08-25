@@ -5,10 +5,16 @@ import {
   squealRead_t,
   squealWrite_t,
 } from '@/schema/shared-schema/squealValidators';
+import { login_t } from '@/schema/shared-schema/loginValidator';
 import { log_t } from '@/schema/shared-schema/logValidator';
+import { userString } from '@/schema/shared-schema/utils/global';
+import { z } from 'zod';
+
+type username_t = z.infer<typeof userString>;
 
 export type {
   quota_t,
+  login_t,
   userRead_t,
   userWrite_t,
   channel_t,
@@ -18,7 +24,7 @@ export type {
 };
 
 export type authUser_t = {
-  username: string;
+  username: username_t;
   SMM: string | null;
   type: 'standard' | 'professional' | 'moderator';
 };

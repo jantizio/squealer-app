@@ -11,16 +11,14 @@ import {
 import { Input } from '@/components/ui/input';
 import { H1 } from '@/components/ui/typography';
 import useLogin from '@/hooks/useLogin';
-import {
-  loginSchema,
-  loginSchema_t,
-} from '@/schema/shared-schema/loginValidator';
+import { loginFormSchema, loginForm_t } from '@/schema/loginValidator';
+import { login_t } from '@/schema/shared-schema/loginValidator';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 
 function Login() {
-  const loginForm = useForm<loginSchema_t>({
-    resolver: zodResolver(loginSchema),
+  const loginForm = useForm<loginForm_t>({
+    resolver: zodResolver(loginFormSchema),
     defaultValues: {
       username: '',
       password: '',
@@ -29,9 +27,10 @@ function Login() {
   const loginUser = useLogin();
 
   const loginUserHandler = loginForm.handleSubmit((values) => {
-    console.log('data', JSON.stringify(values)); //TODO: remove log
+    const credentials: login_t = { ...values, username: `@${values.username}` };
+    console.log('data', credentials); //TODO: remove log
 
-    loginUser(values);
+    loginUser(credentials);
   });
 
   return (
@@ -39,7 +38,7 @@ function Login() {
       <Form {...loginForm}>
         <form
           onSubmit={loginUserHandler}
-          className="flex flex-col mx-auto max-w-lg border rounded-md bg-accent [&>*]:p-4"
+          className="mx-auto flex max-w-lg flex-col rounded-md border bg-accent [&>*]:p-4"
         >
           <H1>Accedi</H1>
           <FormField
@@ -80,7 +79,7 @@ function Login() {
             )}
           />
 
-          <Button type="submit" className="w-5/12 mx-auto mb-4">
+          <Button type="submit" className="mx-auto mb-4 w-5/12">
             Accedi
           </Button>
         </form>

@@ -1,5 +1,5 @@
 import useLogin from '@/hooks/useLogin';
-import { error_t, user_t } from '@/lib/types';
+import { log_t, userWrite_t, userRead_t, login_t } from '@/lib/types';
 import { AxiosError } from 'axios';
 import { backendApi } from '@/lib/utils';
 import { useMutation } from '@tanstack/react-query';
@@ -8,13 +8,14 @@ import { useToast } from '@/hooks/useToast';
 export default function useRegister() {
   const loginUser = useLogin();
   const { toast } = useToast();
-  const register = useMutation<user_t, AxiosError, user_t>({
+  const register = useMutation<userRead_t, AxiosError, userWrite_t>({
     mutationKey: ['register'],
     mutationFn: async (newUser) => {
-      const { data } = await backendApi.put<user_t>(
+      const { data } = await backendApi.put(
         `/users/${newUser.username}`,
-        newUser
+        newUser,
       );
+      // don't need to validate data because im not using it
       return data;
     },
     onSuccess(data, variables) {
@@ -22,18 +23,18 @@ export default function useRegister() {
       console.log('Registration SUCCESS!');
       console.log('data:', data);
       // eseguo il login dell'utente
-      const creds = {
-        username: data.username,
+      const creds: login_t = {
+        username: variables.username,
         password: variables.password,
       };
 
       loginUser(creds);
     },
-    onError(error) {
+    onError(error, { username }) {
       // questo viene chiamato per gli status code che non sono 2xx
       // console.log('error:', error);
-      const errorLog: error_t = {
-        path: error.config?.url ?? '/users/${username}',
+      const errorLog: log_t = {
+        path: error.config?.url ?? `/users/${username}`,
         method: 'PUT',
         message: error.message,
       };
