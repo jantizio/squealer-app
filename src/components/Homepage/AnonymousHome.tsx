@@ -15,31 +15,71 @@ import { channel_t, squealRead_t } from '@/lib/types';
 import { backendApi } from '@/lib/utils';
 import { Menu } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-import z from 'zod';
+import { squealReadSchema } from '@/schema/shared-schema/squealValidators';
+import { channelSchema } from '@/schema/shared-schema/channelValidator';
+import { fromZodError } from 'zod-validation-error';
 
-const fetchPublicSquealsPage = async (page: number) => {
-  const squealArray = await backendApi.get<squealRead_t[]>(
-    `/squeals/?page=${page}`
+const fetchPublicSquealsPage = async (
+  page: number,
+): Promise<squealRead_t[]> => {
+  const response = await backendApi.get<squealRead_t[]>(
+    `/squeals/?page=${page}`,
   );
 
-  // TODO: handle zod validation and remove this workaround
-  return squealArray.data.map((squeal) => {
-    squeal.datetime = new Date(squeal.datetime);
-    return squeal;
-  });
+  const squealArray = response.data.reduce<squealRead_t[]>(
+    (filtered, squeal) => {
+      const squealValidation = squealReadSchema.safeParse(squeal);
+      if (squealValidation.success) {
+        // console.log(`Squeal ${squeal._id} passed validation`);
+        // console.log('data: ', squealValidation.data);
+
+        filtered.push(squealValidation.data);
+      } else {
+        console.log(`Squeal ${squeal._id} failed validation`); //TODO: remove this log
+        console.log(
+          fromZodError(squealValidation.error, {
+            unionSeparator: 'oppure',
+            issueSeparator: '\n',
+          }).message,
+        ); //TODO: remove this log
+      }
+      return filtered;
+    },
+    [],
+  );
+
+  return squealArray;
+  //     ^?
 };
 
-const fetchPublicChannels = async () => {
-  const res = await backendApi.get<channel_t[]>(`/channels/?type=public`);
+const fetchPublicChannels = async (): Promise<channel_t[]> => {
+  const response = await backendApi.get<channel_t[]>(
+    `/channels/?type=public&official=true`,
+  );
   // TODO: handle zod validation
-  return res.data;
+
+  const channelsArray = response.data.reduce<channel_t[]>(
+    (filtered, channel) => {
+      const channelValidation = channelSchema.safeParse(channel);
+      if (channelValidation.success) {
+        filtered.push(channelValidation.data);
+      } else {
+        console.log(`Squeal ${channel.name} failed validation`); //TODO: remove this log
+        console.log(channelValidation.error.message); //TODO: remove this log
+      }
+      return filtered;
+    },
+    [],
+  );
+
+  return channelsArray;
 };
 
 const AnonymousHome = () => {
   const navigate = useNavigate();
   return (
     <>
-      <header className="w-full order-first flex items-center justify-around my-3">
+      <header className="order-first my-3 flex w-full items-center justify-around">
         <section className="flex items-center space-x-2">
           <Sheet>
             <SheetTrigger asChild>
@@ -78,19 +118,19 @@ const AnonymousHome = () => {
 
       <div className="flex overflow-hidden">
         {/* Main content */}
-        <main className="w-full order-2 overflow-auto md:w-4/6 lg:w-1/2">
+        <main className="order-2 w-full overflow-auto md:w-4/6 lg:w-1/2">
           <MessageScroller fetchPage={fetchPublicSquealsPage} />
         </main>
 
         {/* Left sidebar */}
-        <aside className="w-full hidden order-1 overflow-auto md:block md:w-2/6 lg:w-1/4">
+        <aside className="order-1 hidden w-full overflow-auto md:block md:w-2/6 lg:w-1/4">
           <ChannelList fetchChannels={fetchPublicChannels} />
         </aside>
 
         {/* Right sidebar */}
-        <aside className="w-full hidden order-3 overflow-hidden lg:block lg:w-1/4"></aside>
+        <aside className="order-3 hidden w-full overflow-hidden lg:block lg:w-1/4"></aside>
       </div>
-      <footer className="w-full order-last p-4"></footer>
+      <footer className="order-last w-full p-4"></footer>
     </>
   );
 };

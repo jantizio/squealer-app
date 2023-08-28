@@ -7,12 +7,16 @@ type MessageScrollerProps = {
   filter?: string;
 };
 
-const MessageScroller = ({ fetchPage, filter }: MessageScrollerProps) => {
+const MessageScroller = (props: MessageScrollerProps) => {
   const { data, error, isError, isFetchingNextPage, lastPostRef } =
-    useInfiniteScroll({ fetchPage, filter });
+    useInfiniteScroll({ ...props });
 
   const posts = data?.pages.flat();
-  const content = posts?.map((post, i) => {
+
+  if (!posts || posts.length === 0) {
+    return <p>È tristemente vuoto</p>;
+  }
+  const content = posts.map((post, i) => {
     const isLast = posts.length - 1 === i;
     return (
       <Message key={post._id} ref={isLast ? lastPostRef : undefined}>

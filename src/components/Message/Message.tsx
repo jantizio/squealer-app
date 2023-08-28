@@ -4,6 +4,8 @@ import { squealRead_t } from '@/lib/types';
 import { ArrowDownCircle, ArrowUpCircle } from 'lucide-react';
 import { forwardRef, useEffect } from 'react';
 import { useIsAuthenticated } from 'react-auth-kit';
+import { run } from '@/lib/utils';
+import { Large, Muted } from '@/components/ui/typography';
 
 type messageProps = {
   children: squealRead_t;
@@ -21,6 +23,7 @@ const Message = forwardRef<HTMLDivElement, messageProps>(
       negative_reaction,
       positive_reaction,
       datetime,
+      receivers,
     } = children;
     const isAuthenticated = useIsAuthenticated();
     const privateApi = useAxios();
@@ -41,7 +44,7 @@ const Message = forwardRef<HTMLDivElement, messageProps>(
           break;
       }
       // TODO: response and error handling
-      privateApi.patch(`/squeals/${id}`, { op: operation });
+      // privateApi.patch(`/squeals/${id}`, { op: operation });
     };
 
     useEffect(() => {
@@ -57,18 +60,30 @@ const Message = forwardRef<HTMLDivElement, messageProps>(
 
     const date = `${datetime.getHours()}:${datetime.getMinutes()} ${datetime.getDay()}/${datetime.getDate()}/${datetime.getFullYear()}`;
 
+    const bodyContent = run(() => {
+      if (body.type === 'text') return <p>{body.content}</p>;
+      else if (body.type === 'media')
+        return <img src={body.content} alt="post-image" />;
+      else return <p>Errore</p>;
+    });
+
     return (
       <article
-        className="prose prose-custom md:prose-lg lg:prose-xl border rounded p-5 mb-6 mx-auto bg-card"
+        className="prose prose-custom mx-auto mb-6 rounded border bg-card p-5 md:prose-lg lg:prose-xl"
         ref={ref}
       >
-        <p>
-          {author} - {date}
-        </p>
-        {impressions}
-        {/* {bodyContent} */}
-        <p>{body}</p>
-
+        <section className="flex items-baseline space-x-4">
+          <Large>
+            {receivers.map((recv, i) => {
+              if (i === receivers.length - 1) return recv;
+              return `${recv}, `;
+            })}
+          </Large>
+          <Muted>scritto da {author}</Muted>
+        </section>
+        visualizzazioni: {impressions}
+        {bodyContent}
+        {/* <p>{body.content}</p> */}
         <Button
           className="mx-2"
           size="icon"
@@ -76,8 +91,8 @@ const Message = forwardRef<HTMLDivElement, messageProps>(
           disabled={!isAuthenticated()}
         >
           <ArrowUpCircle />
-          {positive_reaction}
         </Button>
+        <span className="pl-1">{positive_reaction}</span>
         <Button
           className="mx-2"
           size="icon"
@@ -85,11 +100,11 @@ const Message = forwardRef<HTMLDivElement, messageProps>(
           disabled={!isAuthenticated()}
         >
           <ArrowDownCircle />
-          {negative_reaction}
         </Button>
+        <span className="pl-1">{negative_reaction}</span>
       </article>
     );
-  }
+  },
 );
 
 export default Message;
