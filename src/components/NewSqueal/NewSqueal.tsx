@@ -1,143 +1,103 @@
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useForm } from 'react-hook-form';
-import { z } from 'zod';
 import { Button } from '@/components/ui/button';
 import { Form, FormField, FormItem, FormMessage } from '@/components/ui/form';
-// import useAxios from '@/hooks/useAxios';
-// import { squealIn_t } from '@/lib/types';
-import { squealFormSchema } from '@/schema/squealValidator';
-import { useQuery } from '@tanstack/react-query';
-// import { useAuthUser } from 'react-auth-kit';
-import ReceiverInput from './ReceiverInput';
-import TypeSelect from './TypeSelect';
+
+import useAxios from '@/hooks/useAxios';
+import useSquealerQuota from '@/hooks/useSquealerQuota';
+import { useToast } from '@/hooks/useToast';
+import { squealWriteSchema } from '@/schema/shared-schema/squealValidators';
+import { receiverString } from '@/schema/shared-schema/utils/global';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useAuthUser } from 'react-auth-kit';
+import { useForm } from 'react-hook-form';
+import { z } from 'zod';
 import BodyTextArea from './BodyTextArea';
 import MediaInput from './MediaInput';
+import ReceiverInput from './ReceiverInput';
 import ReceiversCheckbox from './ReceiversCheckbox';
-// import { userCheck } from '@/lib/utils';
-
-// type receiver_t = `@${string}` | `#${string}` | `§${string}`;
-
-const nonTextQuota = 125;
+import TypeSelect from './TypeSelect';
+import UrlInput from './UrlInput';
 
 const NewSqueal = () => {
-  // const privateApi = useAxios();
-  // const user = useAuthUser()();
-  // if (!userCheck(user)) return <div>Errore utente non definito</div>; //Should never happen
-
-  const { data } = useQuery(['dailyQuota'], async () => {
-    // TODO: get the quota from the server
-    // const response = await privateApi.get<user_t>(`/users/${user.username}`);
-    // if (response.data === undefined) return 0;
-    // return response.data.quota;
-    await new Promise((resolve) => setTimeout(resolve, 3 * 1000));
-    const day = 1000,
-      week = 7 * day - 5,
-      month = 4 * week - 5;
-    return { day, week, month };
-  });
-
-  // Set the quota to 0 while loading
-  const quota = {
-    day: data?.day ?? 0,
-    week: data?.week ?? 0,
-    month: data?.month ?? 0,
-  };
-
-  // modify the schema to check the quota
-  const updatedsquealSchema = squealFormSchema
-    .refine(
-      (data) => {
-        if (data.bodyType === 'text') {
-          return data.txt.length <= quota.day;
-        }
-        return true;
-      },
-      {
-        message: 'Hai superato la quota giornaliera',
-        path: ['txt'],
-      }
-    )
-    .refine(
-      (data) => {
-        if (data.bodyType === 'media') {
-          return nonTextQuota <= quota.day;
-        }
-        return true;
-      },
-      {
-        message:
-          'Per le immagini o i video hai bisogno di 1000 caratteri di quota',
-        path: ['media'],
-      }
-    )
-    .refine(
-      (data) => {
-        if (data.bodyType === 'geolocation') {
-          return nonTextQuota <= quota.day;
-        }
-        return true;
-      },
-      {
-        message:
-          'Per la geolocalizzazione hai bisogno di 1000 caratteri di quota',
-        path: ['geolocation'],
-      }
-    );
+  const user = useAuthUser();
+  const privateApi = useAxios();
+  const { toast } = useToast();
+  const { quota, updatedsquealSchema } = useSquealerQuota();
 
   type updatedSquealSchema_t = z.infer<typeof updatedsquealSchema>;
 
   const squealform = useForm<updatedSquealSchema_t>({
+    mode: 'onChange',
     resolver: zodResolver(updatedsquealSchema),
     defaultValues: {
       receiver: '',
-      txt: '',
-      bodyType: 'text',
       receivers: [],
+      author: user()?.username,
+      body: { type: 'text', content: '' },
+      category: [],
     },
   });
 
   function addReceiver() {
     const recv = squealform.getValues('receiver');
+
     if (recv === undefined) return;
+    const result = receiverString.safeParse(recv);
+    if (result.success === false) {
+      squealform.trigger('receiver');
+      return;
+    }
 
     squealform.resetField('receiver');
     squealform.setValue('receivers', [
       ...squealform.getValues('receivers'),
-      recv,
+      result.data,
     ]);
 
     squealform.trigger('receivers');
   }
 
-  const createSqueal = squealform.handleSubmit((values) => {
+  const createSqueal = squealform.handleSubmit(async (values) => {
     console.log('result', values);
 
-    // let body: squealIn_t['body'];
+    if (values.body.type === 'media' && values.body.file !== undefined) {
+      // upload the file and get the url
+      // then set the url as the content
+      const formData = new FormData();
+      formData.append('image', values.body.file);
+      console.log('file', formData);
 
-    // if (values.bodyType === 'text') {
-    //   body = values.txt;
-    // } else if (values.bodyType === 'media') {
-    //   body = values.media;
-    // } else if (values.bodyType === 'geolocation') {
-    //   // body = values.geo;
-    //   body = 'TODO: geolocation';
-    // } else {
-    //   throw new Error('Invalid body type');
-    // }
+      // TODO: try catch
+      // const fileurlResp = await privateApi.post<string>('/media/', formData, {
+      //   headers: {
+      //     'Content-Type': 'multipart/form-data',
+      //   },
+      // });
+      // console.log('res', fileurlResp);
+      // values.body.content = fileurlResp.data;
+    }
 
-    // TODO: create the squeal
-    // const newSqueal: squealIn_t = {
-    //   body,
-    //   receivers: values.receivers,
-    //   author: user()?.username,
-    //   automatic_receiver: [''],
-    //   category: [''],
-    // };
+    const newSqueal = squealWriteSchema.safeParse(values);
+    if (newSqueal.success) {
+      console.log('newSqueal', newSqueal.data);
+      privateApi.post('/squeals/', newSqueal.data);
+    } else {
+      const errorsMessage = newSqueal.error.issues
+        .map((issue) => issue.message)
+        .toString();
 
-    // privateApi.post('/squeals/', newSqueal);
+      console.log('error', errorsMessage);
+      toast({
+        variant: 'destructive',
+        title: 'Uh oh! qualcosa è andato storto.',
+        description: errorsMessage,
+      });
+    }
   });
 
-  const currType = squealform.watch('bodyType');
+  const currType = squealform.watch('body.type');
+  const currContent = squealform.watch('body.content');
+  const currMedia = squealform.watch('body.file');
+  const form = squealform.watch();
 
   return (
     <>
@@ -175,7 +135,7 @@ const NewSqueal = () => {
 
           <FormField
             control={squealform.control}
-            name="bodyType"
+            name="body.type"
             render={({ field }) => <TypeSelect field={field} />}
           />
 
@@ -183,7 +143,7 @@ const NewSqueal = () => {
             <FormField
               control={squealform.control}
               shouldUnregister={true}
-              name="txt"
+              name="body.content"
               render={({ field }) => (
                 <BodyTextArea field={field} quota={quota} />
               )}
@@ -191,20 +151,43 @@ const NewSqueal = () => {
           )}
 
           {currType === 'media' && (
-            <FormField
-              name="media"
-              control={squealform.control}
-              shouldUnregister={true}
-              render={({ field }) => <MediaInput field={field} />}
-            />
+            <>
+              {
+                <FormField
+                  name="body.content"
+                  control={squealform.control}
+                  shouldUnregister={true}
+                  render={({ field }) => (
+                    <UrlInput
+                      field={field}
+                      disabled={currMedia !== undefined}
+                    />
+                  )}
+                />
+              }
+              <FormField
+                name="body.file"
+                control={squealform.control}
+                shouldUnregister={true}
+                render={({ field }) => (
+                  <MediaInput
+                    field={field}
+                    disabled={currContent !== ''}
+                    reset={() => {
+                      squealform.resetField('body.file');
+                    }}
+                  />
+                )}
+              />
+            </>
           )}
 
-          {currType === 'geolocation' && <div>Geolocazione</div>}
+          {/* {currType === 'geolocation' && <div>Geolocazione</div>} */}
 
           <Button type="submit">Invia</Button>
         </form>
       </Form>
-      <pre>{JSON.stringify(squealform.watch(), null, 2)}</pre>
+      <pre>{JSON.stringify(form, null, 2)}</pre>
     </>
   );
 };

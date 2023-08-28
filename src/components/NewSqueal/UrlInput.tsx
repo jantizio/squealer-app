@@ -1,4 +1,5 @@
 import { ControllerRenderProps, FieldPath, FieldValues } from 'react-hook-form';
+import { Input } from '@/components/ui/input';
 import {
   FormItem,
   FormControl,
@@ -6,37 +7,34 @@ import {
   FormLabel,
   FormDescription,
 } from '@/components/ui/form';
-import { Textarea } from '@/components/ui/textarea';
-import { quota_t } from '@/lib/types';
 
-type BodyTextAreaProp<
+type UrlInputProp<
   TFieldValues extends FieldValues = FieldValues,
   TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
 > = {
   field: ControllerRenderProps<TFieldValues, TName>;
-  quota: quota_t;
+  disabled?: boolean;
 };
 
-const BodyTextArea = <
+const UrlInput = <
   TFieldValues extends FieldValues,
   TName extends FieldPath<TFieldValues>,
 >({
   field,
-  quota,
-}: BodyTextAreaProp<TFieldValues, TName>) => {
+  disabled,
+}: UrlInputProp<TFieldValues, TName>) => {
   return (
     <FormItem>
-      <FormLabel>Squeal</FormLabel>
+      <FormLabel>Inserisci link</FormLabel>
       <FormControl>
-        <Textarea placeholder="Hello world!" {...field} />
+        <Input {...field} disabled={disabled} />
       </FormControl>
       <FormDescription>
-        Hai a disposizione {quota.actualD - field.value.length}/{quota.maxD}{' '}
-        caratteri per il tuo Squeal
+        Inserisci il link di un'immagine o di un video
       </FormDescription>
       <FormMessage />
     </FormItem>
   );
 };
 
-export default BodyTextArea;
+export default UrlInput;

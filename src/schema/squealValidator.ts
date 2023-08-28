@@ -1,46 +1,43 @@
 import { z } from 'zod';
+import {
+  squealWriteSchema,
+  mediaBody,
+  textBody,
+} from './shared-schema/squealValidators';
+import { receiverString } from './shared-schema/utils/global';
 
-const squealSchemaBase = z.object({
-  receiver: z
-    .string()
-    .regex(/^$|^((@|#|§).+)$/, {
-      message: 'Il destinatario non è valido, deve iniziare con @, # o §',
-    })
-    .optional(),
-  receivers: z
-    .array(z.string())
-    .nonempty({
-      message: 'Devi inserire almeno un destinatario',
-    })
-    .refine((items) => new Set(items).size === items.length, {
-      message: 'Non puoi inserire destinatari duplicati',
-    }),
-});
-
-export const squealFormSchema = z.discriminatedUnion('bodyType', [
-  z
-    .object({
-      bodyType: z.literal('text'),
-      txt: z.string().min(1),
-    })
-    .merge(squealSchemaBase),
-  z
-    .object({
-      bodyType: z.literal('media'),
-      media: z.instanceof(File, {
-        message: "Devi caricare un'immagine o un video",
-      }), //TODO: aggiungere validazione sul tipo di file
-    })
-    .merge(squealSchemaBase),
-  z
-    .object({
-      bodyType: z.literal('geolocation'),
-      geo: z.object({
-        //TODO: definire meglio lo schema
-        latitude: z.number(),
-        longitude: z.number(),
+export const squealFormSchema = squealWriteSchema
+  .extend({
+    receiver: z.union([receiverString, z.literal('')]),
+    body: z.discriminatedUnion('type', [
+      textBody,
+      mediaBody.extend({
+        content: mediaBody.shape.content.or(z.literal('')),
+        file: z
+          .instanceof(File, {
+            message: "Devi caricare un'immagine o un video",
+          })
+          .optional(),
       }),
-    })
-    .merge(squealSchemaBase),
-]);
+    ]),
+  })
+  .superRefine((data, ctx) => {
+    if (
+      data.body.type === 'media' &&
+      data.body.content === '' &&
+      data.body.file === undefined
+    ) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: 'Devi inserire un URL o caricare un file',
+        path: ['body.content'],
+      });
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: 'Devi inserire un URL o caricare un file',
+        path: ['body.file'],
+      });
+    }
+  });
+
 export type squealSchema_t = z.infer<typeof squealFormSchema>;

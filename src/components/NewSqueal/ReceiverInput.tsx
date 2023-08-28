@@ -10,9 +10,9 @@ import {
 } from '@/components/ui/form';
 import { Plus } from 'lucide-react';
 
-type receiverInputProp<
+type ReceiverInputProp<
   TFieldValues extends FieldValues = FieldValues,
-  TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>
+  TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
 > = {
   field: ControllerRenderProps<TFieldValues, TName>;
   onClick: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
@@ -20,19 +20,19 @@ type receiverInputProp<
 
 const ReceiverInput = <
   TFieldValues extends FieldValues,
-  TName extends FieldPath<TFieldValues>
+  TName extends FieldPath<TFieldValues>,
 >({
   field,
   onClick,
-}: receiverInputProp<TFieldValues, TName>) => {
+}: ReceiverInputProp<TFieldValues, TName>) => {
   return (
     <FormItem>
       <FormLabel>Destinatari</FormLabel>
-      <section className="flex space-x-2">
+      <section className="flex items-center space-x-2">
         <FormControl>
           <Input {...field} />
         </FormControl>
-        <Button type="button" onClick={onClick}>
+        <Button type="button" onClick={onClick} variant="outline">
           <Plus />
         </Button>
       </section>

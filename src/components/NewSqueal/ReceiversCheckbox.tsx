@@ -11,9 +11,9 @@ function removeFirstOccurence(arr: string[], value: string) {
   return arr;
 }
 
-type receiverInputProp<
+type ReceiversCheckboxProp<
   TFieldValues extends FieldValues = FieldValues,
-  TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>
+  TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
 > = {
   field: ControllerRenderProps<TFieldValues, TName>;
   receiver: string;
@@ -21,11 +21,11 @@ type receiverInputProp<
 
 const ReceiversCheckbox = <
   TFieldValues extends FieldValues,
-  TName extends FieldPath<TFieldValues>
+  TName extends FieldPath<TFieldValues>,
 >({
   field,
   receiver,
-}: receiverInputProp<TFieldValues, TName>) => {
+}: ReceiversCheckboxProp<TFieldValues, TName>) => {
   return (
     <FormItem className="flex flex-row items-center space-x-3 space-y-0">
       <FormControl>
@@ -38,7 +38,7 @@ const ReceiversCheckbox = <
           }}
         />
       </FormControl>
-      <FormLabel className="font-normal">{receiver}</FormLabel>
+      <FormLabel>{receiver}</FormLabel>
     </FormItem>
   );
 };
