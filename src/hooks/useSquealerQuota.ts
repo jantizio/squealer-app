@@ -42,7 +42,7 @@ export default function useSquealerQuota() {
     .refine(
       (data) => {
         if (data.body.type === 'text')
-          return data.body.content.length <= quota.actualD;
+          return data.body.content.length <= quota.maxD - quota.actualD;
         return true;
       },
       {
@@ -53,7 +53,7 @@ export default function useSquealerQuota() {
     .refine(
       (data) => {
         if (data.body.type === 'media') {
-          return nonTextQuota <= quota.actualD;
+          return nonTextQuota <= quota.maxD - quota.actualD;
         }
         return true;
       },
@@ -66,7 +66,7 @@ export default function useSquealerQuota() {
   // .refine(
   //   (data) => {
   //     if (data.body.type === 'geolocation') {
-  //       return nonTextQuota <= quota.actualD;
+  //       return nonTextQuota <= quota.maxD - quota.actualD;
   //     }
   //     return true;
   //   },

@@ -24,6 +24,7 @@ const BodyTextArea = <
   field,
   quota,
 }: BodyTextAreaProp<TFieldValues, TName>) => {
+  const { actualD, maxD } = quota;
   return (
     <FormItem>
       <FormLabel>Squeal</FormLabel>
@@ -31,7 +32,7 @@ const BodyTextArea = <
         <Textarea placeholder="Hello world!" {...field} />
       </FormControl>
       <FormDescription>
-        Hai a disposizione {quota.actualD - field.value.length}/{quota.maxD}{' '}
+        Hai a disposizione {maxD - (actualD + field.value.length)}/{maxD}{' '}
         caratteri per il tuo Squeal
       </FormDescription>
       <FormMessage />
