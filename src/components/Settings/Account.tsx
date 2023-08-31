@@ -34,12 +34,12 @@ const Account = () => {
   const user = useAuthUser()();
   const logout = useSignOut();
 
-  if (!userCheck(user)) return <div>Errore utente non definito</div>; //Should never happen
-
   const changePswdForm = useForm<changepswForm_t>({
     resolver: zodResolver(changepswFormSchema),
     defaultValues: { oldPassword: '', password: '', confirmPassword: '' },
   });
+
+  if (!userCheck(user)) return <div>Errore utente non definito</div>; //Should never happen
 
   const changepwsdHandler = changePswdForm.handleSubmit(async (values) => {
     alert(JSON.stringify(values));
@@ -55,7 +55,7 @@ const Account = () => {
     <>
       <H2>Gestisci il tuo account</H2>
       <section className="mt-6 space-y-7">
-        <section className="flex items-center flex-wrap gap-3">
+        <section className="flex flex-wrap items-center gap-3">
           <H3>Cambio password</H3>
           <Dialog>
             <DialogTrigger asChild>
@@ -140,12 +140,12 @@ const Account = () => {
           </Dialog>
         </section>
 
-        <section className="flex items-center flex-wrap gap-3">
+        <section className="flex flex-wrap items-center gap-3">
           <H3>Logout</H3>
           <Button onClick={() => logout()}>Logout</Button>
         </section>
 
-        <section className="flex items-center flex-wrap gap-3">
+        <section className="flex flex-wrap items-center gap-3">
           <H3>Elimina Account</H3>
           <Button variant="destructive" onClick={deleteAccount}>
             Elimina Account

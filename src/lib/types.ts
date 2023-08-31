@@ -7,10 +7,6 @@ import {
 } from '@/schema/shared-schema/squealValidators';
 import { login_t } from '@/schema/shared-schema/loginValidator';
 import { log_t } from '@/schema/shared-schema/logValidator';
-import { userString } from '@/schema/shared-schema/utils/global';
-import { z } from 'zod';
-
-type username_t = z.infer<typeof userString>;
 
 export type {
   quota_t,
@@ -21,10 +17,4 @@ export type {
   squealRead_t, //TODO: aggiungere il tipo per la geolocation
   squealWrite_t, //TODO: aggiungere il tipo per la geolocation
   log_t,
-};
-
-export type authUser_t = {
-  username: username_t;
-  SMM: string | null;
-  type: 'standard' | 'professional' | 'moderator';
 };

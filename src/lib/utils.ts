@@ -20,10 +20,10 @@ export function errorCheck(error: unknown): error is Error {
 }
 
 import { AuthStateUserObject } from 'react-auth-kit/dist/types';
-import { authUser_t } from '@/lib/types';
+import { userRead_t } from '@/lib/types';
 export function userCheck(
   user: AuthStateUserObject | null,
-): user is authUser_t {
+): user is userRead_t {
   return user !== null;
 }
 

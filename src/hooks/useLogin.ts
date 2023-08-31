@@ -2,10 +2,10 @@ import { useSignIn } from 'react-auth-kit';
 import { useToast } from '@/hooks/useToast';
 import { AxiosError } from 'axios';
 import { backendApi } from '@/lib/utils';
-import { log_t, login_t } from '@/lib/types';
+import { log_t, login_t, userRead_t } from '@/lib/types';
 import { useMutation } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
-import jwt_decode from 'jwt-decode';
+import jwt_decode, { InvalidTokenError } from 'jwt-decode';
 
 type token_payload_t = {
   name: string;
@@ -13,22 +13,37 @@ type token_payload_t = {
   iat: number;
 };
 
+type loginResponse_t = {
+  token: string;
+  user: userRead_t;
+};
+
 export default function useLogin() {
   const signIn = useSignIn();
   const navigate = useNavigate();
   const { toast } = useToast();
-  const login = useMutation<string, AxiosError, login_t>({
+  const login = useMutation<
+    loginResponse_t,
+    AxiosError | InvalidTokenError,
+    login_t
+  >({
     mutationKey: ['login'],
     mutationFn: async (credentials) => {
-      const { data } = await backendApi.post<string>('/token', credentials);
-      return data;
+      const { data: token } = await backendApi.post<string>(
+        '/token',
+        credentials,
+      );
+      const { data: user } = await backendApi.get<userRead_t>(
+        `/users/${credentials.username}`,
+      );
+      return { token, user };
     },
-    onSuccess(data, variables) {
+    onSuccess(data) {
       // questo viene chiamato per gli status code 2xx
       console.log('Login SUCCESS!');
       console.log('data:', data);
 
-      const token_payload = jwt_decode<token_payload_t>(data); //TODO: forse try catch per token non valido
+      const token_payload = jwt_decode<token_payload_t>(data.token);
 
       // calculate expiration time in minutes
       const expiresIn = Math.floor(
@@ -37,39 +52,54 @@ export default function useLogin() {
 
       // eseguo il login dell'utente
       signIn({
-        token: data,
+        token: data.token,
         expiresIn: expiresIn,
         tokenType: 'Bearer',
-        authState: { username: variables.username },
+        authState: data.user,
       });
       navigate('/');
       // TODO: potrebbe essere necessario fare il redirect alla pagina da cui l'utente è arrivato
     },
     onError(error) {
-      const errorLog: log_t = {
-        path: error.config?.url ?? '/token',
-        method: 'POST',
-        message: error.message,
-      };
+      let errorLog: log_t;
+      if (error instanceof AxiosError) {
+        errorLog = {
+          path: error.config?.url ?? '/token',
+          method: 'POST',
+          message: `AxiosError: ${error.message}`,
+        };
 
-      console.log(errorLog);
-      if (error.response?.status === 401) {
-        console.log('credenziali errate');
-        toast({
-          variant: 'destructive',
-          title: 'Uh oh! Qualcosa è andato storto.',
-          description: 'Credenziali errate',
-        });
+        console.log(errorLog);
+        if (error.response?.status === 401) {
+          console.log('credenziali errate');
+          toast({
+            variant: 'destructive',
+            title: 'Uh oh! Qualcosa è andato storto.',
+            description: 'Credenziali errate',
+          });
+        } else {
+          console.log('altro errore');
+          toast({
+            variant: 'destructive',
+            title: 'Uh oh! Qualcosa è andato storto.',
+            description: "C'è stato un problema, riprova",
+          });
+        }
       } else {
-        console.log('altro errore');
+        errorLog = {
+          path: '/token',
+          method: 'POST',
+          message: `InvalidTokenError: ${error.message}`,
+        };
+        console.log('token non valido');
         toast({
           variant: 'destructive',
           title: 'Uh oh! Qualcosa è andato storto.',
-          description: "C'è stato un problema, riprova",
+          description: 'Token non valido',
         });
-
-        backendApi.put('/logs', errorLog);
       }
+
+      backendApi.put('/logs', errorLog);
     },
   });
 
