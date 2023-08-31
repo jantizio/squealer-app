@@ -1,63 +1,153 @@
 import HeaderLogo from '@/components/HeaderLogo';
 import MessageScroller from '@/components/MessageScroller';
+import ModeToggle from '@/components/ModeToggle';
 import { Button } from '@/components/ui/button';
-import { H1 } from '@/components/ui/typography';
+import { A, H1, Large, Lead, Muted } from '@/components/ui/typography';
 import useAxios from '@/hooks/useAxios';
-import { squealRead_t } from '@/lib/types';
+import { useFetchSqueals } from '@/hooks/useFetch';
+import { run, userCheck } from '@/lib/utils';
+import { channel_t } from '@/schema/shared-schema/channelValidator';
+import { useQuery } from '@tanstack/react-query';
 import { Settings } from 'lucide-react';
+import { useAuthUser, useIsAuthenticated } from 'react-auth-kit';
 import { useNavigate, useParams } from 'react-router-dom';
 
 const Channel = () => {
-  let { channelName } = useParams<{ channelName: string }>();
-  const privateBackendApi = useAxios();
+  const { channelName } = useParams<{ channelName: string }>();
   const navigate = useNavigate();
+  const privateApi = useAxios();
+  const isAuthenticated = useIsAuthenticated();
 
   //TODO: probabilmente il layout ora presente non va bene, lascio così per non fare modifiche inutili
   // ma servirebbe un layout a 3 colonne. Le due laterali fisse e quella centrare con la scrollbar centrale
 
-  const fetchChannelSqueals = async (page: number): Promise<squealRead_t[]> => {
-    const response = await privateBackendApi.get<squealRead_t[]>(
-      `/channels/${channelName}/squeals?page=${page}`
-    );
-    // TODO: handle zod validation
-    return response.data;
-  };
+  const fetchChannelSqueals = useFetchSqueals(
+    `/channels/${channelName}/squeals`,
+  );
+
+  const {
+    data: channel,
+    isSuccess,
+    isError,
+    isLoading,
+  } = useQuery(
+    ['channel'],
+    async (): Promise<channel_t> => {
+      const { data } = await privateApi.get<channel_t[]>(
+        `/channels/${channelName}`,
+      );
+      console.log(data);
+      if (!data[0]) throw new Error('Channel not found');
+      else return data[0];
+      // const parsedChannel = channelSchema.safeParse(response.data[0]);
+      // if (parsedChannel.success) {
+      //   return parsedChannel.data;
+      // } else {
+      //   console.log(
+      //     fromZodError(parsedChannel.error, {
+      //       unionSeparator: 'oppure',
+      //       issueSeparator: '\n',
+      //     }).message,
+      //   ); //TODO: remove this log
+      // }
+    },
+    {
+      retry: false,
+    },
+  );
+  const user = useAuthUser()();
+
+  const subscribeButton = run(() => {
+    if (!userCheck(user)) return <></>;
+
+    if (isSuccess && channel.subscribed.includes(user.username))
+      return (
+        <Button variant="secondary" size="sm">
+          Iscritto
+        </Button>
+      );
+
+    return <Button size="sm">Iscriviti</Button>;
+  });
 
   return (
     <>
-      <header className="w-full order-first flex items-center justify-around my-3">
+      <header className="order-first my-3 flex w-full items-center justify-around">
         <HeaderLogo />
-        <Button
-          onClick={() => navigate('/settings')}
-          variant="outline"
-          size="icon"
-          className="mx-2"
-        >
-          <Settings className="h-icon-sm w-icon-sm" />
-        </Button>
+
+        {isAuthenticated() && (
+          <Button
+            onClick={() => navigate('/settings')}
+            variant="outline"
+            size="icon"
+            className="mx-2"
+          >
+            <Settings className="h-icon-sm w-icon-sm" />
+          </Button>
+        )}
+
+        {!isAuthenticated() && (
+          <div className="flex items-center space-x-2">
+            <nav className="flex items-center space-x-2">
+              <Button onClick={() => navigate('/login')}>Accedi</Button>
+              <Button onClick={() => navigate('/signup')} variant="secondary">
+                Iscriviti
+              </Button>
+            </nav>
+            <ModeToggle />
+          </div>
+        )}
       </header>
 
       <div className="flex overflow-hidden">
         {/* Main content */}
-        <main className="w-full order-2 overflow-auto md:w-4/6 lg:w-1/2">
-          <section className="container flex flex-wrap items-center justify-between space-x-1">
-            <H1 className="break-all">{channelName}</H1>
-            <Button variant="default" size="sm">
-              Iscriviti
-            </Button>
-            {/* //TODO: check if user already subscribed, button is primary if unsub, but secondary if subbed */}
-          </section>
+        <main className="container order-2 w-full overflow-auto md:w-4/6 lg:w-1/2">
+          {/* Error content */}
+          {isError && (
+            <>
+              <H1 className="mt-32 text-center">Errore</H1>
+              <section className="my-2 flex flex-wrap items-center justify-center md:space-x-5">
+                <Large className="w-full text-center md:w-auto">
+                  Il canale {channelName} non esiste
+                </Large>
+                <Button variant="outline" onClick={() => navigate('/')}>
+                  Torna alla pagina principale
+                </Button>
+              </section>
+            </>
+          )}
 
-          <MessageScroller fetchPage={fetchChannelSqueals} />
+          {/* Loading content */}
+          {isLoading && <Lead className="mt-32">Caricamento...</Lead>}
+
+          {/* Actual content */}
+          {isSuccess && (
+            <>
+              <section className="flex flex-wrap items-center justify-between">
+                <div className="w-full">
+                  <A href="/channels" className="text-xs">
+                    Scopri altri canali
+                  </A>
+                </div>
+                <H1 className="mb-1 mr-1 break-all">{channel.name}</H1>
+                {subscribeButton}
+                {isSuccess && (
+                  <Muted className="mt-3 w-full">{channel.description}</Muted>
+                )}
+              </section>
+
+              <MessageScroller fetchPage={fetchChannelSqueals} />
+            </>
+          )}
         </main>
 
         {/* Left sidebar */}
-        <aside className="w-full hidden order-1 overflow-auto md:block md:w-2/6 lg:w-1/4"></aside>
+        <aside className="order-1 hidden w-full overflow-auto md:block md:w-2/6 lg:w-1/4"></aside>
 
         {/* Right sidebar */}
-        <aside className="w-full hidden order-3 overflow-hidden lg:block lg:w-1/4"></aside>
+        <aside className="order-3 hidden w-full overflow-hidden lg:block lg:w-1/4"></aside>
       </div>
-      <footer className="w-full order-last p-4"></footer>
+      <footer className="order-last w-full p-4"></footer>
     </>
   );
 };
