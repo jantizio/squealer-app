@@ -1,1 +1,1 @@
-export { default } from './ModeToggle';
+export { default } from './ModeToggleButton';
