@@ -6,22 +6,18 @@ import { useQuery } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
 import { X } from 'lucide-react';
 
-type ChannelListReqProps = {
+type ChannelListProps = {
   fetchChannels: () => Promise<channel_t[]>;
   type: 'official' | 'subscribed' | 'direct' | 'public';
+  removeButton?: boolean;
+  className?: string;
 };
-type ChannelListOptProps = {
-  removeButton: boolean;
-  className: string;
-};
-
-type ChannelListProps = ChannelListReqProps & ChannelListOptProps;
 
 const ChannelList = ({
   fetchChannels,
   type,
-  removeButton,
-  className,
+  removeButton = false,
+  className = '',
 }: ChannelListProps) => {
   const { data } = useQuery<channel_t[], AxiosError>(
     ['channels', type],
@@ -57,11 +53,5 @@ const ChannelList = ({
     </ul>
   );
 };
-
-const defaultProps: ChannelListOptProps = {
-  removeButton: false,
-  className: '',
-};
-ChannelList.defaultProps = defaultProps;
 
 export default ChannelList;
