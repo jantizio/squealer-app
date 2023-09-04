@@ -1,8 +1,9 @@
 import useAxios from '@/hooks/useAxios';
 import { channel_t, squealRead_t } from '@/lib/types';
+import { run } from '@/lib/utils';
 import { channelSchema } from '@/schema/shared-schema/channelValidator';
-import { fromZodError } from 'zod-validation-error';
 import { squealReadSchema } from '@/schema/shared-schema/squealValidators';
+import { fromZodError } from 'zod-validation-error';
 
 export const useFetchChannels = (path: string) => {
   const backendApi = useAxios();
@@ -33,12 +34,18 @@ export const useFetchChannels = (path: string) => {
   };
 };
 
-export const useFetchSqueals = (path: string) => {
+export const useFetchSqueals = (path: string, filter?: string) => {
   const backendApi = useAxios();
+
+  const queryString = run(() => {
+    if (!filter) return '';
+    if (filter.startsWith('@')) return `&mention=${filter}`;
+    else return `&query=${filter}`;
+  });
 
   return async (page: number): Promise<squealRead_t[]> => {
     const response = await backendApi.get<squealRead_t[]>(
-      `${path}?page=${page}`,
+      `${path}?page=${page}${queryString}`,
     );
 
     const squealArray = response.data.reduce<squealRead_t[]>(

@@ -7,9 +7,9 @@ type MessageScrollerProps = {
   filter?: string;
 };
 
-const MessageScroller = (props: MessageScrollerProps) => {
+const MessageScroller = ({ fetchPage, filter }: MessageScrollerProps) => {
   const { data, error, isError, isFetchingNextPage, lastPostRef } =
-    useInfiniteScroll({ ...props });
+    useInfiniteScroll({ fetchPage, filter });
 
   const posts = data?.pages.flat();
 

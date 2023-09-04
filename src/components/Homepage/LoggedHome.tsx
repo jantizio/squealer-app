@@ -29,11 +29,11 @@ import { useDebounce } from 'usehooks-ts';
 import ChannelsSidebar from './ChannelsSidebar';
 
 const LoggedHome = () => {
-  const [filter, setFilter] = useState<string>('');
-  const debouncedFilter = useDebounce<string>(filter, 500);
+  const [filter, setFilter] = useState('');
+  const debouncedFilter = useDebounce(filter, 500);
   const navigate = useNavigate();
 
-  const fetchSquealsPage = useFetchSqueals('/squeals/');
+  const fetchSquealsPage = useFetchSqueals('/squeals/', filter);
 
   const user = useAuthUser()();
   const logout = useSignOut();
