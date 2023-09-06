@@ -63,17 +63,15 @@ const NewSqueal = () => {
       // upload the file and get the url
       // then set the url as the content
       const formData = new FormData();
-      formData.append('image', values.body.file);
-      console.log('file', formData);
+      formData.append('media', values.body.file);
 
       // TODO: try catch
-      // const fileurlResp = await privateApi.post<string>('/media/', formData, {
-      //   headers: {
-      //     'Content-Type': 'multipart/form-data',
-      //   },
-      // });
-      // console.log('res', fileurlResp);
-      // values.body.content = fileurlResp.data;
+      const fileurlResp = await privateApi.post<string>('/media', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+      values.body.content = fileurlResp.data;
     }
 
     const newSqueal = squealWriteSchema.safeParse(values);
