@@ -3,7 +3,7 @@ import { useEffect } from 'react';
 import useRefreshToken from '@/hooks/auth/useRefreshToken';
 import useAuth from '@/hooks/auth/useAuth';
 
-const useAxios = () => {
+export default function useAxios() {
   const refresh = useRefreshToken();
   const { auth } = useAuth();
 
@@ -40,6 +40,4 @@ const useAxios = () => {
   // TODO: non sono sicuro del dependency array
 
   return privateApi;
-};
-
-export default useAxios;
+}

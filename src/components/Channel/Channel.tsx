@@ -3,13 +3,14 @@ import MessageScroller from '@/components/MessageScroller';
 import ModeToggle from '@/components/ModeToggle';
 import { Button } from '@/components/ui/button';
 import { A, H1, Large, Lead, Muted } from '@/components/ui/typography';
+import useAuth from '@/hooks/auth/useAuth';
+import useIsAuthenticated from '@/hooks/auth/useIsAuthenticated';
 import useAxios from '@/hooks/useAxios';
 import { useFetchSqueals } from '@/hooks/useFetch';
-import { run, userCheck } from '@/lib/utils';
+import { run } from '@/lib/utils';
 import { channel_t } from '@/schema/shared-schema/channelValidator';
 import { useQuery } from '@tanstack/react-query';
 import { Settings } from 'lucide-react';
-import { useAuthUser, useIsAuthenticated } from 'react-auth-kit';
 import { useNavigate, useParams } from 'react-router-dom';
 
 const Channel = () => {
@@ -55,12 +56,12 @@ const Channel = () => {
       retry: false,
     },
   );
-  const user = useAuthUser()();
+  const { auth } = useAuth();
 
   const subscribeButton = run(() => {
-    if (!userCheck(user)) return <></>;
+    if (!auth) return <></>;
 
-    if (isSuccess && channel.subscribed.includes(user.username))
+    if (isSuccess && channel.subscribed.includes(auth.authState.username))
       return (
         <Button variant="secondary" size="sm">
           Iscritto
@@ -75,7 +76,7 @@ const Channel = () => {
       <header className="order-first my-3 flex w-full items-center justify-around">
         <HeaderLogo />
 
-        {isAuthenticated() && (
+        {isAuthenticated && (
           <Button
             onClick={() => navigate('/settings')}
             variant="outline"
@@ -86,7 +87,7 @@ const Channel = () => {
           </Button>
         )}
 
-        {!isAuthenticated() && (
+        {!isAuthenticated && (
           <div className="flex items-center space-x-2">
             <nav className="flex items-center space-x-2">
               <Button onClick={() => navigate('/login')}>Accedi</Button>

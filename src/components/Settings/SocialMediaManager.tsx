@@ -9,16 +9,15 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { H2, H3, P } from '@/components/ui/typography';
-import { userCheck } from '@/lib/utils';
-import { useAuthUser } from 'react-auth-kit';
+import useAuth from '@/hooks/auth/useAuth';
 import { useForm } from 'react-hook-form';
 
 const SocialMediaManager = () => {
-  const user = useAuthUser()();
+  const { auth } = useAuth();
 
   const smmForm = useForm({ defaultValues: { SMM: '' } });
 
-  if (!userCheck(user)) return <div>Errore utente non definito</div>; //Should never happen
+  if (!auth) return <div>Errore utente non definito</div>; //Should never happen
 
   const changeSmmHandler = smmForm.handleSubmit(async (values) => {
     // TODO: api call per cambiare il SMM
@@ -57,8 +56,8 @@ const SocialMediaManager = () => {
         <section>
           <H3>Social Media Manager Attuale</H3>
           <P>
-            {user.SMM
-              ? `Il tuo Social Media Manager è ${user.SMM}`
+            {auth.authState.SMM
+              ? `Il tuo Social Media Manager è ${auth.authState.SMM}`
               : 'Non hai un Social Media Manager'}
           </P>
         </section>

@@ -14,7 +14,7 @@ type authState_t = {
   expiresIn: number;
   tokenType: string;
   authState: Omit<userRead_t, 'quota'>;
-} | null;
+};
 
 export type {
   quota_t,

@@ -1,7 +1,7 @@
 import { backendApi } from '@/lib/utils';
 import useAuth from './useAuth';
 
-const useRefreshToken = () => {
+export default function useRefreshToken() {
   const { setAuth } = useAuth();
 
   return async () => {
@@ -19,6 +19,4 @@ const useRefreshToken = () => {
 
     return newToken;
   };
-};
-
-export default useRefreshToken;
+}

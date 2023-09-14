@@ -1,14 +1,14 @@
 import { quota_t, userRead_t } from '@/lib/types';
 import { useQuery } from '@tanstack/react-query';
 import useAxios from './useAxios';
-import { useAuthUser } from 'react-auth-kit';
 import { squealFormSchema } from '@/schema/squealValidator';
+import useAuth from './auth/useAuth';
 
 const nonTextQuota = 80;
 
 export default function useSquealerQuota() {
   const privateApi = useAxios();
-  const user = useAuthUser();
+  const { auth } = useAuth();
 
   const defaultData: quota_t = {
     actualD: 0,
@@ -25,7 +25,7 @@ export default function useSquealerQuota() {
       // TODO: get the quota from the server
       new Promise((resolve) => setTimeout(resolve, 2000));
       const response = await privateApi.get<userRead_t>(
-        `/users/${user()?.username}`,
+        `/users/${auth?.authState.username}`,
       );
 
       return response.data.quota;

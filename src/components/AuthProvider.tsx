@@ -6,8 +6,8 @@ type AuthContextProps = {
 };
 
 type AuthContextState = {
-  auth: authState_t;
-  setAuth: Dispatch<SetStateAction<authState_t>>;
+  auth: authState_t | null;
+  setAuth: Dispatch<SetStateAction<authState_t | null>>;
   persist: boolean;
   setPersist: Dispatch<SetStateAction<boolean>>;
 };
@@ -22,7 +22,7 @@ const initialState = {
 const AuthContext = createContext<AuthContextState>(initialState);
 
 export const AuthProvider = ({ children }: AuthContextProps) => {
-  const [auth, setAuth] = useState<authState_t>(null);
+  const [auth, setAuth] = useState<authState_t | null>(null);
   const [persist, setPersist] = useState(
     localStorage.getItem('persist') === 'true',
   );

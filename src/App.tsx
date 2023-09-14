@@ -9,7 +9,6 @@ import Missing from '@/components/Missing';
 import Layout from '@/components/Layout';
 import RequireAuth from '@/components/RequireAuth';
 import Unauthorized from '@/components/Unauthorized';
-import { Demo } from './Demo';
 import { Routes, Route } from 'react-router-dom';
 
 function App() {
@@ -17,8 +16,7 @@ function App() {
     <Routes>
       <Route path="/" element={<Layout />}>
         {/* public routes */}
-        <Route path="/" element={<Demo />} />
-        <Route path="/a" element={<Homepage />} />
+        <Route path="/" element={<Homepage />} />
         <Route path="login" element={<Login />} />
         <Route path="signup" element={<Signup />} />
         <Route path="unauthorized" element={<Unauthorized />} />

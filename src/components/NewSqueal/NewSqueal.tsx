@@ -7,7 +7,6 @@ import { useToast } from '@/hooks/useToast';
 import { squealWriteSchema } from '@/schema/shared-schema/squealValidators';
 import { receiverString } from '@/schema/shared-schema/utils/global';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useAuthUser } from 'react-auth-kit';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import BodyTextArea from './BodyTextArea';
@@ -16,9 +15,10 @@ import ReceiverInput from './ReceiverInput';
 import ReceiversCheckbox from './ReceiversCheckbox';
 import TypeSelect from './TypeSelect';
 import UrlInput from './UrlInput';
+import useAuth from '@/hooks/auth/useAuth';
 
 const NewSqueal = () => {
-  const user = useAuthUser();
+  const { auth } = useAuth();
   const privateApi = useAxios();
   const { toast } = useToast();
   const { quota, updatedsquealSchema } = useSquealerQuota();
@@ -31,7 +31,7 @@ const NewSqueal = () => {
     defaultValues: {
       receiver: '',
       receivers: [],
-      author: user()?.username,
+      author: auth?.authState.username,
       body: { type: 'text', content: '' },
       category: [],
     },

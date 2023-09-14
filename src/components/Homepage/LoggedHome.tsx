@@ -20,13 +20,13 @@ import {
   SheetTrigger,
 } from '@/components/ui/sheet';
 import { useFetchSqueals } from '@/hooks/useFetch';
-import { userCheck } from '@/lib/utils';
 import { LogOut, Menu, PenSquare, Settings, User } from 'lucide-react';
 import { useState } from 'react';
-import { useAuthUser, useSignOut } from 'react-auth-kit';
 import { useNavigate } from 'react-router-dom';
 import { useDebounce } from 'usehooks-ts';
 import ChannelsSidebar from './ChannelsSidebar';
+import useAuth from '@/hooks/auth/useAuth';
+import useLogout from '@/hooks/auth/useLogout';
 
 const LoggedHome = () => {
   const [filter, setFilter] = useState('');
@@ -35,10 +35,10 @@ const LoggedHome = () => {
 
   const fetchSquealsPage = useFetchSqueals('/squeals/', filter);
 
-  const user = useAuthUser()();
-  const logout = useSignOut();
+  const { auth } = useAuth();
+  const logout = useLogout();
 
-  if (!userCheck(user)) return <div>Errore utente non definito</div>; //Should never happen
+  if (!auth) return <div>Errore utente non definito</div>; //Should never happen
 
   return (
     <>
@@ -70,7 +70,7 @@ const LoggedHome = () => {
           <DropdownMenuTrigger asChild>
             <section className="flex items-center md:order-last">
               <Button variant="link" size="sm">
-                {user.username}
+                {auth.authState.username}
               </Button>
               <Avatar>
                 <AvatarImage
