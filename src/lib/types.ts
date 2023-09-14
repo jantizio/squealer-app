@@ -7,6 +7,14 @@ import {
 } from '@/schema/shared-schema/squealValidators';
 import { login_t } from '@/schema/shared-schema/loginValidator';
 import { log_t } from '@/schema/shared-schema/logValidator';
+import { userType_t } from '@/schema/shared-schema/utils/global';
+
+type authState_t = {
+  token: string;
+  expiresIn: number;
+  tokenType: string;
+  authState: Omit<userRead_t, 'quota'>;
+} | null;
 
 export type {
   quota_t,
@@ -17,4 +25,6 @@ export type {
   squealRead_t, //TODO: aggiungere il tipo per la geolocation
   squealWrite_t, //TODO: aggiungere il tipo per la geolocation
   log_t,
+  authState_t,
+  userType_t,
 };

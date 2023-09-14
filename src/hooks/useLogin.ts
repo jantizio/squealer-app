@@ -1,11 +1,11 @@
-import { useSignIn } from 'react-auth-kit';
 import { useToast } from '@/hooks/useToast';
 import { AxiosError } from 'axios';
 import { backendApi } from '@/lib/utils';
 import { log_t, login_t, userRead_t } from '@/lib/types';
 import { useMutation } from '@tanstack/react-query';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import jwt_decode, { InvalidTokenError } from 'jwt-decode';
+import useAuth from '@/hooks/auth/useAuth';
 
 type token_payload_t = {
   name: string;
@@ -19,7 +19,11 @@ type loginResponse_t = {
 };
 
 export default function useLogin() {
-  const signIn = useSignIn();
+  const { setAuth } = useAuth();
+  const location = useLocation();
+  const from = location.state?.from?.pathname ?? '/';
+  console.log('from:', from, '\n', 'location:', location);
+
   const navigate = useNavigate();
   const { toast } = useToast();
   const login = useMutation<
@@ -51,14 +55,14 @@ export default function useLogin() {
       );
 
       // eseguo il login dell'utente
-      signIn({
+      setAuth({
         token: data.token,
         expiresIn: expiresIn,
         tokenType: 'Bearer',
         authState: data.user,
       });
-      navigate('/');
       // TODO: potrebbe essere necessario fare il redirect alla pagina da cui l'utente è arrivato
+      navigate(from, { replace: true });
     },
     onError(error) {
       let errorLog: log_t;

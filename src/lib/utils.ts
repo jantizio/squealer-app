@@ -11,20 +11,17 @@ import axios from 'axios';
 
 export const backendApi = axios.create({
   baseURL: `${import.meta.env.VITE_API_URL}`,
-  // headers: { Authorization: authHeader() },
+});
+
+export const privateApi = axios.create({
+  baseURL: `${import.meta.env.VITE_API_URL}`,
+  headers: { 'Content-Type': 'application/json' },
+  withCredentials: true,
 });
 
 // Type guards
 export function errorCheck(error: unknown): error is Error {
   return error instanceof Error;
-}
-
-import { AuthStateUserObject } from 'react-auth-kit/dist/types';
-import { userRead_t } from '@/lib/types';
-export function userCheck(
-  user: AuthStateUserObject | null,
-): user is userRead_t {
-  return user !== null;
 }
 
 export const run = <T>(fn: () => T): T => fn();
