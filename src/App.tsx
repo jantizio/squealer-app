@@ -9,6 +9,7 @@ import Missing from '@/components/Missing';
 import Layout from '@/components/Layout';
 import RequireAuth from '@/components/RequireAuth';
 import Unauthorized from '@/components/Unauthorized';
+import PersistLogin from '@/components/PersistLogin';
 import { Routes, Route } from 'react-router-dom';
 
 function App() {
@@ -25,21 +26,23 @@ function App() {
         <Route path="channels/:channelName" element={<Channel />} />
 
         {/* private routes */}
-        <Route
-          element={
-            <RequireAuth
-              allowedRoles={['standard', 'professional', 'moderator']}
-              loginPath="/login"
-              unauthorizedPath="/unauthorized"
-            />
-          }
-        >
-          <Route path="settings" element={<Settings />} />
-          <Route path="create" element={<NewSqueal />} />
-        </Route>
+        <Route element={<PersistLogin />}>
+          <Route
+            element={
+              <RequireAuth
+                allowedRoles={['standard', 'professional', 'moderator']}
+                loginPath="/login"
+                unauthorizedPath="/unauthorized"
+              />
+            }
+          >
+            <Route path="settings" element={<Settings />} />
+            <Route path="create" element={<NewSqueal />} />
+          </Route>
 
-        {/* catch all */}
-        <Route path="*" element={<Missing />} />
+          {/* catch all */}
+          <Route path="*" element={<Missing />} />
+        </Route>
       </Route>
     </Routes>
   );

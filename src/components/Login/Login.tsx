@@ -1,4 +1,5 @@
 import { Button } from '@/components/ui/button';
+import { Checkbox } from '@/components/ui/checkbox';
 import {
   Form,
   FormControl,
@@ -10,6 +11,7 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { H1 } from '@/components/ui/typography';
+import useAuth from '@/hooks/auth/useAuth';
 import useLogin from '@/hooks/useLogin';
 import { loginFormSchema, loginForm_t } from '@/schema/loginValidator';
 import { login_t } from '@/schema/shared-schema/loginValidator';
@@ -22,13 +24,20 @@ function Login() {
     defaultValues: {
       username: '',
       password: '',
+      persist: true,
     },
   });
   const loginUser = useLogin();
+  const { setPersist } = useAuth();
 
   const loginUserHandler = loginForm.handleSubmit((values) => {
-    const credentials: login_t = { ...values, username: `@${values.username}` };
+    const credentials: login_t = {
+      username: `@${values.username}`,
+      password: values.password,
+    };
     console.log('data', credentials); //TODO: remove log
+    setPersist(values.persist);
+    localStorage.setItem('persist', `${values.persist}`);
 
     loginUser(credentials);
   });
@@ -75,6 +84,22 @@ function Login() {
                   carattere maiuscolo, un numero e un simbolo speciale.
                 </FormDescription>
                 <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={loginForm.control}
+            name="persist"
+            render={({ field }) => (
+              <FormItem className="flex items-start space-x-3 space-y-0">
+                <FormControl>
+                  <Checkbox
+                    checked={field.value}
+                    onCheckedChange={field.onChange}
+                  />
+                </FormControl>
+                <FormLabel>Ricorda questo dispositivo</FormLabel>
               </FormItem>
             )}
           />

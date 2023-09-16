@@ -9,11 +9,15 @@ import { login_t } from '@/schema/shared-schema/loginValidator';
 import { log_t } from '@/schema/shared-schema/logValidator';
 import { userType_t } from '@/schema/shared-schema/utils/global';
 
+type Prettify<T> = {
+  [K in keyof T]: T[K];
+} & {};
+
 type authState_t = {
   token: string;
   expiresIn: number;
   tokenType: string;
-  authState: Omit<userRead_t, 'quota'>;
+  authState: Prettify<Omit<userRead_t, 'quota'>>;
 };
 
 export type {

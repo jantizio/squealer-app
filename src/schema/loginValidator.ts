@@ -4,5 +4,6 @@ import { z } from 'zod';
 
 export const loginFormSchema = loginSchema.extend({
   username: standardString,
+  persist: z.boolean(),
 });
 export type loginForm_t = z.infer<typeof loginFormSchema>;

@@ -1,6 +1,6 @@
 import { useToast } from '@/hooks/useToast';
 import { AxiosError } from 'axios';
-import { backendApi } from '@/lib/utils';
+import { privateApi } from '@/lib/utils';
 import { log_t, login_t, userRead_t } from '@/lib/types';
 import { useMutation } from '@tanstack/react-query';
 import { useNavigate, useLocation } from 'react-router-dom';
@@ -22,7 +22,7 @@ export default function useLogin() {
   const { setAuth } = useAuth();
   const location = useLocation();
   const from = location.state?.from?.pathname ?? '/';
-  console.log('from:', from, '\n', 'location:', location);
+  // console.log('from:', from, '\n', 'location:', location);
 
   const navigate = useNavigate();
   const { toast } = useToast();
@@ -33,11 +33,11 @@ export default function useLogin() {
   >({
     mutationKey: ['login'],
     mutationFn: async (credentials) => {
-      const { data: token } = await backendApi.post<string>(
+      const { data: token } = await privateApi.post<string>(
         '/token',
         credentials,
       );
-      const { data: user } = await backendApi.get<userRead_t>(
+      const { data: user } = await privateApi.get<userRead_t>(
         `/users/${credentials.username}`,
       );
       return { token, user };
@@ -103,7 +103,7 @@ export default function useLogin() {
         });
       }
 
-      backendApi.put('/logs', errorLog);
+      privateApi.put('/logs', errorLog);
     },
   });
 
