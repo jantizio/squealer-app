@@ -1,47 +1,38 @@
-import { Outlet } from 'react-router-dom';
-import { useState, useEffect } from 'react';
-import useRefreshToken from '@/hooks/auth/useRefreshToken';
 import useAuth from '@/hooks/auth/useAuth';
+import useRefreshToken from '@/hooks/auth/useRefreshToken';
 import { AxiosError } from 'axios';
+import { useEffect, useRef, useState } from 'react';
+import { Outlet } from 'react-router-dom';
 
 const PersistLogin = () => {
   const [isLoading, setIsLoading] = useState(true);
   const refresh = useRefreshToken();
   const { auth, persist } = useAuth();
+  const effectRan = useRef(false);
 
   useEffect(() => {
-    let isMounted = true;
+    if (!effectRan.current) {
+      const verifyRefreshToken = async () => {
+        try {
+          await refresh();
+        } catch (err) {
+          if (err instanceof AxiosError) {
+            const { stack, ...rest } = err;
+            console.log(rest);
+          } else console.log(err);
+        } finally {
+          setIsLoading(false);
+        }
+      };
 
-    const verifyRefreshToken = async () => {
-      console.log('verifying refresh token');
-
-      try {
-        await refresh();
-      } catch (err) {
-        if (err instanceof AxiosError) {
-          const { stack, ...rest } = err;
-          console.log(rest);
-        } else console.log();
-      } finally {
-        isMounted && setIsLoading(false);
-      }
-    };
-
-    !auth?.token && persist ? verifyRefreshToken() : setIsLoading(false);
-
-    return () => {
-      isMounted = false;
-    };
+      !auth?.token && persist ? verifyRefreshToken() : setIsLoading(false);
+      return () => {
+        effectRan.current = true;
+      };
+    }
   }, []);
 
-  useEffect(() => {
-    console.log(`isLoading: ${isLoading}`);
-    console.log(`aT: ${JSON.stringify(auth?.token)}`);
-  }, [isLoading]);
-
-  return (
-    <>{!persist ? <Outlet /> : isLoading ? <p>Loading...</p> : <Outlet />}</>
-  );
+  return <>{!persist || !isLoading ? <Outlet /> : <p>Loading...</p>}</>;
 };
 
 export default PersistLogin;

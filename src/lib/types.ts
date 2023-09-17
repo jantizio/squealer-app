@@ -20,6 +20,13 @@ type authState_t = {
   authState: Prettify<Omit<userRead_t, 'quota'>>;
 };
 
+type token_payload_t = {
+  username: `@${string}`;
+  type: userType_t;
+  exp: number;
+  iat: number;
+};
+
 export type {
   quota_t,
   login_t,
@@ -31,4 +38,5 @@ export type {
   log_t,
   authState_t,
   userType_t,
+  token_payload_t,
 };

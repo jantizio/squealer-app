@@ -1,17 +1,11 @@
 import { useToast } from '@/hooks/useToast';
 import { AxiosError } from 'axios';
 import { privateApi } from '@/lib/utils';
-import { log_t, login_t, userRead_t } from '@/lib/types';
+import { log_t, login_t, token_payload_t, userRead_t } from '@/lib/types';
 import { useMutation } from '@tanstack/react-query';
 import { useNavigate, useLocation } from 'react-router-dom';
 import jwt_decode, { InvalidTokenError } from 'jwt-decode';
 import useAuth from '@/hooks/auth/useAuth';
-
-type token_payload_t = {
-  name: string;
-  exp: number;
-  iat: number;
-};
 
 type loginResponse_t = {
   token: string;

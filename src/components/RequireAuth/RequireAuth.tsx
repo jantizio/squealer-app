@@ -18,7 +18,7 @@ const RequireAuth = ({
   const location = useLocation();
 
   return run(() => {
-    if (!auth)
+    if (!auth?.token)
       return <Navigate to={loginPath} state={{ from: location }} replace />;
     else if (allowedRoles.includes(auth.authState.type)) return <Outlet />;
     else

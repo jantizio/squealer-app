@@ -17,16 +17,16 @@ function App() {
     <Routes>
       <Route path="/" element={<Layout />}>
         {/* public routes */}
-        <Route path="/" element={<Homepage />} />
         <Route path="login" element={<Login />} />
         <Route path="signup" element={<Signup />} />
         <Route path="unauthorized" element={<Unauthorized />} />
-
-        <Route path="channels" element={<Discover />} />
-        <Route path="channels/:channelName" element={<Channel />} />
-
-        {/* private routes */}
         <Route element={<PersistLogin />}>
+          <Route path="/" element={<Homepage />} />
+
+          <Route path="channels" element={<Discover />} />
+          <Route path="channels/:channelName" element={<Channel />} />
+
+          {/* private routes */}
           <Route
             element={
               <RequireAuth
