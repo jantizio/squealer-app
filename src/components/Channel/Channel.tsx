@@ -34,23 +34,11 @@ const Channel = () => {
   } = useQuery(
     ['channel'],
     async (): Promise<channel_t> => {
-      const { data } = await privateApi.get<channel_t[]>(
+      const { data } = await privateApi.get<channel_t>(
         `/channels/${channelName}`,
       );
-      console.log(data);
-      if (!data[0]) throw new Error('Channel not found');
-      else return data[0];
-      // const parsedChannel = channelSchema.safeParse(response.data[0]);
-      // if (parsedChannel.success) {
-      //   return parsedChannel.data;
-      // } else {
-      //   console.log(
-      //     fromZodError(parsedChannel.error, {
-      //       unionSeparator: 'oppure',
-      //       issueSeparator: '\n',
-      //     }).message,
-      //   ); //TODO: remove this log
-      // }
+
+      return data;
     },
     {
       retry: false,

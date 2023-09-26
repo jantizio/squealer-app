@@ -73,10 +73,7 @@ const LoggedHome = () => {
                 {auth.authState.username}
               </Button>
               <Avatar>
-                <AvatarImage
-                  src="https://github.com/shadcn.png" // TODO: implementare l'immagine dell'utente
-                  alt="user icon"
-                />
+                <AvatarImage src={auth.authState.propic} alt="user icon" />
                 <AvatarFallback>User</AvatarFallback>
               </Avatar>
             </section>

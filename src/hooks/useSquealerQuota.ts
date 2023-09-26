@@ -1,8 +1,8 @@
-import { quota_t, userRead_t } from '@/lib/types';
-import { useQuery } from '@tanstack/react-query';
-import useAxios from './useAxios';
+import { quota_t } from '@/lib/types';
 import { squealFormSchema } from '@/schema/squealValidator';
+import { useQuery } from '@tanstack/react-query';
 import useAuth from './auth/useAuth';
+import useAxios from './useAxios';
 
 const nonTextQuota = 80;
 
@@ -22,13 +22,11 @@ export default function useSquealerQuota() {
   const { data, isSuccess } = useQuery<quota_t, Error>({
     queryKey: ['dailyQuota'],
     queryFn: async () => {
-      // TODO: get the quota from the server
-      new Promise((resolve) => setTimeout(resolve, 2000));
-      const response = await privateApi.get<userRead_t>(
-        `/users/${auth?.authState.username}`,
+      const response = await privateApi.get<quota_t>(
+        `/users/${auth?.authState.username}/quota`,
       );
 
-      return response.data.quota;
+      return response.data;
     },
     placeholderData: defaultData,
   });
