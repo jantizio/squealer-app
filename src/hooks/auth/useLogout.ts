@@ -1,4 +1,4 @@
-import { backendApi } from '@/lib/utils';
+import { privateApi } from '@/lib/axios';
 import useAuth from './useAuth';
 
 export default function useLogout() {

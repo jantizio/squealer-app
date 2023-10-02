@@ -1,7 +1,7 @@
-import useAuth from '@/hooks/auth/useAuth';
+import { useCookies } from 'react-cookie';
 
 export default function useIsAuthenticated() {
-  const { auth } = useAuth();
+  const [cookies] = useCookies(['logged_in']);
 
-  return auth !== null;
+  return !!cookies.logged_in;
 }

@@ -6,6 +6,7 @@ import { forwardRef, useEffect } from 'react';
 import { run } from '@/lib/utils';
 import { Large, Muted } from '@/components/ui/typography';
 import useIsAuthenticated from '@/hooks/auth/useIsAuthenticated';
+import useAuth from '@/hooks/auth/useAuth';
 
 type messageProps = {
   children: squealRead_t;
@@ -25,7 +26,8 @@ const Message = forwardRef<HTMLDivElement, messageProps>(
       datetime,
       receivers,
     } = children;
-    const isAuthenticated = useIsAuthenticated();
+    const { state } = useAuth();
+    const isAuthenticated = !!state.authUser;
     const privateApi = useAxios();
 
     const updateSqueal = (operation: op, id: string) => {

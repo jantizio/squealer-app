@@ -20,29 +20,28 @@ function App() {
         <Route path="login" element={<Login />} />
         <Route path="signup" element={<Signup />} />
         <Route path="unauthorized" element={<Unauthorized />} />
-        <Route element={<PersistLogin />}>
-          <Route path="/" element={<Homepage />} />
 
-          <Route path="channels" element={<Discover />} />
-          <Route path="channels/:channelName" element={<Channel />} />
+        <Route path="/" element={<Homepage />} />
 
-          {/* private routes */}
-          <Route
-            element={
-              <RequireAuth
-                allowedRoles={['standard', 'professional', 'moderator']}
-                loginPath="/login"
-                unauthorizedPath="/unauthorized"
-              />
-            }
-          >
-            <Route path="settings" element={<Settings />} />
-            <Route path="create" element={<NewSqueal />} />
-          </Route>
+        <Route path="channels" element={<Discover />} />
+        <Route path="channels/:channelName" element={<Channel />} />
 
-          {/* catch all */}
-          <Route path="*" element={<Missing />} />
+        {/* private routes */}
+        <Route
+          element={
+            <RequireAuth
+              allowedRoles={['standard', 'professional', 'moderator']}
+              loginPath="/login"
+              unauthorizedPath="/unauthorized"
+            />
+          }
+        >
+          <Route path="settings" element={<Settings />} />
+          <Route path="create" element={<NewSqueal />} />
         </Route>
+
+        {/* catch all */}
+        <Route path="*" element={<Missing />} />
       </Route>
     </Routes>
   );

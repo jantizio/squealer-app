@@ -1,11 +1,14 @@
+import useAuth from '@/hooks/auth/useAuth';
 import AnonymousHome from './AnonymousHome';
 import LoggedHome from './LoggedHome';
 import useIsAuthenticated from '@/hooks/auth/useIsAuthenticated';
 
 function Homepage() {
-  const isAuthenticated = useIsAuthenticated();
+  // const isAuthenticated = useIsAuthenticated();
+  const { state } = useAuth();
+  const isAuth = !!state.authUser;
 
-  if (isAuthenticated) return <LoggedHome />;
+  if (isAuth) return <LoggedHome />;
   else return <AnonymousHome />;
 }
 

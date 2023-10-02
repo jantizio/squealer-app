@@ -35,10 +35,10 @@ const LoggedHome = () => {
 
   const fetchSquealsPage = useFetchSqueals('/squeals/', filter);
 
-  const { auth } = useAuth();
+  const { state } = useAuth();
   const logout = useLogout();
 
-  if (!auth) return <div>Errore utente non definito</div>; //Should never happen
+  if (!state.authUser) return <div>Errore utente non definito</div>; //Should never happen
 
   return (
     <>
@@ -70,10 +70,10 @@ const LoggedHome = () => {
           <DropdownMenuTrigger asChild>
             <section className="flex items-center md:order-last">
               <Button variant="link" size="sm">
-                {auth.authState.username}
+                {state.authUser.username}
               </Button>
               <Avatar>
-                <AvatarImage src={auth.authState.propic} alt="user icon" />
+                <AvatarImage src={state.authUser.propic} alt="user icon" />
                 <AvatarFallback>User</AvatarFallback>
               </Avatar>
             </section>

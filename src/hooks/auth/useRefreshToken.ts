@@ -1,5 +1,5 @@
 import { token_payload_t, userRead_t } from '@/lib/types';
-import { privateApi } from '@/lib/utils';
+import { privateApi } from '@/lib/axios';
 import jwt_decode from 'jwt-decode';
 import useAuth from './useAuth';
 

@@ -1,7 +1,9 @@
-import { useLocation, Navigate, Outlet } from 'react-router-dom';
 import useAuth from '@/hooks/auth/useAuth';
-import { run } from '@/lib/utils';
+import { getMeFn } from '@/lib/axios';
 import { userType_t } from '@/lib/types';
+import { useQuery } from '@tanstack/react-query';
+import { useCookies } from 'react-cookie';
+import { Navigate, Outlet, useLocation } from 'react-router-dom';
 
 type RequireAuthProps = {
   allowedRoles: userType_t[];
@@ -14,18 +16,34 @@ const RequireAuth = ({
   loginPath,
   unauthorizedPath,
 }: RequireAuthProps) => {
-  const { auth } = useAuth();
+  const [cookies] = useCookies(['logged_in']);
+  const { dispatch } = useAuth();
   const location = useLocation();
 
-  return run(() => {
-    if (!auth?.token)
-      return <Navigate to={loginPath} state={{ from: location }} replace />;
-    else if (allowedRoles.includes(auth.authState.type)) return <Outlet />;
-    else
-      return (
-        <Navigate to={unauthorizedPath} state={{ from: location }} replace />
-      );
+  const {
+    isLoading,
+    isFetching,
+    data: user,
+  } = useQuery(['authUser'], getMeFn, {
+    retry: 1,
+    onSuccess: (data) => {
+      dispatch({ type: 'SET_USER', payload: data });
+    },
   });
+
+  if (isLoading || isFetching) {
+    return <p>loading...</p>;
+  }
+
+  // TODO: puzza questo codice
+  return (cookies.logged_in || user) &&
+    allowedRoles.includes(user?.type as string) ? (
+    <Outlet />
+  ) : cookies.logged_in && user ? (
+    <Navigate to={unauthorizedPath} state={{ from: location }} replace />
+  ) : (
+    <Navigate to={loginPath} state={{ from: location }} replace />
+  );
 };
 
 export default RequireAuth;

@@ -13,11 +13,11 @@ import useAuth from '@/hooks/auth/useAuth';
 import { useForm } from 'react-hook-form';
 
 const SocialMediaManager = () => {
-  const { auth } = useAuth();
+  const { state } = useAuth();
 
   const smmForm = useForm({ defaultValues: { SMM: '' } });
 
-  if (!auth) return <div>Errore utente non definito</div>; //Should never happen
+  if (!state.authUser) return <div>Errore utente non definito</div>; //Should never happen
 
   const changeSmmHandler = smmForm.handleSubmit(async (values) => {
     // TODO: api call per cambiare il SMM
@@ -56,8 +56,8 @@ const SocialMediaManager = () => {
         <section>
           <H3>Social Media Manager Attuale</H3>
           <P>
-            {auth.authState.SMM
-              ? `Il tuo Social Media Manager è ${auth.authState.SMM}`
+            {state.authUser.SMM
+              ? `Il tuo Social Media Manager è ${state.authUser.SMM}`
               : 'Non hai un Social Media Manager'}
           </P>
         </section>

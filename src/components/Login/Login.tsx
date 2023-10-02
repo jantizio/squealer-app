@@ -28,7 +28,7 @@ function Login() {
     },
   });
   const loginUser = useLogin();
-  const { setPersist } = useAuth();
+
 
   const loginUserHandler = loginForm.handleSubmit((values) => {
     const credentials: login_t = {
@@ -36,8 +36,6 @@ function Login() {
       password: values.password,
     };
     console.log('data', credentials); //TODO: remove log
-    setPersist(values.persist);
-    localStorage.setItem('persist', `${values.persist}`);
 
     loginUser(credentials);
   });

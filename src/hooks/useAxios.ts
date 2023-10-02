@@ -1,4 +1,4 @@
-import { privateApi } from '@/lib/utils';
+import { privateApi } from '@/lib/axios';
 import { useEffect } from 'react';
 import useRefreshToken from '@/hooks/auth/useRefreshToken';
 import useAuth from '@/hooks/auth/useAuth';

@@ -1,7 +1,7 @@
 import useLogin from '@/hooks/useLogin';
 import { log_t, userWrite_t, userRead_t, login_t } from '@/lib/types';
 import { AxiosError } from 'axios';
-import { backendApi } from '@/lib/utils';
+import { privateApi } from '@/lib/axios';
 import { useMutation } from '@tanstack/react-query';
 import { useToast } from '@/hooks/useToast';
 
@@ -9,9 +9,8 @@ export default function useRegister() {
   const loginUser = useLogin();
   const { toast } = useToast();
   const register = useMutation<userRead_t, AxiosError, userWrite_t>({
-    mutationKey: ['register'],
     mutationFn: async (newUser) => {
-      const { data } = await backendApi.put(
+      const { data } = await privateApi.put(
         `/users/${newUser.username}`,
         newUser,
       );
@@ -22,6 +21,10 @@ export default function useRegister() {
       // questo viene chiamato per gli status code 2xx
       console.log('Registration SUCCESS!');
       console.log('data:', data);
+      toast({
+        title: 'Successo!',
+        description: 'Registrazione effettuato con successo!',
+      });
       // eseguo il login dell'utente
       const creds: login_t = {
         username: variables.username,
@@ -39,7 +42,7 @@ export default function useRegister() {
         message: error.message,
       };
 
-      backendApi.put('/logs', errorLog);
+      privateApi.put('/logs', errorLog);
 
       if (error.response?.status === 409) {
         console.log('utente già registrato');

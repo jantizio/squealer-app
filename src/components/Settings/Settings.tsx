@@ -2,7 +2,7 @@ import HeaderLogo from '@/components/HeaderLogo';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { H1 } from '@/components/ui/typography';
 import { channel_t } from '@/lib/types';
-import { backendApi } from '@/lib/utils';
+import { privateApi } from '@/lib/axios';
 import Account from './Account';
 import SocialMediaManager from './SocialMediaManager';
 import useAuth from '@/hooks/auth/useAuth';
@@ -19,14 +19,14 @@ const fetchFollowedChannels = async () => {
 
   const channelsApi: string =
     'https://jsonplaceholder.typicode.com/albums?_page=1';
-  const res = await backendApi.get<channel_t[]>(channelsApi);
+  const res = await privateApi.get<channel_t[]>(channelsApi);
   return res.data;
 };
 
 const Settings = () => {
-  const { auth } = useAuth();
+  const { state } = useAuth();
 
-  if (!auth) return <div>Errore utente non definito</div>; //Should never happen
+  if (!state.authUser) return <div>Errore utente non definito</div>; //Should never happen
 
   const settings: settingsPage[] = [
     {
@@ -46,7 +46,7 @@ const Settings = () => {
     {
       category: 'SMM',
       component: <SocialMediaManager />,
-      hasPermission: auth.authState.type === 'professional',
+      hasPermission: state.authUser.type === 'professional',
       // hasPermission: true,
     },
   ];

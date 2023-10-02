@@ -31,7 +31,7 @@ import { useForm } from 'react-hook-form';
 
 const Account = () => {
   const privateApi = useAxios();
-  const { auth } = useAuth();
+  const { state } = useAuth();
   const logout = useLogout();
 
   const changePswdForm = useForm<changepswForm_t>({
@@ -39,14 +39,14 @@ const Account = () => {
     defaultValues: { oldPassword: '', password: '', confirmPassword: '' },
   });
 
-  if (!auth) return <div>Errore utente non definito</div>; //Should never happen
+  if (!state.authUser) return <div>Errore utente non definito</div>; //Should never happen
 
   const changepwsdHandler = changePswdForm.handleSubmit(async (values) => {
     alert(JSON.stringify(values));
   });
 
   const deleteAccount = async () => {
-    privateApi.delete(`/users/${auth.authState.username}`);
+    privateApi.delete(`/users/${state.authUser?.username}`);
     // TODO: gestire meglio l'errore
     // forse devo usare useMutation?
   };
