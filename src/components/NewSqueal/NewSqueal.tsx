@@ -1,7 +1,7 @@
 import { Button } from '@/components/ui/button';
 import { Form, FormField, FormItem, FormMessage } from '@/components/ui/form';
 
-import useAxios from '@/hooks/useAxios';
+import { privateApi } from '@/lib/axios';
 import useSquealerQuota from '@/hooks/useSquealerQuota';
 import { useToast } from '@/hooks/useToast';
 import { squealWriteSchema } from '@/schema/shared-schema/squealValidators';
@@ -18,8 +18,9 @@ import UrlInput from './UrlInput';
 import useAuth from '@/hooks/auth/useAuth';
 
 const NewSqueal = () => {
-  const { auth } = useAuth();
-  const privateApi = useAxios();
+  const {
+    state: { authUser },
+  } = useAuth();
   const { toast } = useToast();
   const { quota, updatedsquealSchema } = useSquealerQuota();
 
@@ -31,7 +32,7 @@ const NewSqueal = () => {
     defaultValues: {
       receiver: '',
       receivers: [],
-      author: auth?.authState.username,
+      author: authUser?.username,
       body: { type: 'text', content: '' },
       category: [],
     },

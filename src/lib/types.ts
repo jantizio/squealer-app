@@ -27,6 +27,16 @@ type token_payload_t = {
   iat: number;
 };
 
+type serverResponse_t<T> =
+  | {
+      status: 'success';
+      data: T;
+    }
+  | {
+      status: 'error';
+      message: string;
+    };
+
 export type {
   quota_t,
   login_t,

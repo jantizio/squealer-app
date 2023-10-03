@@ -36,7 +36,7 @@ const LoggedHome = () => {
   const fetchSquealsPage = useFetchSqueals('/squeals/', filter);
 
   const { state } = useAuth();
-  const logout = useLogout();
+  const { logoutUser } = useLogout();
 
   if (!state.authUser) return <div>Errore utente non definito</div>; //Should never happen
 
@@ -93,7 +93,7 @@ const LoggedHome = () => {
               <Settings className="mr-2 h-4 w-4" />
               <span>Impostazioni</span>
             </DropdownMenuItem>
-            <DropdownMenuItem onClick={logout}>
+            <DropdownMenuItem onClick={() => logoutUser()}>
               <LogOut className="mr-2 h-4 w-4" />
               <span>Esci</span>
             </DropdownMenuItem>

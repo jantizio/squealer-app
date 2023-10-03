@@ -1,37 +1,56 @@
-import { createContext, useState, Dispatch, SetStateAction } from 'react';
-import { authState_t } from '@/lib/types';
+import { userRead_t } from '@/lib/types';
+import { Dispatch, createContext, useReducer } from 'react';
 
 type AuthContextProps = {
   children: React.ReactNode;
 };
 
-type AuthContextState = {
-  auth: authState_t | null;
-  setAuth: Dispatch<SetStateAction<authState_t | null>>;
-  persist: boolean;
-  setPersist: Dispatch<SetStateAction<boolean>>;
+type State = {
+  authUser: userRead_t | null;
 };
 
-const initialState = {
-  auth: null,
-  setAuth: () => null,
-  persist: false,
-  setPersist: () => null,
+type Action = {
+  type: string;
+  payload: userRead_t | null;
 };
 
-const AuthContext = createContext<AuthContextState>(initialState);
+type AuthContextState =
+  | {
+      state: State;
+      dispatch: Dispatch<Action>;
+    }
+  | undefined;
+
+const initialState: State = {
+  authUser: null,
+};
+
+export const AuthContext = createContext<AuthContextState>(undefined);
+
+const stateReducer = (state: State, action: Action) => {
+  switch (action.type) {
+    case 'SET_USER': {
+      return {
+        ...state,
+        authUser: action.payload,
+      };
+    }
+    case 'REMOVE_USER': {
+      return {
+        ...state,
+        authUser: null,
+      };
+    }
+    default: {
+      throw new Error(`Unhandled action type: ${action.type}`);
+    }
+  }
+};
 
 export const AuthProvider = ({ children }: AuthContextProps) => {
-  const [auth, setAuth] = useState<authState_t | null>(null);
-  const [persist, setPersist] = useState(
-    localStorage.getItem('persist') === 'true',
-  );
+  const [state, dispatch] = useReducer(stateReducer, initialState);
 
-  return (
-    <AuthContext.Provider value={{ auth, setAuth, persist, setPersist }}>
-      {children}
-    </AuthContext.Provider>
-  );
+  const value = { state, dispatch };
+
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };
-
-export default AuthContext;

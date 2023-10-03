@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button';
 import { A, H1, Large, Lead, Muted } from '@/components/ui/typography';
 import useAuth from '@/hooks/auth/useAuth';
 import useIsAuthenticated from '@/hooks/auth/useIsAuthenticated';
-import useAxios from '@/hooks/useAxios';
+import { privateApi } from '@/lib/axios';
 import { useFetchSqueals } from '@/hooks/useFetch';
 import { run } from '@/lib/utils';
 import { channel_t } from '@/schema/shared-schema/channelValidator';
@@ -16,7 +16,6 @@ import { useNavigate, useParams } from 'react-router-dom';
 const Channel = () => {
   const { channelName } = useParams<{ channelName: string }>();
   const navigate = useNavigate();
-  const privateApi = useAxios();
   const isAuthenticated = useIsAuthenticated();
 
   //TODO: probabilmente il layout ora presente non va bene, lascio così per non fare modifiche inutili
@@ -44,12 +43,14 @@ const Channel = () => {
       retry: false,
     },
   );
-  const { auth } = useAuth();
+  const {
+    state: { authUser },
+  } = useAuth();
 
   const subscribeButton = run(() => {
-    if (!auth) return <></>;
+    if (!authUser) return <></>;
 
-    if (isSuccess && channel.subscribed.includes(auth.authState.username))
+    if (isSuccess && channel.subscribed.includes(authUser.username))
       return (
         <Button variant="secondary" size="sm">
           Iscritto

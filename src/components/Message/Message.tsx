@@ -1,11 +1,10 @@
 import { Button } from '@/components/ui/button';
-import useAxios from '@/hooks/useAxios';
+import { privateApi } from '@/lib/axios';
 import { squealRead_t } from '@/lib/types';
 import { ArrowDownCircle, ArrowUpCircle } from 'lucide-react';
 import { forwardRef, useEffect } from 'react';
 import { run } from '@/lib/utils';
 import { Large, Muted } from '@/components/ui/typography';
-import useIsAuthenticated from '@/hooks/auth/useIsAuthenticated';
 import useAuth from '@/hooks/auth/useAuth';
 
 type messageProps = {
@@ -28,7 +27,6 @@ const Message = forwardRef<HTMLDivElement, messageProps>(
     } = children;
     const { state } = useAuth();
     const isAuthenticated = !!state.authUser;
-    const privateApi = useAxios();
 
     const updateSqueal = (operation: op, id: string) => {
       switch (operation) {

@@ -21,7 +21,7 @@ import { Input } from '@/components/ui/input';
 import { H2, H3 } from '@/components/ui/typography';
 import useAuth from '@/hooks/auth/useAuth';
 import useLogout from '@/hooks/auth/useLogout';
-import useAxios from '@/hooks/useAxios';
+import { privateApi } from '@/lib/axios';
 import {
   changepswFormSchema,
   changepswForm_t,
@@ -30,9 +30,8 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 
 const Account = () => {
-  const privateApi = useAxios();
   const { state } = useAuth();
-  const logout = useLogout();
+  const { logoutUser } = useLogout();
 
   const changePswdForm = useForm<changepswForm_t>({
     resolver: zodResolver(changepswFormSchema),
@@ -142,7 +141,7 @@ const Account = () => {
 
         <section className="flex flex-wrap items-center gap-3">
           <H3>Logout</H3>
-          <Button onClick={logout}>Logout</Button>
+          <Button onClick={() => logoutUser()}>Logout</Button>
         </section>
 
         <section className="flex flex-wrap items-center gap-3">

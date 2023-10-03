@@ -2,13 +2,14 @@ import { quota_t } from '@/lib/types';
 import { squealFormSchema } from '@/schema/squealValidator';
 import { useQuery } from '@tanstack/react-query';
 import useAuth from './auth/useAuth';
-import useAxios from './useAxios';
+import { privateApi } from '@/lib/axios';
 
 const nonTextQuota = 80;
 
 export default function useSquealerQuota() {
-  const privateApi = useAxios();
-  const { auth } = useAuth();
+  const {
+    state: { authUser },
+  } = useAuth();
 
   const defaultData: quota_t = {
     actualD: 0,
@@ -19,21 +20,21 @@ export default function useSquealerQuota() {
     maxM: 0,
   };
 
-  const { data, isSuccess } = useQuery<quota_t, Error>({
-    queryKey: ['dailyQuota'],
-    queryFn: async () => {
-      const response = await privateApi.get<quota_t>(
-        `/users/${auth?.authState.username}/quota`,
-      );
+  // const { data, isSuccess } = useQuery<quota_t, Error>({
+  //   queryKey: ['dailyQuota'],
+  //   queryFn: async () => {
+  //     const response = await privateApi.get<quota_t>(
+  //       `/users/${auth?.authState.username}/quota`,
+  //     );
 
-      return response.data;
-    },
-    placeholderData: defaultData,
-  });
+  //     return response.data;
+  //   },
+  //   placeholderData: defaultData,
+  // });
 
   let quota = defaultData;
 
-  if (isSuccess) quota = data;
+  if (authUser) quota = authUser.quota;
 
   // modify the schema to check the quota
   const updatedsquealSchema = squealFormSchema

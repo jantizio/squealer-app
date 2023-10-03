@@ -17,7 +17,7 @@ import { loginFormSchema, loginForm_t } from '@/schema/loginValidator';
 import { login_t } from '@/schema/shared-schema/loginValidator';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
-
+// TODO: rimuovere il persist
 function Login() {
   const loginForm = useForm<loginForm_t>({
     resolver: zodResolver(loginFormSchema),
@@ -28,7 +28,6 @@ function Login() {
     },
   });
   const loginUser = useLogin();
-
 
   const loginUserHandler = loginForm.handleSubmit((values) => {
     const credentials: login_t = {
@@ -86,7 +85,7 @@ function Login() {
             )}
           />
 
-          <FormField
+          {/* <FormField
             control={loginForm.control}
             name="persist"
             render={({ field }) => (
@@ -100,7 +99,7 @@ function Login() {
                 <FormLabel>Ricorda questo dispositivo</FormLabel>
               </FormItem>
             )}
-          />
+          /> */}
 
           <Button type="submit" className="mx-auto mb-4 w-5/12">
             Accedi
