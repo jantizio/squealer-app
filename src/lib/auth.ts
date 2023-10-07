@@ -1,5 +1,6 @@
 import { configureAuth } from './react-query-auth';
-import { getUser, login, logout, register } from './axios';
+import { getUser, createUser } from '@/api/users';
+import { login, logout } from '@/api/auth';
 import { login_t, userWrite_t } from '../utils/types';
 import Cookies from 'js-cookie';
 
@@ -16,7 +17,7 @@ async function loginFn(data: login_t) {
 }
 
 async function registerFn(data: userWrite_t) {
-  return await register(data);
+  return await createUser(data);
 }
 
 async function logoutFn() {

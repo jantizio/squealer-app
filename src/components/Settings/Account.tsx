@@ -21,7 +21,7 @@ import { Input } from '@/components/ui/input';
 import { H2, H3 } from '@/components/ui/typography';
 import { useLogout } from '@/lib/auth';
 import { useUser } from '@/lib/auth';
-import { privateApi } from '@/lib/axios';
+import { axios } from '@/lib/axios';
 import {
   changepswFormSchema,
   changepswForm_t,
@@ -45,7 +45,7 @@ const Account = () => {
   });
 
   const deleteAccount = async () => {
-    privateApi.delete(`/users/${authUser?.username}`);
+    axios.delete(`/users/${authUser?.username}`);
     // TODO: gestire meglio l'errore
     // forse devo usare useMutation?
   };

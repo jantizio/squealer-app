@@ -1,7 +1,7 @@
 import { Button } from '@/components/ui/button';
 import { Form, FormField, FormItem, FormMessage } from '@/components/ui/form';
 
-import { privateApi } from '@/lib/axios';
+import { axios } from '@/lib/axios';
 import useSquealerQuota from '@/hooks/useSquealerQuota';
 import { useToast } from '@/hooks/useToast';
 import { squealWriteSchema } from '@/schema/shared-schema/squealValidators';
@@ -65,7 +65,7 @@ const NewSqueal = () => {
       formData.append('media', values.body.file);
 
       // TODO: try catch
-      const fileurlResp = await privateApi.post<string>('/media', formData, {
+      const fileurlResp = await axios.post<string>('/media', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
@@ -76,7 +76,7 @@ const NewSqueal = () => {
     const newSqueal = squealWriteSchema.safeParse(values);
     if (newSqueal.success) {
       console.log('newSqueal', newSqueal.data);
-      privateApi.post('/squeals/', newSqueal.data);
+      axios.post('/squeals/', newSqueal.data);
     } else {
       const errorsMessage = newSqueal.error.issues
         .map((issue) => issue.message)

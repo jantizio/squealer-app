@@ -13,6 +13,12 @@ module.exports = {
   plugins: ['react-refresh', 'jsx-a11y', '@tanstack/query'],
   rules: {
     'react-refresh/only-export-components': 'warn',
+    'no-restricted-imports': [
+      'error',
+      {
+        patterns: ['@/features/*/*'],
+      },
+    ],
   },
   settings: {
     'import/resolver': {

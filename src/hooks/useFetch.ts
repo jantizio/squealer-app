@@ -1,4 +1,4 @@
-import { privateApi } from '@/lib/axios';
+import { axios } from '@/lib/axios';
 import { channel_t, squealRead_t } from '@/utils/types';
 import { run } from '@/lib/utils';
 import { channelSchema } from '@/schema/shared-schema/channelValidator';
@@ -7,7 +7,7 @@ import { fromZodError } from 'zod-validation-error';
 
 export const useFetchChannels = (path: string) => {
   return async (): Promise<channel_t[]> => {
-    const response = await privateApi.get<channel_t[]>(path);
+    const response = await axios.get<channel_t[]>(path);
 
     const channelsArray = response.data.reduce<channel_t[]>(
       (filtered, channel) => {
@@ -40,7 +40,7 @@ export const useFetchSqueals = (path: string, filter?: string) => {
   });
 
   return async (page: number): Promise<squealRead_t[]> => {
-    const response = await privateApi.get<squealRead_t[]>(
+    const response = await axios.get<squealRead_t[]>(
       `${path}?page=${page}${queryString}`,
     );
 

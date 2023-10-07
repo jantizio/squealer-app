@@ -1,5 +1,5 @@
 import { Button } from '@/components/ui/button';
-import { privateApi } from '@/lib/axios';
+import { axios } from '@/lib/axios';
 import { squealRead_t } from '@/utils/types';
 import { ArrowDownCircle, ArrowUpCircle } from 'lucide-react';
 import { forwardRef, useEffect } from 'react';

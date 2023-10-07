@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button';
 import { A, H1, Large, Lead, Muted } from '@/components/ui/typography';
 import { useFetchSqueals } from '@/hooks/useFetch';
 import { useUser } from '@/lib/auth';
-import { privateApi } from '@/lib/axios';
+import { axios } from '@/lib/axios';
 import { run } from '@/lib/utils';
 import { channel_t } from '@/schema/shared-schema/channelValidator';
 import { useQuery } from '@tanstack/react-query';
@@ -17,7 +17,6 @@ const Channel = () => {
   const navigate = useNavigate();
   const { data: authUser } = useUser();
   const isAuthenticated = !!authUser;
-
 
   //TODO: probabilmente il layout ora presente non va bene, lascio così per non fare modifiche inutili
   // ma servirebbe un layout a 3 colonne. Le due laterali fisse e quella centrare con la scrollbar centrale
@@ -34,9 +33,7 @@ const Channel = () => {
   } = useQuery(
     ['channel'],
     async (): Promise<channel_t> => {
-      const { data } = await privateApi.get<channel_t>(
-        `/channels/${channelName}`,
-      );
+      const { data } = await axios.get<channel_t>(`/channels/${channelName}`);
 
       return data;
     },
