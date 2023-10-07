@@ -1,5 +1,5 @@
 import Message from '@/components/Message';
-import { squealRead_t } from '@/lib/types';
+import { squealRead_t } from '@/utils/types';
 import useInfiniteScroll from '@/hooks/useInfiniteScroll';
 
 type MessageScrollerProps = {

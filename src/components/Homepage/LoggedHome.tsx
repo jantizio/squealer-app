@@ -20,13 +20,13 @@ import {
   SheetTrigger,
 } from '@/components/ui/sheet';
 import { useFetchSqueals } from '@/hooks/useFetch';
-import { userCheck } from '@/lib/utils';
 import { LogOut, Menu, PenSquare, Settings, User } from 'lucide-react';
 import { useState } from 'react';
-import { useAuthUser, useSignOut } from 'react-auth-kit';
 import { useNavigate } from 'react-router-dom';
 import { useDebounce } from 'usehooks-ts';
 import ChannelsSidebar from './ChannelsSidebar';
+import { useLogout } from '@/lib/auth';
+import { useUser } from '@/lib/auth';
 
 const LoggedHome = () => {
   const [filter, setFilter] = useState('');
@@ -35,10 +35,10 @@ const LoggedHome = () => {
 
   const fetchSquealsPage = useFetchSqueals('/squeals/', filter);
 
-  const user = useAuthUser()();
-  const logout = useSignOut();
+  const { data: authUser } = useUser();
+  const { mutate: logoutUser } = useLogout();
 
-  if (!userCheck(user)) return <div>Errore utente non definito</div>; //Should never happen
+  if (!authUser) return <div>Errore utente non definito</div>; //Should never happen
 
   return (
     <>
@@ -70,13 +70,10 @@ const LoggedHome = () => {
           <DropdownMenuTrigger asChild>
             <section className="flex items-center md:order-last">
               <Button variant="link" size="sm">
-                {user.username}
+                {authUser.username}
               </Button>
               <Avatar>
-                <AvatarImage
-                  src="https://github.com/shadcn.png" // TODO: implementare l'immagine dell'utente
-                  alt="user icon"
-                />
+                <AvatarImage src={authUser.propic} alt="user icon" />
                 <AvatarFallback>User</AvatarFallback>
               </Avatar>
             </section>
@@ -96,7 +93,7 @@ const LoggedHome = () => {
               <Settings className="mr-2 h-4 w-4" />
               <span>Impostazioni</span>
             </DropdownMenuItem>
-            <DropdownMenuItem onClick={logout}>
+            <DropdownMenuItem onClick={() => logoutUser({})}>
               <LogOut className="mr-2 h-4 w-4" />
               <span>Esci</span>
             </DropdownMenuItem>

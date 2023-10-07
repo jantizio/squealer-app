@@ -1,11 +1,11 @@
 import { Button } from '@/components/ui/button';
-import useAxios from '@/hooks/useAxios';
-import { squealRead_t } from '@/lib/types';
+import { axios } from '@/lib/axios';
+import { squealRead_t } from '@/utils/types';
 import { ArrowDownCircle, ArrowUpCircle } from 'lucide-react';
 import { forwardRef, useEffect } from 'react';
-import { useIsAuthenticated } from 'react-auth-kit';
 import { run } from '@/lib/utils';
 import { Large, Muted } from '@/components/ui/typography';
+import { useUser } from '@/lib/auth';
 
 type messageProps = {
   children: squealRead_t;
@@ -25,8 +25,8 @@ const Message = forwardRef<HTMLDivElement, messageProps>(
       datetime,
       receivers,
     } = children;
-    const isAuthenticated = useIsAuthenticated();
-    const privateApi = useAxios();
+    const { data: authUser } = useUser();
+    const isAuthenticated = !!authUser;
 
     const updateSqueal = (operation: op, id: string) => {
       switch (operation) {
@@ -40,7 +40,7 @@ const Message = forwardRef<HTMLDivElement, messageProps>(
           break;
 
         case 'viewed':
-          console.log('plus one views');
+          // console.log('plus one views');
           break;
       }
       // TODO: response and error handling
@@ -88,7 +88,7 @@ const Message = forwardRef<HTMLDivElement, messageProps>(
           className="mx-2"
           size="icon"
           onClick={() => updateSqueal('upvote', _id)}
-          disabled={!isAuthenticated()}
+          disabled={!isAuthenticated}
         >
           <ArrowUpCircle />
         </Button>
@@ -97,7 +97,7 @@ const Message = forwardRef<HTMLDivElement, messageProps>(
           className="mx-2"
           size="icon"
           onClick={() => updateSqueal('downvote', _id)}
-          disabled={!isAuthenticated()}
+          disabled={!isAuthenticated}
         >
           <ArrowDownCircle />
         </Button>

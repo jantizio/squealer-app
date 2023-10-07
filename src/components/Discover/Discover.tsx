@@ -1,10 +1,10 @@
 import ChannelList from '@/components/ChannelList';
 import HeaderLogo from '@/components/HeaderLogo';
 import { Button } from '@/components/ui/button';
+import useIsAuthenticated from '@/hooks/useIsAuthenticated';
 import { useFetchChannels } from '@/hooks/useFetch';
 import { run } from '@/lib/utils';
 import { Settings } from 'lucide-react';
-import { useIsAuthenticated } from 'react-auth-kit';
 import { useNavigate } from 'react-router-dom';
 
 const Discover = () => {
@@ -12,7 +12,7 @@ const Discover = () => {
   const isAuthenticated = useIsAuthenticated();
 
   const queryString = run(() => {
-    if (isAuthenticated()) return '/channels/?type=public';
+    if (isAuthenticated) return '/channels/?type=public';
     else return '/channels/?official=true';
   });
   const fetchEveryChannel = useFetchChannels(queryString);

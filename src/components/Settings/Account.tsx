@@ -19,34 +19,33 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { H2, H3 } from '@/components/ui/typography';
-import useAxios from '@/hooks/useAxios';
-import { userCheck } from '@/lib/utils';
+import { useLogout } from '@/lib/auth';
+import { useUser } from '@/lib/auth';
+import { axios } from '@/lib/axios';
 import {
   changepswFormSchema,
   changepswForm_t,
 } from '@/schema/changepswValidator';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useAuthUser, useSignOut } from 'react-auth-kit';
 import { useForm } from 'react-hook-form';
 
 const Account = () => {
-  const privateApi = useAxios();
-  const user = useAuthUser()();
-  const logout = useSignOut();
+  const { data: authUser } = useUser();
+  const { mutate: logoutUser } = useLogout();
 
   const changePswdForm = useForm<changepswForm_t>({
     resolver: zodResolver(changepswFormSchema),
     defaultValues: { oldPassword: '', password: '', confirmPassword: '' },
   });
 
-  if (!userCheck(user)) return <div>Errore utente non definito</div>; //Should never happen
+  if (!authUser) return <div>Errore utente non definito</div>; //Should never happen
 
   const changepwsdHandler = changePswdForm.handleSubmit(async (values) => {
     alert(JSON.stringify(values));
   });
 
   const deleteAccount = async () => {
-    privateApi.delete(`/users/${user.username}`);
+    axios.delete(`/users/${authUser?.username}`);
     // TODO: gestire meglio l'errore
     // forse devo usare useMutation?
   };
@@ -142,7 +141,7 @@ const Account = () => {
 
         <section className="flex flex-wrap items-center gap-3">
           <H3>Logout</H3>
-          <Button onClick={() => logout()}>Logout</Button>
+          <Button onClick={() => logoutUser({})}>Logout</Button>
         </section>
 
         <section className="flex flex-wrap items-center gap-3">

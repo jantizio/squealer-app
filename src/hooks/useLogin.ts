@@ -1,25 +1,33 @@
-import { useSignIn } from 'react-auth-kit';
 import { useToast } from '@/hooks/useToast';
 import { AxiosError } from 'axios';
-import { backendApi } from '@/lib/utils';
-import { log_t, login_t, userRead_t } from '@/lib/types';
-import { useMutation } from '@tanstack/react-query';
-import { useNavigate } from 'react-router-dom';
+import { getUser, privateApi } from '@/lib/axios';
+import { log_t, login_t, token_payload_t, userRead_t } from '@/utils/types';
+import { useMutation, useQuery } from '@tanstack/react-query';
+import { useNavigate, useLocation } from 'react-router-dom';
 import jwt_decode, { InvalidTokenError } from 'jwt-decode';
-
-type token_payload_t = {
-  name: string;
-  exp: number;
-  iat: number;
-};
+import useAuth from '@/hooks/auth/useAuth';
 
 type loginResponse_t = {
   token: string;
-  user: userRead_t;
+  // user: userRead_t;
 };
 
 export default function useLogin() {
-  const signIn = useSignIn();
+  const { state, dispatch } = useAuth();
+  const location = useLocation();
+  const from = location.state?.from?.pathname ?? '/';
+  // console.log('from:', from, '\n', 'location:', location);
+
+  const authUserQuery = useQuery(['authUser'], getUser, {
+    enabled: false,
+    retry: 1,
+    onSuccess: (data) => {
+      console.log('authUserQuery SUCCESS!');
+      console.log('data:', data);
+      dispatch({ type: 'SET_USER', payload: data });
+    },
+  });
+
   const navigate = useNavigate();
   const { toast } = useToast();
   const login = useMutation<
@@ -27,38 +35,39 @@ export default function useLogin() {
     AxiosError | InvalidTokenError,
     login_t
   >({
-    mutationKey: ['login'],
     mutationFn: async (credentials) => {
-      const { data: token } = await backendApi.post<string>(
+      const { data: token } = await privateApi.post<string>(
         '/token',
         credentials,
       );
-      const { data: user } = await backendApi.get<userRead_t>(
-        `/users/${credentials.username}`,
-      );
-      return { token, user };
+      return { token };
     },
     onSuccess(data) {
       // questo viene chiamato per gli status code 2xx
       console.log('Login SUCCESS!');
       console.log('data:', data);
 
-      const token_payload = jwt_decode<token_payload_t>(data.token);
+      // const token_payload = jwt_decode<token_payload_t>(data.token);
 
-      // calculate expiration time in minutes
-      const expiresIn = Math.floor(
-        (token_payload.exp - token_payload.iat) / 60,
-      );
+      // // calculate expiration time in minutes
+      // const expiresIn = Math.floor(
+      //   (token_payload.exp - token_payload.iat) / 60,
+      // );
 
       // eseguo il login dell'utente
-      signIn({
-        token: data.token,
-        expiresIn: expiresIn,
-        tokenType: 'Bearer',
-        authState: data.user,
+      // setAuth({
+      //   token: data.token,
+      //   expiresIn: expiresIn,
+      //   tokenType: 'Bearer',
+      //   authState: data.user,
+      // });
+      authUserQuery.refetch();
+      toast({
+        title: 'Successo!',
+        description: 'Login effettuato con successo!',
       });
-      navigate('/');
       // TODO: potrebbe essere necessario fare il redirect alla pagina da cui l'utente è arrivato
+      navigate(from, { replace: true });
     },
     onError(error) {
       let errorLog: log_t;
@@ -99,7 +108,7 @@ export default function useLogin() {
         });
       }
 
-      backendApi.put('/logs', errorLog);
+      privateApi.put('/logs', errorLog);
     },
   });
 

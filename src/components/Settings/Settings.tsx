@@ -1,9 +1,7 @@
 import HeaderLogo from '@/components/HeaderLogo';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { H1 } from '@/components/ui/typography';
-import { channel_t } from '@/lib/types';
-import { backendApi, userCheck } from '@/lib/utils';
-import { useAuthUser } from 'react-auth-kit';
+import { useUser } from '@/lib/auth';
 import Account from './Account';
 import SocialMediaManager from './SocialMediaManager';
 
@@ -13,19 +11,10 @@ type settingsPage = {
   hasPermission: boolean;
 };
 
-const fetchFollowedChannels = async () => {
-  // const channelsApi: string = `/channels/?followed=${currentUser}`;
-
-  const channelsApi: string =
-    'https://jsonplaceholder.typicode.com/albums?_page=1';
-  const res = await backendApi.get<channel_t[]>(channelsApi);
-  return res.data;
-};
-
 const Settings = () => {
-  const user = useAuthUser()();
+  const { data: authUser } = useUser();
 
-  if (!userCheck(user)) return <div>Errore utente non definito</div>; //Should never happen
+  if (!authUser) return <div>Errore utente non definito</div>; //Should never happen
 
   const settings: settingsPage[] = [
     {
@@ -45,21 +34,21 @@ const Settings = () => {
     {
       category: 'SMM',
       component: <SocialMediaManager />,
-      hasPermission: user.type === 'professional',
+      hasPermission: authUser.type === 'professional',
       // hasPermission: true,
     },
   ];
 
   return (
     <>
-      <header className="w-full order-first flex items-center justify-around my-3">
+      <header className="order-first my-3 flex w-full items-center justify-around">
         <HeaderLogo />
       </header>
 
-      <H1 className="pl-2 mb-4 w-[80vw] max-w-md mx-auto">Impostazioni</H1>
+      <H1 className="mx-auto mb-4 w-[80vw] max-w-md pl-2">Impostazioni</H1>
       <Tabs
         defaultValue={settings[0]?.category}
-        className="w-[80vw] max-w-md mx-auto"
+        className="mx-auto w-[80vw] max-w-md"
       >
         <TabsList className="w-full">
           {settings.map((page, i) => {
@@ -72,7 +61,7 @@ const Settings = () => {
             );
           })}
         </TabsList>
-        <div className="p-1 w-full">
+        <div className="w-full p-1">
           {settings.map((page, i) => {
             if (!page.hasPermission) return undefined;
 

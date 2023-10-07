@@ -1,13 +1,12 @@
 import { Button } from '@/components/ui/button';
 import { Form, FormField, FormItem, FormMessage } from '@/components/ui/form';
 
-import useAxios from '@/hooks/useAxios';
+import { axios } from '@/lib/axios';
 import useSquealerQuota from '@/hooks/useSquealerQuota';
 import { useToast } from '@/hooks/useToast';
 import { squealWriteSchema } from '@/schema/shared-schema/squealValidators';
 import { receiverString } from '@/schema/shared-schema/utils/global';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useAuthUser } from 'react-auth-kit';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import BodyTextArea from './BodyTextArea';
@@ -16,10 +15,10 @@ import ReceiverInput from './ReceiverInput';
 import ReceiversCheckbox from './ReceiversCheckbox';
 import TypeSelect from './TypeSelect';
 import UrlInput from './UrlInput';
+import { useUser } from '@/lib/auth';
 
 const NewSqueal = () => {
-  const user = useAuthUser();
-  const privateApi = useAxios();
+  const { data: authUser } = useUser();
   const { toast } = useToast();
   const { quota, updatedsquealSchema } = useSquealerQuota();
 
@@ -31,7 +30,7 @@ const NewSqueal = () => {
     defaultValues: {
       receiver: '',
       receivers: [],
-      author: user()?.username,
+      author: authUser?.username,
       body: { type: 'text', content: '' },
       category: [],
     },
@@ -66,7 +65,7 @@ const NewSqueal = () => {
       formData.append('media', values.body.file);
 
       // TODO: try catch
-      const fileurlResp = await privateApi.post<string>('/media', formData, {
+      const fileurlResp = await axios.post<string>('/media', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
@@ -77,7 +76,7 @@ const NewSqueal = () => {
     const newSqueal = squealWriteSchema.safeParse(values);
     if (newSqueal.success) {
       console.log('newSqueal', newSqueal.data);
-      privateApi.post('/squeals/', newSqueal.data);
+      axios.post('/squeals/', newSqueal.data);
     } else {
       const errorsMessage = newSqueal.error.issues
         .map((issue) => issue.message)
