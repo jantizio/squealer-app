@@ -7,7 +7,7 @@ import {
   FormDescription,
 } from '@/components/ui/form';
 import { Textarea } from '@/components/ui/textarea';
-import { quota_t } from '@/lib/types';
+import { quota_t } from '@/utils/types';
 
 type BodyTextAreaProp<
   TFieldValues extends FieldValues = FieldValues,

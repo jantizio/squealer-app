@@ -1,4 +1,4 @@
-import { userRead_t } from '@/lib/types';
+import { userRead_t } from '@/utils/types';
 import { Dispatch, createContext, useReducer } from 'react';
 
 type AuthContextProps = {

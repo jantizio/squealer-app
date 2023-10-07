@@ -1,9 +1,8 @@
 import { Outlet } from 'react-router-dom';
-import useAuth from '@/hooks/auth/useAuth';
+import { useUser } from '@/lib/auth';
 
 const Layout = () => {
-  const { state } = useAuth();
-  const user = state.authUser;
+  const { data: user } = useUser();
 
   return (
     <>

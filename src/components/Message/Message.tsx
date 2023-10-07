@@ -1,11 +1,11 @@
 import { Button } from '@/components/ui/button';
 import { privateApi } from '@/lib/axios';
-import { squealRead_t } from '@/lib/types';
+import { squealRead_t } from '@/utils/types';
 import { ArrowDownCircle, ArrowUpCircle } from 'lucide-react';
 import { forwardRef, useEffect } from 'react';
 import { run } from '@/lib/utils';
 import { Large, Muted } from '@/components/ui/typography';
-import useAuth from '@/hooks/auth/useAuth';
+import { useUser } from '@/lib/auth';
 
 type messageProps = {
   children: squealRead_t;
@@ -25,8 +25,8 @@ const Message = forwardRef<HTMLDivElement, messageProps>(
       datetime,
       receivers,
     } = children;
-    const { state } = useAuth();
-    const isAuthenticated = !!state.authUser;
+    const { data: authUser } = useUser();
+    const isAuthenticated = !!authUser;
 
     const updateSqueal = (operation: op, id: string) => {
       switch (operation) {
@@ -40,7 +40,7 @@ const Message = forwardRef<HTMLDivElement, messageProps>(
           break;
 
         case 'viewed':
-          console.log('plus one views');
+          // console.log('plus one views');
           break;
       }
       // TODO: response and error handling

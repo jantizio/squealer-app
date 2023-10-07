@@ -1,5 +1,5 @@
 import useLogin from '@/hooks/useLogin';
-import { log_t, userWrite_t, userRead_t, login_t } from '@/lib/types';
+import { log_t, userWrite_t, userRead_t, login_t } from '@/utils/types';
 import { AxiosError } from 'axios';
 import { privateApi } from '@/lib/axios';
 import { useMutation } from '@tanstack/react-query';

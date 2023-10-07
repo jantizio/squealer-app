@@ -1,6 +1,6 @@
 import { Button } from '@/components/ui/button';
 import { A, P } from '@/components/ui/typography';
-import { channel_t } from '@/lib/types';
+import { channel_t } from '@/utils/types';
 import { cn } from '@/lib/utils';
 import { useQuery } from '@tanstack/react-query';
 import { AxiosError } from 'axios';

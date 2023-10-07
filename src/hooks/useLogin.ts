@@ -1,7 +1,7 @@
 import { useToast } from '@/hooks/useToast';
 import { AxiosError } from 'axios';
-import { getMeFn, privateApi } from '@/lib/axios';
-import { log_t, login_t, token_payload_t, userRead_t } from '@/lib/types';
+import { getUser, privateApi } from '@/lib/axios';
+import { log_t, login_t, token_payload_t, userRead_t } from '@/utils/types';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { useNavigate, useLocation } from 'react-router-dom';
 import jwt_decode, { InvalidTokenError } from 'jwt-decode';
@@ -18,7 +18,7 @@ export default function useLogin() {
   const from = location.state?.from?.pathname ?? '/';
   // console.log('from:', from, '\n', 'location:', location);
 
-  const authUserQuery = useQuery(['authUser'], getMeFn, {
+  const authUserQuery = useQuery(['authUser'], getUser, {
     enabled: false,
     retry: 1,
     onSuccess: (data) => {

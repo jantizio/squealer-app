@@ -1,12 +1,9 @@
 import HeaderLogo from '@/components/HeaderLogo';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { H1 } from '@/components/ui/typography';
-import { channel_t } from '@/lib/types';
-import { privateApi } from '@/lib/axios';
+import { useUser } from '@/lib/auth';
 import Account from './Account';
 import SocialMediaManager from './SocialMediaManager';
-import useAuth from '@/hooks/auth/useAuth';
-import useIsAuthenticated from '@/hooks/auth/useIsAuthenticated';
 
 type settingsPage = {
   category: string;
@@ -14,19 +11,10 @@ type settingsPage = {
   hasPermission: boolean;
 };
 
-const fetchFollowedChannels = async () => {
-  // const channelsApi: string = `/channels/?followed=${currentUser}`;
-
-  const channelsApi: string =
-    'https://jsonplaceholder.typicode.com/albums?_page=1';
-  const res = await privateApi.get<channel_t[]>(channelsApi);
-  return res.data;
-};
-
 const Settings = () => {
-  const { state } = useAuth();
+  const { data: authUser } = useUser();
 
-  if (!state.authUser) return <div>Errore utente non definito</div>; //Should never happen
+  if (!authUser) return <div>Errore utente non definito</div>; //Should never happen
 
   const settings: settingsPage[] = [
     {
@@ -46,7 +34,7 @@ const Settings = () => {
     {
       category: 'SMM',
       component: <SocialMediaManager />,
-      hasPermission: state.authUser.type === 'professional',
+      hasPermission: authUser.type === 'professional',
       // hasPermission: true,
     },
   ];

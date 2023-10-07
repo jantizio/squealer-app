@@ -3,10 +3,9 @@ import MessageScroller from '@/components/MessageScroller';
 import ModeToggle from '@/components/ModeToggle';
 import { Button } from '@/components/ui/button';
 import { A, H1, Large, Lead, Muted } from '@/components/ui/typography';
-import useAuth from '@/hooks/auth/useAuth';
-import useIsAuthenticated from '@/hooks/auth/useIsAuthenticated';
-import { privateApi } from '@/lib/axios';
 import { useFetchSqueals } from '@/hooks/useFetch';
+import { useUser } from '@/lib/auth';
+import { privateApi } from '@/lib/axios';
 import { run } from '@/lib/utils';
 import { channel_t } from '@/schema/shared-schema/channelValidator';
 import { useQuery } from '@tanstack/react-query';
@@ -16,7 +15,9 @@ import { useNavigate, useParams } from 'react-router-dom';
 const Channel = () => {
   const { channelName } = useParams<{ channelName: string }>();
   const navigate = useNavigate();
-  const isAuthenticated = useIsAuthenticated();
+  const { data: authUser } = useUser();
+  const isAuthenticated = !!authUser;
+
 
   //TODO: probabilmente il layout ora presente non va bene, lascio così per non fare modifiche inutili
   // ma servirebbe un layout a 3 colonne. Le due laterali fisse e quella centrare con la scrollbar centrale
@@ -43,9 +44,6 @@ const Channel = () => {
       retry: false,
     },
   );
-  const {
-    state: { authUser },
-  } = useAuth();
 
   const subscribeButton = run(() => {
     if (!authUser) return <></>;

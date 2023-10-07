@@ -27,6 +27,11 @@ type token_payload_t = {
   iat: number;
 };
 
+type errorMessages_t = {
+  [key: number]: string;
+  generic: string;
+};
+
 type serverResponse_t<T> =
   | {
       status: 'success';
@@ -49,4 +54,5 @@ export type {
   authState_t,
   userType_t,
   token_payload_t,
+  errorMessages_t,
 };

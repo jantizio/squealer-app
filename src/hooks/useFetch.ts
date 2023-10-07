@@ -1,5 +1,5 @@
 import { privateApi } from '@/lib/axios';
-import { channel_t, squealRead_t } from '@/lib/types';
+import { channel_t, squealRead_t } from '@/utils/types';
 import { run } from '@/lib/utils';
 import { channelSchema } from '@/schema/shared-schema/channelValidator';
 import { squealReadSchema } from '@/schema/shared-schema/squealValidators';

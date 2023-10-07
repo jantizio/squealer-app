@@ -9,8 +9,8 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { H1 } from '@/components/ui/typography';
-import useRegister from '@/hooks/useRegister';
-import { userWrite_t } from '@/lib/types';
+import { useLogin, useRegister } from '@/lib/auth';
+import { userWrite_t } from '@/utils/types';
 import { registerFormSchema, registerForm_t } from '@/schema/registerValidator';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
@@ -27,9 +27,19 @@ function Signup() {
       confirmPassword: '',
     },
   });
-  const registerUser = useRegister();
+  const { mutateAsync: registerUser } = useRegister({
+    meta: {
+      errorMessages: {
+        409: 'Username già in uso',
+        400: 'Errore di validazione dei dati',
+        422: 'Errore di validazione dei dati',
+        generic: 'Qualcosa è andato storto, riprova più tardi',
+      },
+    },
+  });
+  const { mutateAsync: loginUser } = useLogin();
 
-  const signupHandler = signupForm.handleSubmit((values) => {
+  const signupHandler = signupForm.handleSubmit(async (values) => {
     const { confirmPassword, username, ...rest } = values;
     const newUser: userWrite_t = {
       type: 'standard',
@@ -39,7 +49,8 @@ function Signup() {
 
     // TODO: handle zod validation
     console.log('data', newUser);
-    registerUser(newUser);
+    await registerUser(newUser);
+    await loginUser({ username: newUser.username, password: newUser.password });
   });
 
   return (

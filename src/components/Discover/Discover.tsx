@@ -1,7 +1,7 @@
 import ChannelList from '@/components/ChannelList';
 import HeaderLogo from '@/components/HeaderLogo';
 import { Button } from '@/components/ui/button';
-import useIsAuthenticated from '@/hooks/auth/useIsAuthenticated';
+import useIsAuthenticated from '@/hooks/useIsAuthenticated';
 import { useFetchChannels } from '@/hooks/useFetch';
 import { run } from '@/lib/utils';
 import { Settings } from 'lucide-react';

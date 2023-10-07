@@ -15,12 +15,10 @@ import ReceiverInput from './ReceiverInput';
 import ReceiversCheckbox from './ReceiversCheckbox';
 import TypeSelect from './TypeSelect';
 import UrlInput from './UrlInput';
-import useAuth from '@/hooks/auth/useAuth';
+import { useUser } from '@/lib/auth';
 
 const NewSqueal = () => {
-  const {
-    state: { authUser },
-  } = useAuth();
+  const { data: authUser } = useUser();
   const { toast } = useToast();
   const { quota, updatedsquealSchema } = useSquealerQuota();
 

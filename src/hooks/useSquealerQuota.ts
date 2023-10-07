@@ -1,15 +1,11 @@
-import { quota_t } from '@/lib/types';
+import { quota_t } from '@/utils/types';
 import { squealFormSchema } from '@/schema/squealValidator';
-import { useQuery } from '@tanstack/react-query';
-import useAuth from './auth/useAuth';
-import { privateApi } from '@/lib/axios';
+import { useUser } from '@/lib/auth';
 
 const nonTextQuota = 80;
 
 export default function useSquealerQuota() {
-  const {
-    state: { authUser },
-  } = useAuth();
+  const { data: authUser } = useUser();
 
   const defaultData: quota_t = {
     actualD: 0,

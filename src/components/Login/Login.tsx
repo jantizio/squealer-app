@@ -1,5 +1,4 @@
 import { Button } from '@/components/ui/button';
-import { Checkbox } from '@/components/ui/checkbox';
 import {
   Form,
   FormControl,
@@ -11,32 +10,44 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { H1 } from '@/components/ui/typography';
-import useAuth from '@/hooks/auth/useAuth';
-import useLogin from '@/hooks/useLogin';
+import { useLogin } from '@/lib/auth';
 import { loginFormSchema, loginForm_t } from '@/schema/loginValidator';
 import { login_t } from '@/schema/shared-schema/loginValidator';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
+import { useLocation, useNavigate } from 'react-router-dom';
 // TODO: rimuovere il persist
+
 function Login() {
   const loginForm = useForm<loginForm_t>({
     resolver: zodResolver(loginFormSchema),
     defaultValues: {
       username: '',
       password: '',
-      persist: true,
     },
   });
-  const loginUser = useLogin();
+  // const loginUser = useLogin();
+  const { mutateAsync: loginUser, isLoading } = useLogin({
+    meta: {
+      errorMessages: {
+        401: 'Credenziali errate',
+        generic: 'Qualcosa è andato storto, riprova più tardi',
+      },
+    },
+  });
+  const location = useLocation();
+  const navigate = useNavigate();
+  const from = location.state?.from?.pathname ?? '/';
 
-  const loginUserHandler = loginForm.handleSubmit((values) => {
+  const loginUserHandler = loginForm.handleSubmit(async (values) => {
     const credentials: login_t = {
       username: `@${values.username}`,
       password: values.password,
     };
     console.log('data', credentials); //TODO: remove log
 
-    loginUser(credentials);
+    await loginUser(credentials);
+    navigate(from, { replace: true });
   });
 
   return (
@@ -101,7 +112,11 @@ function Login() {
             )}
           /> */}
 
-          <Button type="submit" className="mx-auto mb-4 w-5/12">
+          <Button
+            type="submit"
+            className="mx-auto mb-4 w-5/12"
+            disabled={isLoading}
+          >
             Accedi
           </Button>
         </form>

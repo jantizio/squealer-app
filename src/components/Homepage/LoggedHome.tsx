@@ -25,8 +25,8 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDebounce } from 'usehooks-ts';
 import ChannelsSidebar from './ChannelsSidebar';
-import useAuth from '@/hooks/auth/useAuth';
-import useLogout from '@/hooks/auth/useLogout';
+import { useLogout } from '@/lib/auth';
+import { useUser } from '@/lib/auth';
 
 const LoggedHome = () => {
   const [filter, setFilter] = useState('');
@@ -35,10 +35,10 @@ const LoggedHome = () => {
 
   const fetchSquealsPage = useFetchSqueals('/squeals/', filter);
 
-  const { state } = useAuth();
-  const { logoutUser } = useLogout();
+  const { data: authUser } = useUser();
+  const { mutate: logoutUser } = useLogout();
 
-  if (!state.authUser) return <div>Errore utente non definito</div>; //Should never happen
+  if (!authUser) return <div>Errore utente non definito</div>; //Should never happen
 
   return (
     <>
@@ -70,10 +70,10 @@ const LoggedHome = () => {
           <DropdownMenuTrigger asChild>
             <section className="flex items-center md:order-last">
               <Button variant="link" size="sm">
-                {state.authUser.username}
+                {authUser.username}
               </Button>
               <Avatar>
-                <AvatarImage src={state.authUser.propic} alt="user icon" />
+                <AvatarImage src={authUser.propic} alt="user icon" />
                 <AvatarFallback>User</AvatarFallback>
               </Avatar>
             </section>
@@ -93,7 +93,7 @@ const LoggedHome = () => {
               <Settings className="mr-2 h-4 w-4" />
               <span>Impostazioni</span>
             </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => logoutUser()}>
+            <DropdownMenuItem onClick={() => logoutUser({})}>
               <LogOut className="mr-2 h-4 w-4" />
               <span>Esci</span>
             </DropdownMenuItem>
