@@ -9,38 +9,25 @@ import { login_t } from '@/schema/shared-schema/loginValidator';
 import { log_t } from '@/schema/shared-schema/logValidator';
 import { userType_t } from '@/schema/shared-schema/utils/global';
 
-type Prettify<T> = {
-  [K in keyof T]: T[K];
-} & {};
-
-type authState_t = {
-  token: string;
-  expiresIn: number;
-  tokenType: string;
-  authState: Prettify<Omit<userRead_t, 'quota'>>;
-};
-
-type token_payload_t = {
-  username: `@${string}`;
-  type: userType_t;
-  exp: number;
-  iat: number;
-};
+// type Prettify<T> = {
+//   [K in keyof T]: T[K];
+// } & {};
 
 type errorMessages_t = {
   [key: number]: string;
   generic: string;
 };
 
-type serverResponse_t<T> =
-  | {
-      status: 'success';
-      data: T;
-    }
-  | {
-      status: 'error';
-      message: string;
-    };
+// type serverResponse_t<T> = // TODO
+
+//     | {
+//         status: 'success';
+//         data: T;
+//       }
+//     | {
+//         status: 'error';
+//         message: string;
+//       };
 
 export type {
   quota_t,
@@ -51,8 +38,6 @@ export type {
   squealRead_t, //TODO: aggiungere il tipo per la geolocation
   squealWrite_t, //TODO: aggiungere il tipo per la geolocation
   log_t,
-  authState_t,
   userType_t,
-  token_payload_t,
   errorMessages_t,
 };

@@ -1,7 +1,7 @@
 import { MutationCache, QueryCache, QueryClient } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
 import { toast } from 'sonner';
-import { isErrorMessages } from '@/lib/utils';
+import { isErrorMessages } from '@/utils/type-guards';
 
 export const queryClient = new QueryClient({
   defaultOptions: {

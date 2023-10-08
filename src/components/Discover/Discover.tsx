@@ -3,7 +3,7 @@ import HeaderLogo from '@/components/HeaderLogo';
 import { Button } from '@/components/ui/button';
 import useIsAuthenticated from '@/hooks/useIsAuthenticated';
 import { useFetchChannels } from '@/hooks/useFetch';
-import { run } from '@/lib/utils';
+import { run } from '@/utils';
 import { Settings } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 

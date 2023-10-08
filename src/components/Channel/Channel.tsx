@@ -6,7 +6,7 @@ import { A, H1, Large, Lead, Muted } from '@/components/ui/typography';
 import { useFetchSqueals } from '@/hooks/useFetch';
 import { useUser } from '@/lib/auth';
 import { axios } from '@/lib/axios';
-import { run } from '@/lib/utils';
+import { run } from '@/utils';
 import { channel_t } from '@/schema/shared-schema/channelValidator';
 import { useQuery } from '@tanstack/react-query';
 import { Settings } from 'lucide-react';

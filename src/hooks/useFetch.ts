@@ -1,6 +1,6 @@
 import { axios } from '@/lib/axios';
 import { channel_t, squealRead_t } from '@/utils/types';
-import { run } from '@/lib/utils';
+import { run } from '@/utils';
 import { channelSchema } from '@/schema/shared-schema/channelValidator';
 import { squealReadSchema } from '@/schema/shared-schema/squealValidators';
 import { fromZodError } from 'zod-validation-error';

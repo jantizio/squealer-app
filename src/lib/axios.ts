@@ -1,7 +1,7 @@
 import { refreshAccessToken } from '@/api/auth';
 import { BASE_URL } from '@/config';
 import Axios from 'axios';
-import { errorPayloadCheck } from './utils';
+import { errorPayloadCheck } from '@/utils/type-guards';
 
 // export const backendApi = axios.create({
 //   baseURL: BASE_URL,

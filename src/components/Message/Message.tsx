@@ -1,9 +1,9 @@
 import { Button } from '@/components/ui/button';
-import { axios } from '@/lib/axios';
+// import { axios } from '@/lib/axios';
 import { squealRead_t } from '@/utils/types';
 import { ArrowDownCircle, ArrowUpCircle } from 'lucide-react';
 import { forwardRef, useEffect } from 'react';
-import { run } from '@/lib/utils';
+import { run } from '@/utils';
 import { Large, Muted } from '@/components/ui/typography';
 import { useUser } from '@/lib/auth';
 
