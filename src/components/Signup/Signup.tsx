@@ -9,7 +9,7 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { H1 } from '@/components/ui/typography';
-import { useLogin, useRegister } from '@/lib/auth';
+import useRegister from '@/hooks/useRegister';
 import { userWrite_t } from '@/utils/types';
 import { registerFormSchema, registerForm_t } from '@/schema/registerValidator';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -20,6 +20,7 @@ function Signup() {
     resolver: zodResolver(registerFormSchema),
     defaultValues: {
       email: '',
+      propic: null,
       username: '',
       firstname: '',
       lastname: '',
@@ -27,31 +28,23 @@ function Signup() {
       confirmPassword: '',
     },
   });
-  const { mutateAsync: registerUser } = useRegister({
-    meta: {
-      errorMessages: {
-        409: 'Username già in uso',
-        400: 'Errore di validazione dei dati',
-        422: 'Errore di validazione dei dati',
-        generic: 'Qualcosa è andato storto, riprova più tardi',
-      },
+  const { registerUser } = useRegister();
+
+  const signupHandler = signupForm.handleSubmit(
+    (values) => {
+      const { confirmPassword, username, ...rest } = values;
+      const newUser: userWrite_t = {
+        type: 'standard',
+        username: `@${username}`,
+        ...rest,
+      };
+
+      // TODO: handle zod validation
+      console.log('data', newUser);
+      registerUser(newUser);
     },
-  });
-  const { mutateAsync: loginUser } = useLogin();
-
-  const signupHandler = signupForm.handleSubmit(async (values) => {
-    const { confirmPassword, username, ...rest } = values;
-    const newUser: userWrite_t = {
-      type: 'standard',
-      username: `@${username}`,
-      ...rest,
-    };
-
-    // TODO: handle zod validation
-    console.log('data', newUser);
-    await registerUser(newUser);
-    await loginUser({ username: newUser.username, password: newUser.password });
-  });
+    (err) => console.log('err', err),
+  );
 
   return (
     <main className="container my-14">

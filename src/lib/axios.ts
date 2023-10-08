@@ -14,7 +14,7 @@ export const axios = Axios.create({
 });
 
 axios.interceptors.response.use(
-  (response) => response.data,
+  (response) => response,
   async (error) => {
     const prevRequest = error.config;
     // TODO: definire bene il tipo di payload e il messaggio di errore

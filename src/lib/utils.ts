@@ -30,7 +30,7 @@ export function isErrorMessages(object: unknown): object is errorMessages_t {
 
   // Additional type checking for numeric keys
   for (const key in object) {
-    if (key !== 'generic' && typeof key !== 'number') {
+    if (key !== 'generic' && !/^[0-9]+$/.test(key)) {
       return false;
     }
   }

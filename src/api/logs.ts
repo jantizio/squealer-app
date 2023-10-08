@@ -1,7 +1,7 @@
 import { axios } from '@/lib/axios';
 import { log_t } from '@/utils/types';
 
-export const postLog = async (log: log_t): Promise<void> => {
+export const addLog = async (log: log_t): Promise<void> => {
   await axios.put('/logs', log);
 };
 
