@@ -1,6 +1,6 @@
 import { Form, FormControl, FormField, FormItem } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import { cn } from '@/lib/utils';
+import { cn } from '@/utils';
 import { Search } from 'lucide-react';
 import { SetStateAction } from 'react';
 import { useForm } from 'react-hook-form';
@@ -26,8 +26,8 @@ const SearchBar = ({ setFilter, className }: SearchBarProps) => {
           control={searchForm.control}
           render={({ field }) => {
             return (
-              <FormItem className="flex items-center w-full space-y-0">
-                <Search className="h-icon-md w-icon-md z-10 relative left-10" />
+              <FormItem className="flex w-full items-center space-y-0">
+                <Search className="relative left-10 z-10 h-icon-md w-icon-md" />
                 <FormControl>
                   <Input
                     {...field}

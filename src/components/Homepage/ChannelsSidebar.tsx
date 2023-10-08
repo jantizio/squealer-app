@@ -6,7 +6,7 @@ import {
 } from '@/components/ui/accordion';
 import ChannelList from '@/components/ChannelList';
 import { useFetchChannels } from '@/hooks/useFetch';
-import { cn } from '@/lib/utils';
+import { cn } from '@/utils';
 
 type ChannelsSidebarProps = {
   className?: string;

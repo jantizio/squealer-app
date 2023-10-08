@@ -1,6 +1,6 @@
 import { ReactNode } from 'react';
 import { Link } from 'react-router-dom';
-import { cn } from '@/lib/utils';
+import { cn } from '@/utils';
 
 type Props_t = {
   children: ReactNode;
@@ -12,7 +12,7 @@ export function H1({ children, className }: Props_t) {
     <h1
       className={cn(
         'scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl',
-        className
+        className,
       )}
     >
       {children}
@@ -25,7 +25,7 @@ export function H2({ children, className }: Props_t) {
     <h2
       className={cn(
         'scroll-m-20 border-b pb-2 text-3xl font-semibold tracking-tight transition-colors first:mt-0',
-        className
+        className,
       )}
     >
       {children}
@@ -38,7 +38,7 @@ export function H3({ children, className }: Props_t) {
     <h3
       className={cn(
         'scroll-m-20 text-2xl font-semibold tracking-tight',
-        className
+        className,
       )}
     >
       {children}
@@ -51,7 +51,7 @@ export function H4({ children, className }: Props_t) {
     <h4
       className={cn(
         'scroll-m-20 text-xl font-semibold tracking-tight',
-        className
+        className,
       )}
     >
       {children}
@@ -79,7 +79,7 @@ export function A({
         href={href}
         className={cn(
           'font-medium text-primary underline underline-offset-4',
-          className
+          className,
         )}
       >
         {children}
@@ -90,7 +90,7 @@ export function A({
       to={href}
       className={cn(
         'font-medium text-primary underline underline-offset-4',
-        className
+        className,
       )}
     >
       {children}
@@ -119,7 +119,7 @@ export function InlineCode({ children, className }: Props_t) {
     <code
       className={cn(
         'relative rounded bg-muted px-[0.3rem] py-[0.2rem] font-mono text-sm font-semibold',
-        className
+        className,
       )}
     >
       {children}
