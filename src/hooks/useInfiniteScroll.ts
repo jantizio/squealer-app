@@ -8,15 +8,13 @@ type options<T> = {
 };
 
 export default function useInfinteScroll<T>({ fetchPage, filter }: options<T>) {
-  const queryObj = useInfiniteQuery<T[], Error>(
-    ['message', filter],
-    ({ pageParam = 0 }) => fetchPage(pageParam),
-    {
-      getNextPageParam: (lastPage, allPages) => {
-        return lastPage.length ? allPages.length : undefined;
-      },
-    }
-  );
+  const queryObj = useInfiniteQuery<T[], Error>({
+    queryKey: ['message', filter],
+    queryFn: ({ pageParam = 0 }) => fetchPage(pageParam),
+    getNextPageParam: (lastPage, allPages) => {
+      return lastPage.length ? allPages.length : undefined;
+    },
+  });
 
   const intObserver = useRef<IntersectionObserver | null>(null);
   const lastPostRef = (post: HTMLDivElement) => {
@@ -30,7 +28,7 @@ export default function useInfinteScroll<T>({ fetchPage, filter }: options<T>) {
           console.log("vicini all'ultimo post");
           queryObj.fetchNextPage();
         }
-      }
+      },
     );
     if (post) intObserver.current.observe(post);
   };

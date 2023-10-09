@@ -1,15 +1,15 @@
-import Homepage from '@/components/Homepage';
-import Login from '@/components/Login';
-import Signup from '@/components/Signup';
-import Settings from '@/components/Settings';
-import NewSqueal from '@/components/NewSqueal';
-import Discover from '@/components/Discover';
-import Channel from '@/components/Channel';
-import Missing from '@/components/Missing';
-import Layout from '@/components/Layout';
-import RequireAuth from '@/components/RequireAuth';
-import Unauthorized from '@/components/Unauthorized';
-import { Routes, Route } from 'react-router-dom';
+// import Homepage from '@/components/Homepage';
+// import Login from '@/components/Login';
+// import Signup from '@/components/Signup';
+// import Settings from '@/components/Settings';
+// import NewSqueal from '@/components/NewSqueal';
+// import Discover from '@/components/Discover';
+// import Channel from '@/components/Channel';
+// import Missing from '@/components/Missing';
+// import Layout from '@/components/Layout';
+// import RequireAuth from '@/components/RequireAuth';
+// import Unauthorized from '@/components/Unauthorized';
+// import { Routes, Route } from 'react-router-dom';
 import { AppRoutes } from '@/routes';
 
 function App() {

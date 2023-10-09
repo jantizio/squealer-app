@@ -1,5 +1,5 @@
-import { Suspense } from 'react';
-import { Navigate, Outlet, RouteObject } from 'react-router-dom';
+// import { Suspense } from 'react';
+import { Navigate, RouteObject } from 'react-router-dom';
 
 import Settings from '@/components/Settings';
 import NewSqueal from '@/components/NewSqueal';
@@ -22,13 +22,13 @@ import Layout from '@/components/Layout';
 //   'default',
 // );
 
-const App = () => {
-  return (
-    <Suspense fallback={<div>Loading</div>}>
-      <Outlet />
-    </Suspense>
-  );
-};
+// const App = () => {
+//   return (
+//     <Suspense fallback={<div>Loading</div>}>
+//       <Outlet />
+//     </Suspense>
+//   );
+// };
 
 export const protectedRoutes: RouteObject[] = [
   {

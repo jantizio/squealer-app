@@ -22,13 +22,13 @@ const Message = forwardRef<HTMLDivElement, messageProps>(
       impressions,
       negative_reaction,
       positive_reaction,
-      datetime,
+      // datetime,
       receivers,
     } = children;
     const { data: authUser } = useUser();
     const isAuthenticated = !!authUser;
 
-    const updateSqueal = (operation: op, id: string) => {
+    const updateSqueal = (operation: op, _id: string) => {
       switch (operation) {
         case 'downvote':
           console.log('downvote');
@@ -58,7 +58,7 @@ const Message = forwardRef<HTMLDivElement, messageProps>(
     // // else if (body instanceof File) bodyContent = <p>{body.name}</p>;
     // else bodyContent = <p>Errore</p>;
 
-    const date = `${datetime.getHours()}:${datetime.getMinutes()} ${datetime.getDay()}/${datetime.getDate()}/${datetime.getFullYear()}`;
+    // const date = `${datetime.getHours()}:${datetime.getMinutes()} ${datetime.getDay()}/${datetime.getDate()}/${datetime.getFullYear()}`;
 
     const bodyContent = run(() => {
       if (body.type === 'text') return <p>{body.content}</p>;

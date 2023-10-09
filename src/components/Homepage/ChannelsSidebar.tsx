@@ -27,22 +27,19 @@ const ChannelsSidebar = ({ className }: ChannelsSidebarProps) => {
       <AccordionItem value="official">
         <AccordionTrigger>Canali Ufficiali</AccordionTrigger>
         <AccordionContent>
-          <ChannelList fetchChannels={fetchOfficialChannels} type="official" />
+          <ChannelList filter="official" />
         </AccordionContent>
       </AccordionItem>
       <AccordionItem value="subscribed">
         <AccordionTrigger>Canali a cui sei iscritto</AccordionTrigger>
         <AccordionContent>
-          <ChannelList
-            fetchChannels={fetchSubscribedChannels}
-            type="subscribed"
-          />
+          <ChannelList filter="subscribed" />
         </AccordionContent>
       </AccordionItem>
       <AccordionItem value="direct">
         <AccordionTrigger>Messaggi Diretti</AccordionTrigger>
         <AccordionContent>
-          <ChannelList fetchChannels={fetchDirectChannels} type="direct" />
+          <ChannelList filter="direct" />
         </AccordionContent>
       </AccordionItem>
     </Accordion>
