@@ -1,7 +1,8 @@
 import { axios } from '@/lib/axios';
+import { channelSchema } from '@/schema/shared-schema/channelValidator';
 import { run } from '@/utils';
-import { channel_t, squealRead_t } from '@/utils/types';
-import { ChannelsQueryContext } from '@/utils/types';
+import { ChannelsQueryContext, channel_t } from '@/utils/types';
+import { validateArray, validateElement } from '@/utils/validators';
 
 export const getChannels = async ({
   queryKey: [{ filter }],
@@ -16,7 +17,7 @@ export const getChannels = async ({
   });
 
   const response = await axios.get<channel_t[]>(`/channels/${query}`);
-  return response.data;
+  return validateArray(response.data, channelSchema);
 };
 
 export const createChannel = async (channel: channel_t): Promise<channel_t> => {
@@ -28,19 +29,5 @@ export const getChannel = async ({
   queryKey: [{ channelName }],
 }: ChannelsQueryContext['specific']): Promise<channel_t> => {
   const response = await axios.get<channel_t>(`/channels/${channelName}`);
-  return response.data;
-};
-
-export const getChannelSqueals = async (
-  channelName: string,
-  page: number,
-  author?: string,
-): Promise<squealRead_t[]> => {
-  const pageQuery = page ? `page=${page}` : '';
-  const authorQuery = author ? `author=${author}` : '';
-
-  const response = await axios.get<squealRead_t[]>(
-    `/channels/${channelName}/squeals?${pageQuery}&${authorQuery}`,
-  );
-  return response.data;
+  return validateElement(response.data, channelSchema);
 };
