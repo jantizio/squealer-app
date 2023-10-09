@@ -1,16 +1,21 @@
 import { axios } from '@/lib/axios';
+import { run } from '@/utils';
 import { channel_t, squealRead_t } from '@/utils/types';
+import { ChannelsQueryContext } from '@/utils/types';
 
-export const getChannels = async (
-  type?: 'public' | 'private',
-  official?: boolean,
-): Promise<channel_t[]> => {
-  const typeQuery = type ? `type=${type}` : '';
-  const officialQuery = official === undefined ? `official=${official}` : '';
+export const getChannels = async ({
+  queryKey: [{ filter }],
+}: ChannelsQueryContext['filter']): Promise<channel_t[]> => {
+  const query = run(() => {
+    if (filter === 'official') return '?official=true';
+    else if (filter === 'subscribed')
+      return '?type=public&official=false'; // TODO: use the right query
+    else if (filter === 'direct')
+      return '?type=private'; // TODO: use the right query
+    else return '';
+  });
 
-  const response = await axios.get<channel_t[]>(
-    `/channels/?${typeQuery}&${officialQuery}`,
-  );
+  const response = await axios.get<channel_t[]>(`/channels/${query}`);
   return response.data;
 };
 
@@ -19,7 +24,9 @@ export const createChannel = async (channel: channel_t): Promise<channel_t> => {
   return response.data;
 };
 
-export const getChannel = async (channelName: string): Promise<channel_t> => {
+export const getChannel = async ({
+  queryKey: [{ channelName }],
+}: ChannelsQueryContext['specific']): Promise<channel_t> => {
   const response = await axios.get<channel_t>(`/channels/${channelName}`);
   return response.data;
 };

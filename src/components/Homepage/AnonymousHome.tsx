@@ -40,9 +40,8 @@ const AnonymousHome = () => {
                 </SheetDescription>
               </SheetHeader>
               <ChannelList
-                fetchChannels={fetchOfficialChannels}
                 className="h-[83vh] overflow-auto"
-                type="official"
+                filter="official"
               />
             </SheetContent>
           </Sheet>
@@ -68,7 +67,7 @@ const AnonymousHome = () => {
 
         {/* Left sidebar */}
         <aside className="order-1 hidden w-full overflow-auto md:block md:w-2/6 lg:w-1/4">
-          <ChannelList fetchChannels={fetchOfficialChannels} type="official" />
+          <ChannelList filter="official" />
         </aside>
 
         {/* Right sidebar */}

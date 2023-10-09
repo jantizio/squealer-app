@@ -8,10 +8,12 @@ import {
 import { login_t } from '@/schema/shared-schema/loginValidator';
 import { log_t } from '@/schema/shared-schema/logValidator';
 import { userType_t } from '@/schema/shared-schema/utils/global';
+import { QueryFunctionContext, QueryKey } from '@tanstack/react-query';
+import { channelsKey } from '@/hooks/useChannels';
 
-// type Prettify<T> = {
-//   [K in keyof T]: T[K];
-// } & {};
+type Prettify<T> = {
+  [K in keyof T]: T[K];
+} & {};
 
 type errorMessages_t = {
   [key: number]: string;
@@ -29,6 +31,20 @@ type errorMessages_t = {
 //         message: string;
 //       };
 
+type QueryContextFromKeys<
+  KeyFactory extends Record<string, QueryKey | ((...args: any[]) => QueryKey)>,
+> = {
+  [K in keyof KeyFactory]: KeyFactory[K] extends (...args: any[]) => QueryKey
+    ? QueryFunctionContext<ReturnType<KeyFactory[K]>>
+    : KeyFactory[K] extends QueryKey
+    ? QueryFunctionContext<KeyFactory[K]>
+    : never;
+};
+
+type ChannelsQueryContext = Prettify<QueryContextFromKeys<typeof channelsKey>>;
+
+type filter_t = 'official' | 'subscribed' | 'direct' | 'public';
+
 export type {
   quota_t,
   login_t,
@@ -40,4 +56,6 @@ export type {
   log_t,
   userType_t,
   errorMessages_t,
+  ChannelsQueryContext,
+  filter_t,
 };

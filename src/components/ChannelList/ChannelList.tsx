@@ -1,28 +1,23 @@
 import { Button } from '@/components/ui/button';
 import { A, P } from '@/components/ui/typography';
-import { channel_t } from '@/utils/types';
+import { useChannelsQuery } from '@/hooks/useChannels';
 import { cn } from '@/utils';
-import { useQuery } from '@tanstack/react-query';
-import { AxiosError } from 'axios';
+import { filter_t } from '@/utils/types';
 import { X } from 'lucide-react';
 
 type ChannelListProps = {
-  fetchChannels: () => Promise<channel_t[]>;
-  type: 'official' | 'subscribed' | 'direct' | 'public';
+  filter?: filter_t;
   removeButton?: boolean;
   className?: string;
 };
 
 const ChannelList = ({
-  fetchChannels,
-  type,
+  filter,
   removeButton = false,
   className = '',
 }: ChannelListProps) => {
-  const { data } = useQuery<channel_t[], AxiosError>(
-    ['channels', type],
-    fetchChannels,
-  );
+  const { data } = useChannelsQuery(filter);
+
   const channelUnsub = () => {
     //TODO: api to unsub to a channel
     console.log('disiscritto dal canale');
