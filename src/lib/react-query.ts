@@ -2,6 +2,7 @@ import { MutationCache, QueryCache, QueryClient } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
 import { toast } from 'sonner';
 import { isErrorMessages } from '@/utils/type-guards';
+import { isValidationErrorLike } from 'zod-validation-error';
 
 export const queryClient = new QueryClient({
   defaultOptions: {
@@ -10,7 +11,10 @@ export const queryClient = new QueryClient({
     },
   },
   queryCache: new QueryCache({
-    onError(_error, _query) {
+    onError(error, _query) {
+      if (isValidationErrorLike(error)) {
+        toast.error(error.message);
+      }
       toast.error('TODO errore');
     },
   }),

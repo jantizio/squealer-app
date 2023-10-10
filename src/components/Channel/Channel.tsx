@@ -3,12 +3,9 @@ import MessageScroller from '@/components/MessageScroller';
 import ModeToggle from '@/components/ModeToggle';
 import { Button } from '@/components/ui/button';
 import { A, H1, Large, Lead, Muted } from '@/components/ui/typography';
-import { useFetchSqueals } from '@/hooks/useFetch';
+import { useChannelQuery } from '@/hooks/useChannels';
 import { useUser } from '@/lib/auth';
-import { axios } from '@/lib/axios';
 import { run } from '@/utils';
-import { channel_t } from '@/schema/shared-schema/channelValidator';
-import { useQuery } from '@tanstack/react-query';
 import { Settings } from 'lucide-react';
 import { useNavigate, useParams } from 'react-router-dom';
 
@@ -21,26 +18,12 @@ const Channel = () => {
   //TODO: probabilmente il layout ora presente non va bene, lascio così per non fare modifiche inutili
   // ma servirebbe un layout a 3 colonne. Le due laterali fisse e quella centrare con la scrollbar centrale
 
-  const fetchChannelSqueals = useFetchSqueals(
-    `/channels/${channelName}/squeals`,
-  );
-
   const {
     data: channel,
     isSuccess,
     isError,
     isLoading,
-  } = useQuery(
-    ['channel'],
-    async (): Promise<channel_t> => {
-      const { data } = await axios.get<channel_t>(`/channels/${channelName}`);
-
-      return data;
-    },
-    {
-      retry: false,
-    },
-  );
+  } = useChannelQuery(channelName as string); // TODO: un po' sus
 
   const subscribeButton = run(() => {
     if (!authUser) return <></>;
@@ -116,12 +99,10 @@ const Channel = () => {
                 </div>
                 <H1 className="mb-1 mr-1 break-all">{channel.name}</H1>
                 {subscribeButton}
-                {isSuccess && (
-                  <Muted className="mt-3 w-full">{channel.description}</Muted>
-                )}
+                <Muted className="mt-3 w-full">{channel.description}</Muted>
               </section>
 
-              <MessageScroller fetchPage={fetchChannelSqueals} />
+              <MessageScroller channelName={channelName} />
             </>
           )}
         </main>

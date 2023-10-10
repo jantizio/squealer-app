@@ -2,20 +2,12 @@ import ChannelList from '@/components/ChannelList';
 import HeaderLogo from '@/components/HeaderLogo';
 import { Button } from '@/components/ui/button';
 import useIsAuthenticated from '@/hooks/useIsAuthenticated';
-import { useFetchChannels } from '@/hooks/useFetch';
-import { run } from '@/utils';
 import { Settings } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
 const Discover = () => {
   const navigate = useNavigate();
   const isAuthenticated = useIsAuthenticated();
-
-  const queryString = run(() => {
-    if (isAuthenticated) return '/channels/?type=public';
-    else return '/channels/?official=true';
-  });
-  const fetchEveryChannel = useFetchChannels(queryString);
 
   return (
     <>
@@ -34,7 +26,7 @@ const Discover = () => {
       <div className="flex overflow-hidden">
         {/* Main content */}
         <main className="order-2 w-full overflow-auto md:w-4/6 lg:w-1/2">
-          <ChannelList fetchChannels={fetchEveryChannel} type="public" />
+          <ChannelList filter={isAuthenticated ? 'public' : 'official'} />
         </main>
 
         {/* Left sidebar */}

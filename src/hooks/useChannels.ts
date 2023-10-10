@@ -4,9 +4,12 @@ import { useQuery } from '@tanstack/react-query';
 
 export const channelsKey = {
   all: [{ scope: 'channels' }] as const,
+  lists: () => [{ ...channelsKey.all[0], type: 'lists' }] as const,
+  filter: (filter?: filter_t) =>
+    [{ ...channelsKey.lists()[0], filter }] as const,
+  elements: () => [{ ...channelsKey.all[0], type: 'element' }] as const,
   specific: (channelName: string) =>
-    [{ ...channelsKey.all[0], channelName }] as const,
-  filter: (filter?: filter_t) => [{ ...channelsKey.all[0], filter }] as const,
+    [{ ...channelsKey.elements()[0], channelName }] as const,
 };
 
 export const useChannelsQuery = (filter?: filter_t) =>

@@ -1,20 +1,18 @@
 import { useRef } from 'react';
-import { useInfiniteQuery } from '@tanstack/react-query';
-// import { post_t } from '@/lib/types';
+import { useSquealsQuery } from './useSqueals';
 
-type options<T> = {
-  fetchPage: (page: number) => Promise<T[]>;
+type options = {
   filter?: string;
+  author?: string;
+  channelName?: string;
 };
 
-export default function useInfinteScroll<T>({ fetchPage, filter }: options<T>) {
-  const queryObj = useInfiniteQuery<T[], Error>({
-    queryKey: ['message', filter],
-    queryFn: ({ pageParam = 0 }) => fetchPage(pageParam),
-    getNextPageParam: (lastPage, allPages) => {
-      return lastPage.length ? allPages.length : undefined;
-    },
-  });
+export default function useInfiniteScroll({
+  filter,
+  author,
+  channelName,
+}: options) {
+  const queryObj = useSquealsQuery(filter, author, channelName);
 
   const intObserver = useRef<IntersectionObserver | null>(null);
   const lastPostRef = (post: HTMLDivElement) => {

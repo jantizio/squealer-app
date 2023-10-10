@@ -10,6 +10,7 @@ import { log_t } from '@/schema/shared-schema/logValidator';
 import { userType_t } from '@/schema/shared-schema/utils/global';
 import { QueryFunctionContext, QueryKey } from '@tanstack/react-query';
 import { channelsKey } from '@/hooks/useChannels';
+import { squealsKey } from '@/hooks/useSqueals';
 
 type Prettify<T> = {
   [K in keyof T]: T[K];
@@ -43,6 +44,8 @@ type QueryContextFromKeys<
 
 type ChannelsQueryContext = Prettify<QueryContextFromKeys<typeof channelsKey>>;
 
+type SquealsQueryContext = Prettify<QueryContextFromKeys<typeof squealsKey>>;
+
 type filter_t = 'official' | 'subscribed' | 'direct' | 'public';
 
 export type {
@@ -57,5 +60,6 @@ export type {
   userType_t,
   errorMessages_t,
   ChannelsQueryContext,
+  SquealsQueryContext,
   filter_t,
 };

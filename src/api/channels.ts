@@ -2,7 +2,8 @@ import { axios } from '@/lib/axios';
 import { channelSchema } from '@/schema/shared-schema/channelValidator';
 import { run } from '@/utils';
 import { ChannelsQueryContext, channel_t } from '@/utils/types';
-import { validateArray, validateElement } from '@/utils/validators';
+import { validate } from '@/utils/validators';
+import { z } from 'zod';
 
 export const getChannels = async ({
   queryKey: [{ filter }],
@@ -16,18 +17,18 @@ export const getChannels = async ({
     else return '';
   });
 
-  const response = await axios.get<channel_t[]>(`/channels/${query}`);
-  return validateArray(response.data, channelSchema);
+  const response = await axios.get<unknown[]>(`/channels/${query}`);
+  return validate(response.data, z.array(channelSchema));
 };
 
 export const createChannel = async (channel: channel_t): Promise<channel_t> => {
-  const response = await axios.post<channel_t>('/channels', channel);
-  return response.data;
+  const response = await axios.post<unknown>('/channels', channel);
+  return validate(response.data, channelSchema);
 };
 
 export const getChannel = async ({
   queryKey: [{ channelName }],
 }: ChannelsQueryContext['specific']): Promise<channel_t> => {
-  const response = await axios.get<channel_t>(`/channels/${channelName}`);
-  return validateElement(response.data, channelSchema);
+  const response = await axios.get<unknown>(`/channels/${channelName}`);
+  return validate(response.data, channelSchema);
 };

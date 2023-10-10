@@ -19,21 +19,17 @@ import {
   SheetTitle,
   SheetTrigger,
 } from '@/components/ui/sheet';
-import { useFetchSqueals } from '@/hooks/useFetch';
+import { useLogout, useUser } from '@/lib/auth';
 import { LogOut, Menu, PenSquare, Settings, User } from 'lucide-react';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDebounce } from 'usehooks-ts';
 import ChannelsSidebar from './ChannelsSidebar';
-import { useLogout } from '@/lib/auth';
-import { useUser } from '@/lib/auth';
 
 const LoggedHome = () => {
   const [filter, setFilter] = useState('');
   const debouncedFilter = useDebounce(filter, 500);
   const navigate = useNavigate();
-
-  const fetchSquealsPage = useFetchSqueals('/squeals/', filter);
 
   const { data: authUser } = useUser();
   const { mutate: logoutUser } = useLogout();
@@ -109,10 +105,7 @@ const LoggedHome = () => {
       <div className="flex overflow-hidden">
         {/* Main content */}
         <main className="order-2 w-full overflow-auto overflow-x-hidden md:w-4/6 lg:w-1/2">
-          <MessageScroller
-            fetchPage={fetchSquealsPage}
-            filter={debouncedFilter}
-          />
+          <MessageScroller filter={debouncedFilter} />
         </main>
 
         {/* Left sidebar */}

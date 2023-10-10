@@ -1,15 +1,19 @@
 import Message from '@/components/Message';
-import { squealRead_t } from '@/utils/types';
 import useInfiniteScroll from '@/hooks/useInfiniteScroll';
 
 type MessageScrollerProps = {
-  fetchPage: (page: number) => Promise<squealRead_t[]>;
   filter?: string;
+  author?: string;
+  channelName?: string;
 };
 
-const MessageScroller = ({ fetchPage, filter }: MessageScrollerProps) => {
+const MessageScroller = ({
+  filter,
+  author,
+  channelName,
+}: MessageScrollerProps) => {
   const { data, error, isError, isFetchingNextPage, lastPostRef } =
-    useInfiniteScroll({ fetchPage, filter });
+    useInfiniteScroll({ filter, author, channelName });
 
   const posts = data?.pages.flat();
 
@@ -25,11 +29,12 @@ const MessageScroller = ({ fetchPage, filter }: MessageScrollerProps) => {
     );
   });
 
+  // TODO: migliorare la presentazione
   return (
     <>
       <div className="container mt-14">{content}</div>
       {isFetchingNextPage && <p>Loading more posts...</p>}
-      {isError && <p>Error: {error.message}</p>}
+      {isError && <p>Error: {error instanceof Error && error.message}</p>}
     </>
   );
 };

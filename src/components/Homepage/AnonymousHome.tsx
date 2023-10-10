@@ -62,7 +62,7 @@ const AnonymousHome = () => {
       <div className="flex overflow-hidden">
         {/* Main content */}
         <main className="order-2 w-full overflow-auto md:w-4/6 lg:w-1/2">
-          <MessageScroller fetchPage={fetchPublicSquealsPage} />
+          <MessageScroller />
         </main>
 
         {/* Left sidebar */}
