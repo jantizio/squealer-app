@@ -6,7 +6,7 @@ export function errorPayloadCheck(data: unknown): data is { message: string } {
   return data instanceof Object && 'message' in data;
 }
 
-import { errorMessages_t } from '@/utils/types';
+import { type errorMessages_t } from '@/utils/types';
 export function isErrorMessages(object: unknown): object is errorMessages_t {
   if (typeof object !== 'object' || object === null) {
     return false;

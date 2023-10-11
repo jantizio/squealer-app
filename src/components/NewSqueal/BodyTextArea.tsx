@@ -1,4 +1,8 @@
-import { ControllerRenderProps, FieldPath, FieldValues } from 'react-hook-form';
+import {
+  type ControllerRenderProps,
+  type FieldPath,
+  type FieldValues,
+} from 'react-hook-form';
 import {
   FormItem,
   FormControl,
@@ -7,7 +11,7 @@ import {
   FormDescription,
 } from '@/components/ui/form';
 import { Textarea } from '@/components/ui/textarea';
-import { quota_t } from '@/utils/types';
+import { type quota_t } from '@/utils/types';
 
 type BodyTextAreaProp<
   TFieldValues extends FieldValues = FieldValues,

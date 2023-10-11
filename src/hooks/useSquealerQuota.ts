@@ -1,4 +1,4 @@
-import { quota_t } from '@/utils/types';
+import { type quota_t } from '@/utils/types';
 import { squealFormSchema } from '@/schema/squealValidator';
 import { useUser } from '@/lib/auth';
 

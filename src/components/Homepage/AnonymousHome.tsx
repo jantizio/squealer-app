@@ -12,13 +12,81 @@ import {
   SheetTrigger,
 } from '@/components/ui/sheet';
 import { useFetchChannels, useFetchSqueals } from '@/hooks/useFetch';
+import { channelSchema } from '@/schema/shared-schema/channelValidator';
+import { validate } from '@/utils/validators';
 import { Menu } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { z } from 'zod';
+
+const channels = [
+  {
+    type: 'public',
+    name: '§general',
+    description: 'General discussion about Squealer',
+    subscribed: ['@john_doe', '@jane_doe'],
+  },
+  {
+    type: 'public',
+    name: 'announcements',
+    description: 'Official announcements from Squealer',
+    subscribed: ['@john_doe', '@jane_doe', '@jim_smith'],
+  },
+  {
+    type: 'public',
+    name: '#random',
+    description: 'Random discussion about anything',
+    subscribed: ['@jane_doe', '@jim_smith'],
+  },
+  {
+    type: 'public',
+    name: '#programming',
+    description: 'Discussion about programming languages and tools',
+    subscribed: ['@john_doe', '@jim_smith'],
+  },
+  {
+    type: 'publica',
+    name: '#music',
+    description: 'Discussion about music and artists',
+    subscribed: ['@jane_doe', '@jim_smith'],
+  },
+  {
+    type: 'public',
+    name: '§movies',
+    description: 'Discussion about movies and TV shows',
+    subscribed: ['@john_doe', '@jane_doe'],
+  },
+  {
+    type: 'public',
+    name: 'books',
+    description: 'Discussion about books and authors',
+    subscribed: ['@jim_smith'],
+  },
+  {
+    type: 'public',
+    name: '#sports',
+    description: 'Discussion about sports and athletes',
+    subscribed: ['@john_doe', '@jane_doe', '@jim_smith'],
+  },
+  {
+    type: 'public',
+    name: '#food',
+    description: 'Discussion about food and recipes',
+    subscribed: ['@john_doe', '@jane_doe'],
+  },
+  {
+    type: 'public',
+    name: '#travel',
+    description: 'Discussion about travel destinations and experiences',
+    subscribed: ['@jane_doe', '@jim_smith', 'caca'],
+  },
+];
 
 const AnonymousHome = () => {
   const navigate = useNavigate();
   const fetchPublicSquealsPage = useFetchSqueals('/squeals/');
   const fetchOfficialChannels = useFetchChannels('/channels/?official=true');
+
+  // console.log(validate(channels[1], channelSchema));
 
   return (
     <>

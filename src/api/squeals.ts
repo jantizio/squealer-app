@@ -2,9 +2,9 @@ import { axios } from '@/lib/axios';
 import { squealReadSchema } from '@/schema/shared-schema/squealValidators';
 import { run } from '@/utils';
 import {
-  SquealsQueryContext,
-  squealRead_t,
-  squealWrite_t,
+  type SquealsQueryContext,
+  type squealRead_t,
+  type squealWrite_t,
 } from '@/utils/types';
 import { validate } from '@/utils/validators';
 import { z } from 'zod';

@@ -10,8 +10,11 @@ import {
 import { Input } from '@/components/ui/input';
 import { H1 } from '@/components/ui/typography';
 import useRegister from '@/hooks/useRegister';
-import { userWrite_t } from '@/utils/types';
-import { registerFormSchema, registerForm_t } from '@/schema/registerValidator';
+import { type userWrite_t } from '@/utils/types';
+import {
+  registerFormSchema,
+  type registerForm_t,
+} from '@/schema/registerValidator';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 

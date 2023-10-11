@@ -1,5 +1,5 @@
 import { axios } from '@/lib/axios';
-import { login_t } from '@/utils/types';
+import { type login_t } from '@/utils/types';
 
 export const refreshAccessToken = async (): Promise<string> => {
   const response = await axios.post<string>('/token/refresh');

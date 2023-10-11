@@ -1,7 +1,7 @@
 import { axios } from '@/lib/axios';
 import { channelSchema } from '@/schema/shared-schema/channelValidator';
 import { run } from '@/utils';
-import { ChannelsQueryContext, channel_t } from '@/utils/types';
+import { type ChannelsQueryContext, type channel_t } from '@/utils/types';
 import { validate } from '@/utils/validators';
 import { z } from 'zod';
 
