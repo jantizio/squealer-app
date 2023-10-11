@@ -1,4 +1,4 @@
-import { Navigate, RouteObject } from 'react-router-dom';
+import { Navigate, type RouteObject } from 'react-router-dom';
 
 import AnonymousHome from '@/components/Homepage/AnonymousHome';
 import Login from '@/components/Login';

@@ -1,5 +1,5 @@
 // import { Suspense } from 'react';
-import { Navigate, RouteObject } from 'react-router-dom';
+import { Navigate, type RouteObject } from 'react-router-dom';
 
 import Settings from '@/components/Settings';
 import NewSqueal from '@/components/NewSqueal';

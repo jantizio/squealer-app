@@ -8,11 +8,11 @@ import {
   useQuery,
   useMutation,
   useQueryClient,
-  QueryKey,
-  UseQueryOptions,
-  QueryFunction,
-  MutationFunction,
-  UseMutationOptions,
+  type QueryKey,
+  type UseQueryOptions,
+  type QueryFunction,
+  type MutationFunction,
+  type UseMutationOptions,
 } from '@tanstack/react-query';
 
 export interface ReactQueryAuthConfig<

@@ -11,8 +11,8 @@ import {
 import { Input } from '@/components/ui/input';
 import { H1 } from '@/components/ui/typography';
 import useLogin from '@/hooks/useLogin';
-import { loginFormSchema, loginForm_t } from '@/schema/loginValidator';
-import { login_t } from '@/schema/shared-schema/loginValidator';
+import { loginFormSchema, type loginForm_t } from '@/schema/loginValidator';
+import { type login_t } from '@/schema/shared-schema/loginValidator';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 

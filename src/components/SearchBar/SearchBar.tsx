@@ -2,7 +2,7 @@ import { Form, FormControl, FormField, FormItem } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { cn } from '@/utils';
 import { Search } from 'lucide-react';
-import { SetStateAction } from 'react';
+import { type SetStateAction } from 'react';
 import { useForm } from 'react-hook-form';
 
 type SearchBarProps = {

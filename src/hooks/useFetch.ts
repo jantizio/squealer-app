@@ -1,5 +1,5 @@
 import { axios } from '@/lib/axios';
-import { type channel_t, type squealRead_t } from '@/utils/types';
+import type { channel_t, squealRead_t } from '@/utils/types';
 import { run } from '@/utils';
 import { channelSchema } from '@/schema/shared-schema/channelValidator';
 import { squealReadSchema } from '@/schema/shared-schema/squealValidators';

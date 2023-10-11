@@ -1,10 +1,10 @@
 import { axios } from '@/lib/axios';
 import { squealReadSchema } from '@/schema/shared-schema/squealValidators';
 import { run } from '@/utils';
-import {
-  type SquealsQueryContext,
-  type squealRead_t,
-  type squealWrite_t,
+import type {
+  SquealsQueryContext,
+  squealRead_t,
+  squealWrite_t,
 } from '@/utils/types';
 import { validate } from '@/utils/validators';
 import { z } from 'zod';

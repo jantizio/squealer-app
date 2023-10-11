@@ -1,4 +1,4 @@
-import { RouteObject, useRoutes } from 'react-router-dom';
+import { type RouteObject, useRoutes } from 'react-router-dom';
 
 import { useUser } from '@/lib/auth';
 

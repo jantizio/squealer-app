@@ -10,12 +10,10 @@ import {
   SheetTitle,
   SheetDescription,
 } from '@/components/ui/sheet';
-import { useFetchChannels } from '@/hooks/useFetch';
 import { useNavigate } from 'react-router-dom';
 
 const Header = () => {
   const navigate = useNavigate();
-  const fetchOfficialChannels = useFetchChannels('/channels/?official=true');
 
   return (
     <header className="order-first my-3 flex w-full items-center justify-around">
@@ -35,11 +33,7 @@ const Header = () => {
                 Lista dei canali pubblici di Squealer
               </SheetDescription>
             </SheetHeader>
-            <ChannelList
-              fetchChannels={fetchOfficialChannels}
-              className="h-[83vh] overflow-auto"
-              type="official"
-            />
+            <ChannelList className="h-[83vh] overflow-auto" filter="official" />
           </SheetContent>
         </Sheet>
         <HeaderLogo responsive />

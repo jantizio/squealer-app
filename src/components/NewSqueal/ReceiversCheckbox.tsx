@@ -1,4 +1,8 @@
-import { ControllerRenderProps, FieldPath, FieldValues } from 'react-hook-form';
+import type {
+  ControllerRenderProps,
+  FieldPath,
+  FieldValues,
+} from 'react-hook-form';
 import { Checkbox } from '@/components/ui/checkbox';
 import { FormItem, FormControl, FormLabel } from '@/components/ui/form';
 

@@ -1,5 +1,5 @@
 import { axios } from '@/lib/axios';
-import { type userRead_t, type userWrite_t, type login_t } from '@/utils/types';
+import type { userRead_t, userWrite_t, login_t } from '@/utils/types';
 
 export const getUser = async (
   username?: login_t['username'],

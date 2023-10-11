@@ -2,7 +2,7 @@ import { Button } from '@/components/ui/button';
 import { A, P } from '@/components/ui/typography';
 import { useChannelsQuery } from '@/hooks/useChannels';
 import { cn } from '@/utils';
-import { type filter_t } from '@/utils/types';
+import type { filter_t } from '@/utils/types';
 import { X } from 'lucide-react';
 
 type ChannelListProps = {

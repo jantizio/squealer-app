@@ -24,7 +24,7 @@ import { useUser } from '@/lib/auth';
 import { axios } from '@/lib/axios';
 import {
   changepswFormSchema,
-  changepswForm_t,
+  type changepswForm_t,
 } from '@/schema/changepswValidator';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';

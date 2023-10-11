@@ -1,5 +1,5 @@
 import { useUser } from '@/lib/auth';
-import { type userType_t } from '@/utils/types';
+import type { userType_t } from '@/utils/types';
 import { Navigate, Outlet, useLocation } from 'react-router-dom';
 
 type RequireAuthProps = {

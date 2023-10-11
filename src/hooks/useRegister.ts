@@ -1,6 +1,6 @@
 import { addLog } from '@/api/logs';
 import { useLogin, useRegister as useRegisterLib } from '@/lib/auth';
-import { type log_t } from '@/utils/types';
+import type { log_t } from '@/utils/types';
 import { AxiosError } from 'axios';
 import { toast } from 'sonner';
 

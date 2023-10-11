@@ -1,16 +1,19 @@
-import { quota_t } from '@/schema/shared-schema/quotaValidator';
-import { userRead_t, userWrite_t } from '@/schema/shared-schema/userValidators';
-import { channel_t } from '@/schema/shared-schema/channelValidator';
-import {
+import { channelsKey } from '@/hooks/useChannels';
+import { squealsKey } from '@/hooks/useSqueals';
+import type { channel_t } from '@/schema/shared-schema/channelValidator';
+import type { log_t } from '@/schema/shared-schema/logValidator';
+import type { login_t } from '@/schema/shared-schema/loginValidator';
+import type { quota_t } from '@/schema/shared-schema/quotaValidator';
+import type {
   squealRead_t,
   squealWrite_t,
 } from '@/schema/shared-schema/squealValidators';
-import { login_t } from '@/schema/shared-schema/loginValidator';
-import { log_t } from '@/schema/shared-schema/logValidator';
-import { userType_t } from '@/schema/shared-schema/utils/global';
-import { QueryFunctionContext, QueryKey } from '@tanstack/react-query';
-import { channelsKey } from '@/hooks/useChannels';
-import { squealsKey } from '@/hooks/useSqueals';
+import type {
+  userRead_t,
+  userWrite_t,
+} from '@/schema/shared-schema/userValidators';
+import type { userType_t } from '@/schema/shared-schema/utils/global';
+import type { QueryFunctionContext, QueryKey } from '@tanstack/react-query';
 
 type Prettify<T> = {
   [K in keyof T]: T[K];
@@ -49,17 +52,17 @@ type SquealsQueryContext = Prettify<QueryContextFromKeys<typeof squealsKey>>;
 type filter_t = 'official' | 'subscribed' | 'direct' | 'public';
 
 export type {
-  quota_t,
-  login_t,
-  userRead_t,
-  userWrite_t,
-  channel_t,
-  squealRead_t, //TODO: aggiungere il tipo per la geolocation
-  squealWrite_t, //TODO: aggiungere il tipo per la geolocation
-  log_t,
-  userType_t,
-  errorMessages_t,
   ChannelsQueryContext,
   SquealsQueryContext,
-  filter_t,
+  channel_t,
+  errorMessages_t,
+  filter_t, //TODO: aggiungere il tipo per la geolocation
+  log_t,
+  login_t,
+  quota_t,
+  squealRead_t,
+  squealWrite_t,
+  userRead_t,
+  userType_t,
+  userWrite_t,
 };

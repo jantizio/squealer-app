@@ -10,7 +10,7 @@ import {
 import { Input } from '@/components/ui/input';
 import { H1 } from '@/components/ui/typography';
 import useRegister from '@/hooks/useRegister';
-import { type userWrite_t } from '@/utils/types';
+import type { userWrite_t } from '@/utils/types';
 import {
   registerFormSchema,
   type registerForm_t,

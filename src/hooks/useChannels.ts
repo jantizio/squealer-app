@@ -1,5 +1,5 @@
 import { getChannel, getChannels } from '@/api/channels';
-import { type filter_t } from '@/utils/types';
+import type { filter_t } from '@/utils/types';
 import { useQuery } from '@tanstack/react-query';
 
 export const channelsKey = {

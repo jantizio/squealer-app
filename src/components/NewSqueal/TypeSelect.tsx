@@ -1,4 +1,8 @@
-import { ControllerRenderProps, FieldPath, FieldValues } from 'react-hook-form';
+import type {
+  ControllerRenderProps,
+  FieldPath,
+  FieldValues,
+} from 'react-hook-form';
 import {
   FormItem,
   FormControl,
@@ -16,14 +20,14 @@ import {
 
 type receiverInputProp<
   TFieldValues extends FieldValues = FieldValues,
-  TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>
+  TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
 > = {
   field: ControllerRenderProps<TFieldValues, TName>;
 };
 
 const TypeSelect = <
   TFieldValues extends FieldValues,
-  TName extends FieldPath<TFieldValues>
+  TName extends FieldPath<TFieldValues>,
 >({
   field,
 }: receiverInputProp<TFieldValues, TName>) => {

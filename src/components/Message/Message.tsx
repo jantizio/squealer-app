@@ -1,6 +1,5 @@
 import { Button } from '@/components/ui/button';
-// import { axios } from '@/lib/axios';
-import { type squealRead_t } from '@/utils/types';
+import type { squealRead_t } from '@/utils/types';
 import { ArrowDownCircle, ArrowUpCircle } from 'lucide-react';
 import { forwardRef, useEffect } from 'react';
 import { run } from '@/utils';
