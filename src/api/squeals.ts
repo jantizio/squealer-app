@@ -3,13 +3,12 @@ import { squealReadSchema } from '@/schema/shared-schema/squealValidators';
 import { run } from '@/utils';
 import type {
   SquealsQueryContext,
+  squealOperation_t,
   squealRead_t,
   squealWrite_t,
 } from '@/utils/types';
 import { validate } from '@/utils/validators';
 import { z } from 'zod';
-
-type op = 'viewed' | 'upvote' | 'downvote';
 
 export const getSqueals = async ({
   queryKey: [{ filter, channelName, author }],
@@ -56,14 +55,17 @@ export const getSqueal = async ({
   return validate(response.data, squealReadSchema);
 };
 
-export const deleteSqueal = async (id: number): Promise<void> => {
+export const deleteSqueal = async (id: string): Promise<void> => {
   await axios.delete(`/squeals/${id}`);
 };
 
-export const updateSqueal = async (
-  id: number,
-  operation: op,
-): Promise<squealRead_t> => {
+export const updateSqueal = async ({
+  id,
+  operation,
+}: {
+  id: string;
+  operation: squealOperation_t;
+}): Promise<squealRead_t> => {
   const response = await axios.patch<squealRead_t>(`/squeals/${id}`, {
     op: operation,
   });

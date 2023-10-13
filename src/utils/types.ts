@@ -51,6 +51,8 @@ type SquealsQueryContext = Prettify<QueryContextFromKeys<typeof squealsKey>>;
 
 type filter_t = 'official' | 'subscribed' | 'direct' | 'public';
 
+type squealOperation_t = 'viewed' | 'upvote' | 'downvote';
+
 export type {
   ChannelsQueryContext,
   SquealsQueryContext,
@@ -65,4 +67,5 @@ export type {
   userRead_t,
   userType_t,
   userWrite_t,
+  squealOperation_t,
 };

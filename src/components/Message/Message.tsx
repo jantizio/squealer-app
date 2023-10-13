@@ -1,16 +1,17 @@
 import { Button } from '@/components/ui/button';
-import type { squealRead_t } from '@/utils/types';
-import { ArrowDownCircle, ArrowUpCircle } from 'lucide-react';
-import { forwardRef, useEffect } from 'react';
-import { run } from '@/utils';
-import { Large, Muted } from '@/components/ui/typography';
+import { Large, Muted, P } from '@/components/ui/typography';
+import { useUpdateSquealMutation } from '@/hooks/useSqueals';
 import { useUser } from '@/lib/auth';
+import { formatNumber } from '@/utils';
+import type { squealRead_t } from '@/utils/types';
+import { formatDistanceToNowStrict } from 'date-fns';
+import { it } from 'date-fns/locale';
+import { Eye, Frown, Smile } from 'lucide-react';
+import { forwardRef, useEffect } from 'react';
 
 type messageProps = {
   children: squealRead_t;
 };
-
-type op = 'viewed' | 'upvote' | 'downvote';
 
 const Message = forwardRef<HTMLDivElement, messageProps>(
   ({ children }, ref) => {
@@ -21,86 +22,69 @@ const Message = forwardRef<HTMLDivElement, messageProps>(
       impressions,
       negative_reaction,
       positive_reaction,
-      // datetime,
+      datetime,
       receivers,
     } = children;
     const { data: authUser } = useUser();
     const isAuthenticated = !!authUser;
 
-    const updateSqueal = (operation: op, _id: string) => {
-      switch (operation) {
-        case 'downvote':
-          console.log('downvote');
-
-          break;
-        case 'upvote':
-          console.log('upvote');
-
-          break;
-
-        case 'viewed':
-          // console.log('plus one views');
-          break;
-      }
-      // TODO: response and error handling
-      // privateApi.patch(`/squeals/${id}`, { op: operation });
-    };
+    const { mutate: updateSqueal } = useUpdateSquealMutation();
+    const reacted = false; //TODO: use real data
 
     useEffect(() => {
       // when the component is mounted count one view
-      updateSqueal('viewed', _id);
+      updateSqueal({ id: _id, operation: 'viewed' });
     }, []);
 
-    // let bodyContent: JSX.Element;
-
-    // if (typeof body == 'string') bodyContent = <p>{body}</p>;
-    // // else if (body instanceof File) bodyContent = <p>{body.name}</p>;
-    // else bodyContent = <p>Errore</p>;
-
-    // const date = `${datetime.getHours()}:${datetime.getMinutes()} ${datetime.getDay()}/${datetime.getDate()}/${datetime.getFullYear()}`;
-
-    const bodyContent = run(() => {
-      if (body.type === 'text') return <p>{body.content}</p>;
-      else if (body.type === 'media')
-        return <img src={body.content} alt="post-image" />;
-      else return <p>Errore</p>;
+    const date = formatDistanceToNowStrict(datetime, {
+      addSuffix: true,
+      locale: it,
     });
 
+    //simbolo: •
     return (
       <article
-        className="prose prose-custom mx-auto mb-6 rounded border bg-card p-5 md:prose-lg lg:prose-xl"
+        className="mx-auto mb-6 max-w-prose space-y-5 rounded border bg-card p-5 shadow shadow-secondary hover:border-muted-foreground [&>section]:min-w-full"
         ref={ref}
       >
-        <section className="flex items-baseline space-x-4">
-          <Large>
-            {receivers.map((recv, i) => {
-              if (i === receivers.length - 1) return recv;
-              return `${recv}, `;
-            })}
-          </Large>
-          <Muted>scritto da {author}</Muted>
+        <section className="items-center justify-between gap-1 xl:flex xl:max-w-xs">
+          <Large className="">{receivers.join(', ')}</Large>
+          <Muted className="shrink-0">
+            scritto da {author} • {date} •
+            <Eye className="mx-1 inline h-[1em] w-[1em]" />
+            {formatNumber(impressions)}
+          </Muted>
         </section>
-        visualizzazioni: {impressions}
-        {bodyContent}
-        {/* <p>{body.content}</p> */}
-        <Button
-          className="mx-2"
-          size="icon"
-          onClick={() => updateSqueal('upvote', _id)}
-          disabled={!isAuthenticated}
-        >
-          <ArrowUpCircle />
-        </Button>
-        <span className="pl-1">{positive_reaction}</span>
-        <Button
-          className="mx-2"
-          size="icon"
-          onClick={() => updateSqueal('downvote', _id)}
-          disabled={!isAuthenticated}
-        >
-          <ArrowDownCircle />
-        </Button>
-        <span className="pl-1">{negative_reaction}</span>
+        <section>
+          {body.type === 'text' && <P>{body.content}</P>}
+          {body.type === 'media' && <img src={body.content} alt="post-image" />}
+        </section>
+        <section className="flex justify-end">
+          {/* Buttons are ghost if unused, if reaction then secondary and reacted becomes primary */}
+          <Button
+            className="mx-2"
+            variant={reacted ? 'secondary' : 'ghost'}
+            disabled={!isAuthenticated || reacted}
+            onClick={() => updateSqueal({ id: _id, operation: 'upvote' })}
+          >
+            <span className={reacted ? 'text-primary' : ''}>
+              <Smile className="mr-2 inline h-[1.5em] w-[1.5em]" />
+              {positive_reaction}
+            </span>
+          </Button>
+
+          <Button
+            className="mx-2"
+            variant={reacted ? 'secondary' : 'ghost'}
+            disabled={!isAuthenticated || reacted}
+            onClick={() => updateSqueal({ id: _id, operation: 'downvote' })}
+          >
+            <span className={reacted ? 'text-primary' : ''}>
+              <Frown className="mr-2 inline h-[1.5em] w-[1.5em]" />
+              {negative_reaction}
+            </span>
+          </Button>
+        </section>
       </article>
     );
   },

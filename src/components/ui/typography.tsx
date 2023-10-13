@@ -1,4 +1,4 @@
-import { ReactNode } from 'react';
+import { type ReactNode } from 'react';
 import { Link } from 'react-router-dom';
 import { cn } from '@/utils';
 
@@ -134,9 +134,7 @@ export function Lead({ children, className }: Props_t) {
 }
 
 export function Large({ children, className }: Props_t) {
-  return (
-    <span className={cn('text-lg font-semibold', className)}>{children}</span>
-  );
+  return <p className={cn('text-lg font-semibold', className)}>{children}</p>;
 }
 
 export function Small({ children, className }: Props_t) {
