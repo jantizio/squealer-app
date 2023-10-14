@@ -25,10 +25,12 @@ const Channel = () => {
     isLoading,
   } = useChannelQuery(channelName as string); // TODO: un po' sus
 
+  if (!channelName) throw new Error('Channel name is required');
+
   const subscribeButton = run(() => {
     if (!authUser) return <></>;
 
-    if (isSuccess && channel.subscribed.includes(authUser.username))
+    if (channel && channel.subscribed.includes(authUser.username))
       return (
         <Button variant="secondary" size="sm">
           Iscritto

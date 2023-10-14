@@ -10,8 +10,11 @@ import {
 export const squealsKey = {
   all: [{ scope: 'squeals' }] as const,
   lists: () => [{ ...squealsKey.all[0], type: 'lists' }] as const,
-  filter: (filter?: string, channelName?: string, author?: string) =>
-    [{ ...squealsKey.lists()[0], channelName, author, filter }] as const,
+  filter: (
+    filter: string = '',
+    channelName: string = '',
+    author: string = '',
+  ) => [{ ...squealsKey.lists()[0], channelName, author, filter }] as const,
   elements: () => [{ ...squealsKey.all[0], type: 'element' }] as const,
   specific: (id: string) => [{ ...squealsKey.elements()[0], id }] as const,
 };

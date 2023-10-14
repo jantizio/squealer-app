@@ -49,7 +49,7 @@ type ChannelsQueryContext = Prettify<QueryContextFromKeys<typeof channelsKey>>;
 
 type SquealsQueryContext = Prettify<QueryContextFromKeys<typeof squealsKey>>;
 
-type filter_t = 'official' | 'subscribed' | 'direct' | 'public';
+type filter_t = 'official' | 'subscribed' | 'direct' | 'public' | '';
 
 type squealOperation_t = 'viewed' | 'upvote' | 'downvote';
 
