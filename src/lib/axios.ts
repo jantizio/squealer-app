@@ -3,6 +3,10 @@ import { BASE_URL } from '@/config';
 import Axios from 'axios';
 import { errorPayloadCheck } from '@/utils/type-guards';
 
+// create only one promise for the refresh token = avoid multiple refresh token calls
+let refreshPromise: Promise<string> | null = null;
+const clearPromise = () => (refreshPromise = null);
+
 // export const backendApi = axios.create({
 //   baseURL: BASE_URL,
 // });
@@ -29,7 +33,13 @@ axios.interceptors.response.use(
       !prevRequest?.sent
     ) {
       prevRequest.sent = true;
-      await refreshAccessToken();
+
+      if (!refreshPromise) {
+        refreshPromise = refreshAccessToken().finally(clearPromise);
+      }
+
+      await refreshPromise;
+      // await refreshAccessToken();
       return axios(prevRequest);
     }
 
