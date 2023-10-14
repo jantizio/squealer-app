@@ -30,6 +30,12 @@ export const useSquealsQuery = (
     getNextPageParam: (lastPage, allPages) => {
       return lastPage.length ? allPages.length : undefined;
     },
+    select: (data) => {
+      return {
+        ...data,
+        pages: data.pages.flat(),
+      };
+    },
   });
 
 export const useSquealQuery = (id: string) =>
