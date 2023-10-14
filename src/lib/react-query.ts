@@ -11,11 +11,14 @@ export const queryClient = new QueryClient({
     },
   },
   queryCache: new QueryCache({
-    onError(error, _query) {
-      if (isValidationErrorLike(error)) {
-        toast.error(error.message);
+    onError(error, query) {
+      // show toast only on backgound refetch
+      if (query.state.data !== undefined) {
+        if (isValidationErrorLike(error)) {
+          toast.error(error.message);
+        }
+        toast.error('TODO errore');
       }
-      toast.error('TODO errore');
     },
   }),
   mutationCache: new MutationCache({
