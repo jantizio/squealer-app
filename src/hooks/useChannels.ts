@@ -18,23 +18,22 @@ export const useChannelsQuery = (filter?: filter_t) =>
     queryFn: getChannels,
   });
 
-export const useChannelQuery = (channelName: string) => {
+export const useChannelQuery = (channelName: string, enabled?: boolean) => {
   const queryClient = useQueryClient();
 
   return useQuery({
     queryKey: channelsKey.specific(channelName),
     queryFn: getChannel,
-    placeholderData: () => {
+    initialData: () => {
       // seeding data to the cache has the problem that the data might be undefined in success state
-      // so we need to use placeholderData, but it's not so useful
-      const trovato = queryClient
+      return queryClient
         .getQueriesData<channel_t[]>(channelsKey.lists())
         .map(
           ([, channels]) =>
             channels?.find((channel) => channel.name === channelName),
         )
         .find((channel) => channel !== undefined);
-      return trovato;
     },
+    enabled,
   });
 };

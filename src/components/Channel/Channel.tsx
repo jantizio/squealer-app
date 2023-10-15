@@ -2,11 +2,14 @@ import HeaderLogo from '@/components/HeaderLogo';
 import MessageScroller from '@/components/MessageScroller';
 import ModeToggle from '@/components/ModeToggle';
 import { Button } from '@/components/ui/button';
-import { A, H1, Large, Lead, Muted } from '@/components/ui/typography';
+import { Skeleton } from '@/components/ui/skeleton';
+import { A, H1, Large, Muted } from '@/components/ui/typography';
 import { useChannelQuery } from '@/hooks/useChannels';
 import { useUser } from '@/lib/auth';
 import { run } from '@/utils';
+import { AxiosError } from 'axios';
 import { Settings } from 'lucide-react';
+import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
 const Channel = () => {
@@ -14,18 +17,27 @@ const Channel = () => {
   const navigate = useNavigate();
   const { data: authUser } = useUser();
   const isAuthenticated = !!authUser;
+  const [exists, setExists] = useState(true);
 
   //TODO: probabilmente il layout ora presente non va bene, lascio così per non fare modifiche inutili
   // ma servirebbe un layout a 3 colonne. Le due laterali fisse e quella centrare con la scrollbar centrale
 
-  const {
-    data: channel,
-    isSuccess,
-    isError,
-    isLoading,
-  } = useChannelQuery(channelName as string); // TODO: un po' sus
+  const { data: channel, error } = useChannelQuery(
+    channelName as string,
+    exists,
+  ); // TODO: un po' sus
 
   if (!channelName) throw new Error('Channel name is required');
+
+  useEffect(() => {
+    if (
+      error &&
+      error instanceof AxiosError &&
+      error.response?.status === 404
+    ) {
+      setExists(false);
+    }
+  }, [error]);
 
   const subscribeButton = run(() => {
     if (!authUser) return <></>;
@@ -72,41 +84,76 @@ const Channel = () => {
       <div className="flex overflow-hidden">
         {/* Main content */}
         <main className="container order-2 w-full overflow-auto md:w-4/6 lg:w-1/2">
-          {/* Error content */}
-          {isError && (
-            <>
-              <H1 className="mt-32 text-center">Errore</H1>
-              <section className="my-2 flex flex-wrap items-center justify-center md:space-x-5">
-                <Large className="w-full text-center md:w-auto">
-                  Il canale {channelName} non esiste
-                </Large>
-                <Button variant="outline" onClick={() => navigate('/')}>
-                  Torna alla pagina principale
-                </Button>
-              </section>
-            </>
-          )}
+          {run(() => {
+            /* Actual content */
+            if (channel)
+              return (
+                <>
+                  <section className="flex flex-wrap items-center justify-between">
+                    <div className="w-full">
+                      <A href="/channels" className="text-xs">
+                        Scopri altri canali
+                      </A>
+                    </div>
+                    <H1 className="mb-1 mr-1 break-all">{channel.name}</H1>
+                    {subscribeButton}
+                    <Muted className="mt-3 w-full">{channel.description}</Muted>
+                  </section>
 
-          {/* Loading content */}
-          {isLoading && <Lead className="mt-32">Caricamento...</Lead>}
+                  <MessageScroller channelName={channelName} />
+                </>
+              );
 
-          {/* Actual content */}
-          {isSuccess && (
-            <>
-              <section className="flex flex-wrap items-center justify-between">
-                <div className="w-full">
-                  <A href="/channels" className="text-xs">
-                    Scopri altri canali
-                  </A>
+            /* Error content */
+            if (error) {
+              return (
+                <>
+                  <H1 className="mt-32 text-center">Errore</H1>
+                  <section className="my-2 flex flex-wrap items-center justify-center md:space-x-5">
+                    <Large className="w-full text-center md:w-auto">
+                      {error instanceof AxiosError &&
+                        error.response?.status === 404 &&
+                        `Il canale ${channelName} non esiste`}
+                      {!(error instanceof AxiosError) &&
+                        error instanceof Error && (
+                          <>
+                            Riprova più tardi
+                            <Muted>{error.message}</Muted>
+                          </>
+                        )}
+                    </Large>
+                    <Button
+                      variant="outline"
+                      onClick={() => navigate('/channels')}
+                    >
+                      Scopri altri canali
+                    </Button>
+                  </section>
+                </>
+              );
+            }
+            /* Loading content */
+            return (
+              <>
+                <section className="flex flex-wrap items-center justify-between">
+                  <div className="w-full">
+                    <Skeleton className="mb-1 h-[12px] w-[90px]" />
+                  </div>
+                  <Skeleton className="h-[40px] w-[300px]" />
+                  <Skeleton className="h-[36px] w-[66px]" />
+                  <Skeleton className="mt-3 h-[20px] w-full" />
+                </section>
+                <div className="container mt-14">
+                  {Array.from({ length: 4 }, (_, i) => (
+                    <Skeleton
+                      key={i}
+                      className="mx-auto mb-6 h-52 max-w-prose rounded p-5"
+                    />
+                  ))}
                 </div>
-                <H1 className="mb-1 mr-1 break-all">{channel.name}</H1>
-                {subscribeButton}
-                <Muted className="mt-3 w-full">{channel.description}</Muted>
-              </section>
-
-              <MessageScroller channelName={channelName} />
-            </>
-          )}
+              </>
+            );
+          })}
         </main>
 
         {/* Left sidebar */}
