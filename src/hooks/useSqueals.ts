@@ -51,7 +51,7 @@ export const useUpdateSquealMutation = () => {
     mutationFn: updateSqueal,
     onSuccess: (newSqueal) => {
       // queryClient.invalidateQueries(squealsKey.lists()); //TODO: safe se sotto non va
-      queryClient.setQueryData<squealRead_t[]>(
+      queryClient.setQueriesData<squealRead_t[]>(
         squealsKey.lists(),
         (oldData) => {
           return oldData?.map((squeal) =>
