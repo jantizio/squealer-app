@@ -14,12 +14,14 @@ export const getSqueals = async ({
   queryKey: [{ filter, channelName, author }],
   pageParam: page = 0,
 }: SquealsQueryContext['filter']): Promise<squealRead_t[]> => {
-  const authorQuery = author ? `&author=${author}` : '';
-  const channelQuery = channelName ? `&channel=${channelName}` : '';
+  const authorQuery = author ? `&author=${encodeURIComponent(author)}` : '';
+  const channelQuery = channelName
+    ? `&channel=${encodeURIComponent(channelName)}`
+    : '';
   const filterQuery = run(() => {
     if (!filter) return '';
-    if (filter.startsWith('@')) return `&mention=${filter}`;
-    else return `&query=${filter}`;
+    if (filter.startsWith('@')) return `&author=${encodeURIComponent(filter)}`;
+    else return `&query=${encodeURIComponent(filter)}`;
   });
 
   const response = await axios.get<unknown[]>(
@@ -33,10 +35,12 @@ export const getChannelSqueals = async (
   channelName: string,
   author?: string,
 ): Promise<squealRead_t[]> => {
-  const authorQuery = author ? `&author=${author}` : '';
+  const authorQuery = author ? `&author=${encodeURIComponent(author)}` : '';
 
   const response = await axios.get<unknown[]>(
-    `/channels/${channelName}/squeals?&page=${page}${authorQuery}`,
+    `/channels/${encodeURIComponent(
+      channelName,
+    )}/squeals?&page=${page}${authorQuery}`,
   );
   return validate(response.data, z.array(squealReadSchema));
 };

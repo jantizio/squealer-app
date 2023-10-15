@@ -29,6 +29,8 @@ export const createChannel = async (channel: channel_t): Promise<channel_t> => {
 export const getChannel = async ({
   queryKey: [{ channelName }],
 }: ChannelsQueryContext['specific']): Promise<channel_t> => {
-  const response = await axios.get<unknown>(`/channels/${channelName}`);
+  const response = await axios.get<unknown>(
+    `/channels/${encodeURIComponent(channelName)}`,
+  );
   return validate(response.data, channelSchema);
 };
