@@ -8,13 +8,13 @@ type HeaderLogoProps = {
 };
 
 const HeaderLogo = ({ responsive }: HeaderLogoProps) => {
-  const responsiveClass = responsive ? 'hidden sm:block' : '';
-
   return (
     <Link to="/">
       <div className="flex items-center">
         <SquealerLogo className="h-12 w-12" />
-        <Large className={cn('m-2', responsiveClass)}>Squealer</Large>
+        <Large className={cn('m-2', { 'hidden sm:block': responsive })}>
+          Squealer
+        </Large>
       </div>
     </Link>
   );

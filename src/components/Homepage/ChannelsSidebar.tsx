@@ -5,7 +5,6 @@ import {
   AccordionTrigger,
 } from '@/components/ui/accordion';
 import ChannelList from '@/components/ChannelList';
-import { useFetchChannels } from '@/hooks/useFetch';
 import { cn } from '@/utils';
 
 type ChannelsSidebarProps = {
@@ -13,11 +12,6 @@ type ChannelsSidebarProps = {
 };
 
 const ChannelsSidebar = ({ className }: ChannelsSidebarProps) => {
-  const fetchSubscribedChannels = useFetchChannels(
-    '/channels/?type=public&official=false',
-  );
-  const fetchOfficialChannels = useFetchChannels('/channels/?official=true');
-  const fetchDirectChannels = useFetchChannels('/channels/?type=public');
   return (
     <Accordion
       type="multiple"
