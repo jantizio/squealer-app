@@ -1,27 +1,14 @@
 import ChannelList from '@/components/ChannelList';
-import HeaderLogo from '@/components/HeaderLogo';
-import { Button } from '@/components/ui/button';
+import AnonymousHeader from '@/components/Header/AnonymousHeader';
+import LoggedHeader from '@/components/Header/LoggedHeader';
 import useIsAuthenticated from '@/hooks/useIsAuthenticated';
-import { Settings } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
 
 const Discover = () => {
-  const navigate = useNavigate();
   const isAuthenticated = useIsAuthenticated();
 
   return (
     <>
-      <header className="order-first my-3 flex w-full items-center justify-around">
-        <HeaderLogo />
-        <Button
-          onClick={() => navigate('/settings')}
-          variant="outline"
-          size="icon"
-          className="mx-2"
-        >
-          <Settings className="h-icon-sm w-icon-sm" />
-        </Button>
-      </header>
+      {isAuthenticated ? <LoggedHeader /> : <AnonymousHeader />}
 
       <div className="flex overflow-hidden">
         {/* Main content */}

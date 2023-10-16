@@ -1,6 +1,6 @@
-import HeaderLogo from '@/components/HeaderLogo';
+import AnonymousHeader from '@/components/Header/AnonymousHeader';
+import LoggedHeader from '@/components/Header/LoggedHeader';
 import MessageScroller from '@/components/MessageScroller';
-import ModeToggle from '@/components/ModeToggle';
 import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
 import { A, H1, Large, Muted } from '@/components/ui/typography';
@@ -8,7 +8,6 @@ import { useChannelQuery } from '@/hooks/useChannels';
 import { useUser } from '@/lib/auth';
 import { run } from '@/utils';
 import { AxiosError } from 'axios';
-import { Settings } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
@@ -54,32 +53,7 @@ const Channel = () => {
 
   return (
     <>
-      <header className="order-first my-3 flex w-full items-center justify-around">
-        <HeaderLogo />
-
-        {isAuthenticated && (
-          <Button
-            onClick={() => navigate('/settings')}
-            variant="outline"
-            size="icon"
-            className="mx-2"
-          >
-            <Settings className="h-icon-sm w-icon-sm" />
-          </Button>
-        )}
-
-        {!isAuthenticated && (
-          <div className="flex items-center space-x-2">
-            <nav className="flex items-center space-x-2">
-              <Button onClick={() => navigate('/login')}>Accedi</Button>
-              <Button onClick={() => navigate('/signup')} variant="secondary">
-                Iscriviti
-              </Button>
-            </nav>
-            <ModeToggle />
-          </div>
-        )}
-      </header>
+      {isAuthenticated ? <LoggedHeader /> : <AnonymousHeader />}
 
       <div className="flex overflow-hidden">
         {/* Main content */}

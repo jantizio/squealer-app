@@ -1,9 +1,10 @@
+import LoggedHeader from '@/components/Header/LoggedHeader';
 import { Button } from '@/components/ui/button';
 import { Form, FormField, FormItem, FormMessage } from '@/components/ui/form';
-
-import { axios } from '@/lib/axios';
 import useSquealerQuota from '@/hooks/useSquealerQuota';
 import { useToast } from '@/hooks/useToast';
+import { useUser } from '@/lib/auth';
+import { axios } from '@/lib/axios';
 import { squealWriteSchema } from '@/schema/shared-schema/squealValidators';
 import { receiverString } from '@/schema/shared-schema/utils/global';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -15,7 +16,6 @@ import ReceiverInput from './ReceiverInput';
 import ReceiversCheckbox from './ReceiversCheckbox';
 import TypeSelect from './TypeSelect';
 import UrlInput from './UrlInput';
-import { useUser } from '@/lib/auth';
 
 const NewSqueal = () => {
   const { data: authUser } = useUser();
@@ -98,6 +98,7 @@ const NewSqueal = () => {
 
   return (
     <>
+      <LoggedHeader />
       <Form {...squealform}>
         <form onSubmit={createSqueal} className="container grid w-full gap-2">
           <FormField

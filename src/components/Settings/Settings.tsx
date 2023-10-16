@@ -1,4 +1,4 @@
-import HeaderLogo from '@/components/HeaderLogo';
+import LoggedHeader from '@/components/Header/LoggedHeader';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { H1 } from '@/components/ui/typography';
 import { useUser } from '@/lib/auth';
@@ -41,9 +41,7 @@ const Settings = () => {
 
   return (
     <>
-      <header className="order-first my-3 flex w-full items-center justify-around">
-        <HeaderLogo />
-      </header>
+      <LoggedHeader />
 
       <H1 className="mx-auto mb-4 w-[80vw] max-w-md pl-2">Impostazioni</H1>
       <Tabs
