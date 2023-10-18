@@ -1,4 +1,9 @@
-import { getSqueal, getSqueals, updateSqueal } from '@/api/squeals';
+import {
+  createSqueal,
+  getSqueal,
+  getSqueals,
+  updateSqueal,
+} from '@/api/squeals';
 import type { squealRead_t } from '@/utils/types';
 import {
   useInfiniteQuery,
@@ -6,6 +11,8 @@ import {
   useQuery,
   useQueryClient,
 } from '@tanstack/react-query';
+import { toast } from 'sonner';
+import { isValidationErrorLike } from 'zod-validation-error';
 
 export const squealsKey = {
   all: [{ scope: 'squeals' }] as const,
@@ -62,3 +69,18 @@ export const useUpdateSquealMutation = () => {
     },
   });
 };
+
+export const useCreateSquealMutation = () =>
+  useMutation({
+    mutationFn: createSqueal,
+    onError(error) {
+      if (isValidationErrorLike(error)) {
+        return toast.error(error.message);
+      }
+    },
+    meta: {
+      errorMessages: {
+        generic: 'Qualcosa è andato storto, riprova più tardi',
+      },
+    },
+  });

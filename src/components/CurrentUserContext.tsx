@@ -10,7 +10,6 @@ export const useUserContext = () => {
 };
 
 export const CurrentUserContextProvider = () => {
-  console.log('CurrentUserContextProvider');
   const currentUserQuery = useUser();
   const location = useLocation();
 

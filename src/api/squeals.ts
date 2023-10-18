@@ -48,8 +48,8 @@ export const getChannelSqueals = async (
 export const createSqueal = async (
   squeal: squealWrite_t,
 ): Promise<squealRead_t> => {
-  const response = await axios.post<squealRead_t>('/squeals', squeal);
-  return response.data;
+  const response = await axios.post<unknown>('/squeals/', squeal);
+  return validate(response.data, squealReadSchema);
 };
 
 export const getSqueal = async ({
