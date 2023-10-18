@@ -2,7 +2,7 @@ import { errorMessage } from '@/utils/type-guards';
 import { useRouteError } from 'react-router-dom';
 import { H1, Muted, P } from '@/components/ui/typography';
 
-export default function ErrorPage() {
+export const ErrorPage = () => {
   const error = useRouteError();
 
   return (
@@ -12,4 +12,4 @@ export default function ErrorPage() {
       <Muted>{errorMessage(error)}</Muted>
     </div>
   );
-}
+};

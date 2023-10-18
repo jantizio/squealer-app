@@ -1,9 +1,9 @@
 import { useUserContext } from '@/components/CurrentUserContext';
-import LoggedHeader from '@/components/Header/LoggedHeader';
+import { LoggedHeader } from '@/components/Header/LoggedHeader';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { H1 } from '@/components/ui/typography';
-import Account from './Account';
-import SocialMediaManager from './SocialMediaManager';
+import { Account } from './Account';
+import { SocialMediaManager } from './SocialMediaManager';
 
 type settingsPage = {
   category: string;
@@ -11,7 +11,7 @@ type settingsPage = {
   hasPermission: boolean;
 };
 
-const Settings = () => {
+export const Settings = () => {
   const authUser = useUserContext();
   if (!authUser) {
     throw new Error('CurrentUserContext: No value provided');
@@ -50,22 +50,26 @@ const Settings = () => {
         className="mx-auto w-[80vw] max-w-md"
       >
         <TabsList className="w-full">
-          {settings.map((page, i) => {
+          {settings.map((page) => {
             if (!page.hasPermission) return undefined;
 
             return (
-              <TabsTrigger key={i} value={page.category} className="grow">
+              <TabsTrigger
+                key={page.category}
+                value={page.category}
+                className="grow"
+              >
                 {page.category}
               </TabsTrigger>
             );
           })}
         </TabsList>
         <div className="w-full p-1">
-          {settings.map((page, i) => {
+          {settings.map((page) => {
             if (!page.hasPermission) return undefined;
 
             return (
-              <TabsContent key={i} value={page.category}>
+              <TabsContent key={page.category} value={page.category}>
                 {page.component}
               </TabsContent>
             );
@@ -75,5 +79,3 @@ const Settings = () => {
     </>
   );
 };
-
-export default Settings;

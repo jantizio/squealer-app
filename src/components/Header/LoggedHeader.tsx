@@ -1,6 +1,6 @@
-import HeaderLogo from '@/components/HeaderLogo';
-import ChannelsSidebar from '@/components/Homepage/ChannelsSidebar';
-import SearchBar from '@/components/SearchBar';
+import { HeaderLogo } from '@/components/HeaderLogo';
+import { ChannelsSidebar } from '@/components/Homepage/ChannelsSidebar';
+import { SearchBar } from '@/components/SearchBar';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import {
@@ -29,7 +29,7 @@ type HeaderProps = {
   setFilter?: Dispatch<SetStateAction<string>>;
 };
 
-function LoggedHeader({ isHome, setFilter }: HeaderProps) {
+export const LoggedHeader = ({ isHome, setFilter }: HeaderProps) => {
   const { data: authUser } = useUser();
   const navigate = useNavigate();
   const { mutate: logoutUser } = useLogout();
@@ -103,6 +103,4 @@ function LoggedHeader({ isHome, setFilter }: HeaderProps) {
       )}
     </header>
   );
-}
-
-export default LoggedHeader;
+};

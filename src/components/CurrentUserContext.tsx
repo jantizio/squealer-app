@@ -1,7 +1,7 @@
 import { useUser } from '@/lib/auth';
 import type { userRead_t } from '@/utils/types';
 import { createContext, useContext } from 'react';
-import { Navigate, Outlet } from 'react-router-dom';
+import { Navigate, Outlet, useLocation } from 'react-router-dom';
 
 const CurrentUserContext = createContext<userRead_t | null>(null);
 
@@ -12,6 +12,7 @@ export const useUserContext = () => {
 export const CurrentUserContextProvider = () => {
   console.log('CurrentUserContextProvider');
   const currentUserQuery = useUser();
+  const location = useLocation();
 
   // if is loading show loading page
   if (currentUserQuery.isLoading) {
@@ -32,7 +33,7 @@ export const CurrentUserContextProvider = () => {
 
   // if user is not logged in redirect to login page
   if (currentUserQuery.data === null) {
-    return <Navigate to="/login" />;
+    return <Navigate to="/login" state={{ from: location }} replace />;
   }
 
   return (

@@ -10,13 +10,13 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { H1 } from '@/components/ui/typography';
-import useLogin from '@/hooks/useLogin';
+import { useLogin } from '@/hooks/useLogin';
 import { loginFormSchema, type loginForm_t } from '@/schema/loginValidator';
 import { type login_t } from '@/schema/shared-schema/loginValidator';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 
-function Login() {
+export const Login = () => {
   const loginForm = useForm<loginForm_t>({
     resolver: zodResolver(loginFormSchema),
     defaultValues: {
@@ -96,6 +96,4 @@ function Login() {
       </Form>
     </main>
   );
-}
-
-export default Login;
+};

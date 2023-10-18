@@ -23,8 +23,9 @@ function validateArray<T extends z.ZodTypeAny>(
   return validatedData;
 }
 
+// It overrides the default parse method for arrays
 export function validate<T extends z.ZodTypeAny>(
-  data: unknown | unknown[],
+  data: unknown,
   schema: T,
 ): z.infer<T> {
   if (Array.isArray(data) && schema instanceof z.ZodArray) {

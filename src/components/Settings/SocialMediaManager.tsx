@@ -12,7 +12,7 @@ import { H2, H3, P } from '@/components/ui/typography';
 import { useUser } from '@/lib/auth';
 import { useForm } from 'react-hook-form';
 
-const SocialMediaManager = () => {
+export const SocialMediaManager = () => {
   const { data: authUser } = useUser();
 
   const smmForm = useForm({ defaultValues: { SMM: '' } });
@@ -65,5 +65,3 @@ const SocialMediaManager = () => {
     </>
   );
 };
-
-export default SocialMediaManager;

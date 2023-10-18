@@ -23,7 +23,7 @@ type MediaInputProp<
   reset: () => void;
 };
 
-const MediaInput = <
+export const MediaInput = <
   TFieldValues extends FieldValues,
   TName extends FieldPath<TFieldValues>,
 >({
@@ -59,5 +59,3 @@ const MediaInput = <
     </FormItem>
   );
 };
-
-export default MediaInput;

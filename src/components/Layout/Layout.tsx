@@ -1,7 +1,7 @@
 import { Outlet } from 'react-router-dom';
 import { useUser } from '@/lib/auth';
 
-const Layout = () => {
+export const Layout = () => {
   const { data: user } = useUser();
 
   return (
@@ -12,5 +12,3 @@ const Layout = () => {
     </>
   );
 };
-
-export default Layout;

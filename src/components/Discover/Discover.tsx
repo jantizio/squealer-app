@@ -1,9 +1,9 @@
-import ChannelList from '@/components/ChannelList';
-import AnonymousHeader from '@/components/Header/AnonymousHeader';
-import LoggedHeader from '@/components/Header/LoggedHeader';
-import useIsAuthenticated from '@/hooks/useIsAuthenticated';
+import { ChannelList } from '@/components/ChannelList';
+import { AnonymousHeader } from '@/components/Header/AnonymousHeader';
+import { LoggedHeader } from '@/components/Header/LoggedHeader';
+import { useIsAuthenticated } from '@/hooks/useIsAuthenticated';
 
-const Discover = () => {
+export const Discover = () => {
   const isAuthenticated = useIsAuthenticated();
 
   return (
@@ -26,5 +26,3 @@ const Discover = () => {
     </>
   );
 };
-
-export default Discover;

@@ -1,13 +1,13 @@
-import LoggedHeader from '@/components/Header/LoggedHeader';
-import MessageScroller from '@/components/MessageScroller';
+import { LoggedHeader } from '@/components/Header';
+import { MessageScroller } from '@/components/MessageScroller';
 import { Button } from '@/components/ui/button';
 import { PenSquare } from 'lucide-react';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDebounce } from 'usehooks-ts';
-import ChannelsSidebar from './ChannelsSidebar';
+import { ChannelsSidebar } from './ChannelsSidebar';
 
-const LoggedHome = () => {
+export const LoggedHome = () => {
   const [filter, setFilter] = useState('');
   const debouncedFilter = useDebounce(filter, 500);
   const navigate = useNavigate();
@@ -42,5 +42,3 @@ const LoggedHome = () => {
     </>
   );
 };
-
-export default LoggedHome;

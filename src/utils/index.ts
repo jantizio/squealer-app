@@ -19,7 +19,7 @@ export function formatNumber(num: number) {
     { value: 1e15, symbol: 'P' },
     { value: 1e18, symbol: 'E' },
   ];
-  const rx = /\.0+$|(\.[0-9]*[1-9])0+$/;
+  const rx = /\.0+$|(\.\d*[1-9])0+$/;
   let item = lookup
     .slice()
     .reverse()

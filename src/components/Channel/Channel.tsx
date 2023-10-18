@@ -1,6 +1,6 @@
-import AnonymousHeader from '@/components/Header/AnonymousHeader';
-import LoggedHeader from '@/components/Header/LoggedHeader';
-import MessageScroller from '@/components/MessageScroller';
+import { AnonymousHeader } from '@/components/Header/AnonymousHeader';
+import { LoggedHeader } from '@/components/Header/LoggedHeader';
+import { MessageScroller } from '@/components/MessageScroller';
 import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
 import { A, H1, Large, Muted } from '@/components/ui/typography';
@@ -11,7 +11,7 @@ import { AxiosError } from 'axios';
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
-const Channel = () => {
+export const Channel = () => {
   const { channelName } = useParams<{ channelName: string }>();
   const navigate = useNavigate();
   const { data: authUser } = useUser();
@@ -140,5 +140,3 @@ const Channel = () => {
     </>
   );
 };
-
-export default Channel;

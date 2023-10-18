@@ -25,7 +25,7 @@ type receiverInputProp<
   field: ControllerRenderProps<TFieldValues, TName>;
 };
 
-const TypeSelect = <
+export const TypeSelect = <
   TFieldValues extends FieldValues,
   TName extends FieldPath<TFieldValues>,
 >({
@@ -53,5 +53,3 @@ const TypeSelect = <
     </FormItem>
   );
 };
-
-export default TypeSelect;

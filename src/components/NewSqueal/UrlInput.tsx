@@ -20,7 +20,7 @@ type UrlInputProp<
   disabled?: boolean;
 };
 
-const UrlInput = <
+export const UrlInput = <
   TFieldValues extends FieldValues,
   TName extends FieldPath<TFieldValues>,
 >({
@@ -40,5 +40,3 @@ const UrlInput = <
     </FormItem>
   );
 };
-
-export default UrlInput;

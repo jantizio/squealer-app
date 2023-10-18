@@ -7,10 +7,6 @@ import { errorPayloadCheck } from '@/utils/type-guards';
 let refreshPromise: Promise<string> | null = null;
 const clearPromise = () => (refreshPromise = null);
 
-// export const backendApi = axios.create({
-//   baseURL: BASE_URL,
-// });
-
 export const axios = Axios.create({
   baseURL: BASE_URL,
   headers: { 'Content-Type': 'application/json' },
@@ -39,7 +35,6 @@ axios.interceptors.response.use(
       }
 
       await refreshPromise;
-      // await refreshAccessToken();
       return axios(prevRequest);
     }
 

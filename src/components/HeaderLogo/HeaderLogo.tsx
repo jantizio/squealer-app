@@ -7,7 +7,7 @@ type HeaderLogoProps = {
   responsive?: boolean;
 };
 
-const HeaderLogo = ({ responsive }: HeaderLogoProps) => {
+export const HeaderLogo = ({ responsive }: HeaderLogoProps) => {
   return (
     <Link to="/">
       <div className="flex items-center">
@@ -19,5 +19,3 @@ const HeaderLogo = ({ responsive }: HeaderLogoProps) => {
     </Link>
   );
 };
-
-export default HeaderLogo;

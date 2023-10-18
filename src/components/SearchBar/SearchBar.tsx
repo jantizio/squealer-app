@@ -10,7 +10,7 @@ type SearchBarProps = {
   className?: string;
 };
 
-const SearchBar = ({ setFilter, className }: SearchBarProps) => {
+export const SearchBar = ({ setFilter, className }: SearchBarProps) => {
   const searchForm = useForm<{ search: string }>({
     defaultValues: { search: '' },
   });
@@ -48,5 +48,3 @@ const SearchBar = ({ setFilter, className }: SearchBarProps) => {
     </Form>
   );
 };
-
-export default SearchBar;

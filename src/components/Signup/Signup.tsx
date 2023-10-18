@@ -9,7 +9,7 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { H1 } from '@/components/ui/typography';
-import useRegister from '@/hooks/useRegister';
+import { useRegister } from '@/hooks/useRegister';
 import type { userWrite_t } from '@/utils/types';
 import {
   registerFormSchema,
@@ -18,7 +18,7 @@ import {
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 
-function Signup() {
+export const Signup = () => {
   const signupForm = useForm<registerForm_t>({
     resolver: zodResolver(registerFormSchema),
     defaultValues: {
@@ -155,6 +155,4 @@ function Signup() {
       </Form>
     </main>
   );
-}
-
-export default Signup;
+};

@@ -1,10 +1,9 @@
 import type { quota_t } from '@/utils/types';
 import { squealFormSchema } from '@/schema/squealValidator';
 import { useUser } from '@/lib/auth';
+import { nonTextQuota } from '@/config';
 
-const nonTextQuota = 80;
-
-export default function useSquealerQuota() {
+export const useSquealerQuota = () => {
   const { data: authUser } = useUser();
 
   const defaultData: quota_t = {
@@ -72,4 +71,4 @@ export default function useSquealerQuota() {
   // );
 
   return { quota, updatedsquealSchema };
-}
+};

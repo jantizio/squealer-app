@@ -1,7 +1,7 @@
-import Message from '@/components/Message';
+import { Message } from '@/components/Message';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Skeleton } from '@/components/ui/skeleton';
-import useInfiniteScroll from '@/hooks/useInfiniteScroll';
+import { useInfiniteScroll } from '@/hooks/useInfiniteScroll';
 import { AlertCircle, Loader2, Frown } from 'lucide-react';
 import { H1, Large } from '@/components/ui/typography';
 
@@ -11,7 +11,7 @@ type MessageScrollerProps = {
   channelName?: string;
 };
 
-const MessageScroller = ({
+export const MessageScroller = ({
   filter,
   author,
   channelName,
@@ -77,4 +77,3 @@ const MessageScroller = ({
     </div>
   );
 };
-export default MessageScroller;

@@ -13,5 +13,5 @@ export function lazyImport<
   });
 }
 
-// Usage
+// Example Usage
 // const { Home } = lazyImport(() => import("./Home"), "Home");

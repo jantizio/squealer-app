@@ -21,7 +21,7 @@ type BodyTextAreaProp<
   quota: quota_t;
 };
 
-const BodyTextArea = <
+export const BodyTextArea = <
   TFieldValues extends FieldValues,
   TName extends FieldPath<TFieldValues>,
 >({
@@ -43,5 +43,3 @@ const BodyTextArea = <
     </FormItem>
   );
 };
-
-export default BodyTextArea;

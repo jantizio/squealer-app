@@ -19,8 +19,7 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { H2, H3 } from '@/components/ui/typography';
-import { useLogout } from '@/lib/auth';
-import { useUser } from '@/lib/auth';
+import { useLogout, useUser } from '@/lib/auth';
 import { axios } from '@/lib/axios';
 import {
   changepswFormSchema,
@@ -29,7 +28,7 @@ import {
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 
-const Account = () => {
+export const Account = () => {
   const { data: authUser } = useUser();
   const { mutate: logoutUser } = useLogout();
 
@@ -154,5 +153,3 @@ const Account = () => {
     </>
   );
 };
-
-export default Account;

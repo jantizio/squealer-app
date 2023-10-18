@@ -2,16 +2,18 @@ import { addLog } from '@/api/logs';
 import { useLogin as useLoginLib } from '@/lib/auth';
 import type { log_t } from '@/utils/types';
 import { AxiosError } from 'axios';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
 
-export default function useLogin() {
-  // const location = useLocation();
-  // const navigate = useNavigate();
-  // const from = location.state?.from?.pathname ?? '/';
+export const useLogin = () => {
+  const location = useLocation();
+  const navigate = useNavigate();
+  const from = location.state?.from ?? '/';
 
   const { mutate, ...rest } = useLoginLib({
     onSuccess() {
       toast.success('Login effettuato con successo');
+      navigate(from);
     },
     onError(error) {
       if (error instanceof AxiosError) {
@@ -34,4 +36,4 @@ export default function useLogin() {
   });
 
   return { loginUser: mutate, ...rest };
-}
+};

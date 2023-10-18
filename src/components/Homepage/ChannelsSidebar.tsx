@@ -4,14 +4,14 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from '@/components/ui/accordion';
-import ChannelList from '@/components/ChannelList';
+import { ChannelList } from '@/components/ChannelList';
 import { cn } from '@/utils';
 
 type ChannelsSidebarProps = {
   className?: string;
 };
 
-const ChannelsSidebar = ({ className }: ChannelsSidebarProps) => {
+export const ChannelsSidebar = ({ className }: ChannelsSidebarProps) => {
   return (
     <Accordion
       type="multiple"
@@ -39,5 +39,3 @@ const ChannelsSidebar = ({ className }: ChannelsSidebarProps) => {
     </Accordion>
   );
 };
-
-export default ChannelsSidebar;

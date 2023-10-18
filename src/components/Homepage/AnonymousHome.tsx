@@ -1,8 +1,8 @@
-import ChannelList from '@/components/ChannelList';
-import AnonymousHeader from '@/components/Header/AnonymousHeader';
-import MessageScroller from '@/components/MessageScroller';
+import { ChannelList } from '@/components/ChannelList';
+import { AnonymousHeader } from '@/components/Header/AnonymousHeader';
+import { MessageScroller } from '@/components/MessageScroller';
 
-const AnonymousHome = () => {
+export const AnonymousHome = () => {
   return (
     <>
       <AnonymousHeader isHome />
@@ -25,5 +25,3 @@ const AnonymousHome = () => {
     </>
   );
 };
-
-export default AnonymousHome;

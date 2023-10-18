@@ -1,7 +1,7 @@
-import LoggedHeader from '@/components/Header/LoggedHeader';
+import { LoggedHeader } from '@/components/Header/LoggedHeader';
 import { Button } from '@/components/ui/button';
 import { Form, FormField, FormItem, FormMessage } from '@/components/ui/form';
-import useSquealerQuota from '@/hooks/useSquealerQuota';
+import { useSquealerQuota } from '@/hooks/useSquealerQuota';
 import { useToast } from '@/hooks/useToast';
 import { axios } from '@/lib/axios';
 import { squealWriteSchema } from '@/schema/shared-schema/squealValidators';
@@ -9,15 +9,15 @@ import { receiverString } from '@/schema/shared-schema/utils/global';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
-import BodyTextArea from './BodyTextArea';
-import MediaInput from './MediaInput';
-import ReceiverInput from './ReceiverInput';
-import ReceiversCheckbox from './ReceiversCheckbox';
-import TypeSelect from './TypeSelect';
-import UrlInput from './UrlInput';
+import { BodyTextArea } from './BodyTextArea';
+import { MediaInput } from './MediaInput';
+import { ReceiverInput } from './ReceiverInput';
+import { ReceiversCheckbox } from './ReceiversCheckbox';
+import { TypeSelect } from './TypeSelect';
+import { UrlInput } from './UrlInput';
 import { useUserContext } from '@/components/CurrentUserContext';
 
-const NewSqueal = () => {
+export const NewSqueal = () => {
   const authUser = useUserContext();
   if (!authUser) {
     throw new Error('CurrentUserContext: No value provided');
@@ -118,9 +118,9 @@ const NewSqueal = () => {
             render={({ field }) => {
               return (
                 <FormItem>
-                  {field.value.map((receiver, id) => (
+                  {field.value.map((receiver) => (
                     <FormField
-                      key={id}
+                      key={receiver}
                       control={squealform.control}
                       name="receivers"
                       render={({ field }) => (
@@ -192,5 +192,3 @@ const NewSqueal = () => {
     </>
   );
 };
-
-export default NewSqueal;

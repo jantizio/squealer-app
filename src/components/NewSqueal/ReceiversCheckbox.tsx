@@ -23,7 +23,7 @@ type ReceiversCheckboxProp<
   receiver: string;
 };
 
-const ReceiversCheckbox = <
+export const ReceiversCheckbox = <
   TFieldValues extends FieldValues,
   TName extends FieldPath<TFieldValues>,
 >({
@@ -46,5 +46,3 @@ const ReceiversCheckbox = <
     </FormItem>
   );
 };
-
-export default ReceiversCheckbox;

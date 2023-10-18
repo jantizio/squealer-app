@@ -11,7 +11,7 @@ type ChannelListProps = {
   className?: string;
 };
 
-const ChannelList = ({
+export const ChannelList = ({
   filter,
   removeButton = false,
   className = '',
@@ -48,5 +48,3 @@ const ChannelList = ({
     </ul>
   );
 };
-
-export default ChannelList;

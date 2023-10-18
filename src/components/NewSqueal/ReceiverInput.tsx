@@ -22,7 +22,7 @@ type ReceiverInputProp<
   onClick: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
 };
 
-const ReceiverInput = <
+export const ReceiverInput = <
   TFieldValues extends FieldValues,
   TName extends FieldPath<TFieldValues>,
 >({

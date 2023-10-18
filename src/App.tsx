@@ -1,13 +1,13 @@
 import { RouterProvider, createBrowserRouter } from 'react-router-dom';
-import Channel from './components/Channel';
+import { Channel } from './components/Channel';
 import { CurrentUserContextProvider } from './components/CurrentUserContext.tsx';
-import Discover from './components/Discover';
-import ErrorPage from './components/ErrorPage';
-import Homepage from './components/Homepage';
-import Login from './components/Login';
-import NewSqueal from './components/NewSqueal';
-import Settings from './components/Settings';
-import Signup from './components/Signup';
+import { Discover } from './components/Discover';
+import { ErrorPage } from './components/ErrorPage';
+import { Homepage } from './components/Homepage';
+import { Login } from './components/Login';
+import { NewSqueal } from './components/NewSqueal';
+import { Settings } from './components/Settings';
+import { Signup } from './components/Signup';
 
 function App() {
   return <RouterProvider router={router} />;

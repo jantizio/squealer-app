@@ -1,6 +1,6 @@
-import ChannelList from '@/components/ChannelList';
-import HeaderLogo from '@/components/HeaderLogo';
-import ModeToggle from '@/components/ModeToggle';
+import { ChannelList } from '@/components/ChannelList';
+import { HeaderLogo } from '@/components/HeaderLogo';
+import { ModeToggle } from '@/components/ModeToggle';
 import { Button } from '@/components/ui/button';
 import {
   Sheet,
@@ -16,7 +16,7 @@ import { useNavigate } from 'react-router-dom';
 type HeaderProps = {
   isHome?: boolean;
 };
-function AnonymousHeader({ isHome }: HeaderProps) {
+export const AnonymousHeader = ({ isHome }: HeaderProps) => {
   const navigate = useNavigate();
 
   return (
@@ -63,6 +63,4 @@ function AnonymousHeader({ isHome }: HeaderProps) {
       </div>
     </header>
   );
-}
-
-export default AnonymousHeader;
+};

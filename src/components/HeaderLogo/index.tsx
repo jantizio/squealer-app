@@ -1,1 +1,1 @@
-export { default } from './HeaderLogo';
+export { HeaderLogo } from './HeaderLogo';

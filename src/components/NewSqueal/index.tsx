@@ -1,1 +1,1 @@
-export { default } from './NewSqueal';
+export { NewSqueal } from './NewSqueal';

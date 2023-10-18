@@ -1,1 +1,1 @@
-export { default } from './MessageScroller';
+export { MessageScroller } from './MessageScroller';

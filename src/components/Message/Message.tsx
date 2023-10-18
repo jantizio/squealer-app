@@ -1,6 +1,6 @@
 import { Button } from '@/components/ui/button';
 import { Large, Muted, P } from '@/components/ui/typography';
-import useIsAuthenticated from '@/hooks/useIsAuthenticated';
+import { useIsAuthenticated } from '@/hooks/useIsAuthenticated';
 import { useUpdateSquealMutation } from '@/hooks/useSqueals';
 import { formatNumber } from '@/utils';
 import type { squealRead_t } from '@/utils/types';
@@ -13,7 +13,7 @@ type messageProps = {
   children: squealRead_t;
 };
 
-const Message = forwardRef<HTMLDivElement, messageProps>(
+export const Message = forwardRef<HTMLDivElement, messageProps>(
   ({ children }, ref) => {
     const {
       _id,
@@ -88,5 +88,3 @@ const Message = forwardRef<HTMLDivElement, messageProps>(
     );
   },
 );
-
-export default Message;

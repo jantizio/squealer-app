@@ -7,11 +7,7 @@ type options = {
   channelName?: string;
 };
 
-export default function useInfiniteScroll({
-  filter,
-  author,
-  channelName,
-}: options) {
+export const useInfiniteScroll = ({ filter, author, channelName }: options) => {
   const queryObj = useSquealsQuery(filter, author, channelName);
 
   const intObserver = useRef<IntersectionObserver | null>(null);
@@ -32,4 +28,4 @@ export default function useInfiniteScroll({
   };
 
   return { ...queryObj, lastPostRef };
-}
+};

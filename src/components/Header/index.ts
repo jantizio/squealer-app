@@ -1,1 +1,2 @@
-export { default } from './LoggedHeader'; //TODO
+export { LoggedHeader } from './LoggedHeader';
+export { AnonymousHeader } from './AnonymousHeader';
