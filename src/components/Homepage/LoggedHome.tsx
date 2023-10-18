@@ -1,7 +1,6 @@
 import LoggedHeader from '@/components/Header/LoggedHeader';
 import MessageScroller from '@/components/MessageScroller';
 import { Button } from '@/components/ui/button';
-import { useUser } from '@/lib/auth';
 import { PenSquare } from 'lucide-react';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -12,9 +11,6 @@ const LoggedHome = () => {
   const [filter, setFilter] = useState('');
   const debouncedFilter = useDebounce(filter, 500);
   const navigate = useNavigate();
-
-  const { data: authUser } = useUser();
-  if (!authUser) return <div>Errore utente non definito</div>; //Should never happen
 
   return (
     <>

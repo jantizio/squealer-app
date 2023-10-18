@@ -7,6 +7,7 @@ export function errorPayloadCheck(data: unknown): data is { message: string } {
 }
 
 import type { errorMessages_t } from '@/utils/types';
+import { isRouteErrorResponse } from 'react-router-dom';
 export function isErrorMessages(object: unknown): object is errorMessages_t {
   if (typeof object !== 'object' || object === null) {
     return false;
@@ -27,4 +28,17 @@ export function isErrorMessages(object: unknown): object is errorMessages_t {
   }
 
   return true;
+}
+
+export function errorMessage(error: unknown): string {
+  if (isRouteErrorResponse(error)) {
+    return `${error.status} ${error.statusText}`;
+  } else if (error instanceof Error) {
+    return error.message;
+  } else if (typeof error === 'string') {
+    return error;
+  } else {
+    console.error(error);
+    return 'Unknown error';
+  }
 }

@@ -39,9 +39,9 @@ const Channel = () => {
   }, [error]);
 
   const subscribeButton = run(() => {
-    if (!authUser) return <></>;
+    if (!isAuthenticated) return <></>;
 
-    if (channel && channel.subscribed.includes(authUser.username))
+    if (channel?.subscribed.includes(authUser.username))
       return (
         <Button variant="secondary" size="sm">
           Iscritto

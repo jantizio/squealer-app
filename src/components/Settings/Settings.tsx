@@ -1,7 +1,7 @@
+import { useUserContext } from '@/components/CurrentUserContext';
 import LoggedHeader from '@/components/Header/LoggedHeader';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { H1 } from '@/components/ui/typography';
-import { useUser } from '@/lib/auth';
 import Account from './Account';
 import SocialMediaManager from './SocialMediaManager';
 
@@ -12,9 +12,10 @@ type settingsPage = {
 };
 
 const Settings = () => {
-  const { data: authUser } = useUser();
-
-  if (!authUser) return <div>Errore utente non definito</div>; //Should never happen
+  const authUser = useUserContext();
+  if (!authUser) {
+    throw new Error('CurrentUserContext: No value provided');
+  }
 
   const settings: settingsPage[] = [
     {

@@ -3,7 +3,6 @@ import { Button } from '@/components/ui/button';
 import { Form, FormField, FormItem, FormMessage } from '@/components/ui/form';
 import useSquealerQuota from '@/hooks/useSquealerQuota';
 import { useToast } from '@/hooks/useToast';
-import { useUser } from '@/lib/auth';
 import { axios } from '@/lib/axios';
 import { squealWriteSchema } from '@/schema/shared-schema/squealValidators';
 import { receiverString } from '@/schema/shared-schema/utils/global';
@@ -16,9 +15,13 @@ import ReceiverInput from './ReceiverInput';
 import ReceiversCheckbox from './ReceiversCheckbox';
 import TypeSelect from './TypeSelect';
 import UrlInput from './UrlInput';
+import { useUserContext } from '@/components/CurrentUserContext';
 
 const NewSqueal = () => {
-  const { data: authUser } = useUser();
+  const authUser = useUserContext();
+  if (!authUser) {
+    throw new Error('CurrentUserContext: No value provided');
+  }
   const { toast } = useToast();
   const { quota, updatedsquealSchema } = useSquealerQuota();
 
@@ -30,7 +33,7 @@ const NewSqueal = () => {
     defaultValues: {
       receiver: '',
       receivers: [],
-      author: authUser?.username,
+      author: authUser.username,
       body: { type: 'text', content: '' },
       category: [],
     },

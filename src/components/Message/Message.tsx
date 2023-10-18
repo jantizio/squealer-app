@@ -1,10 +1,10 @@
 import { Button } from '@/components/ui/button';
 import { Large, Muted, P } from '@/components/ui/typography';
+import useIsAuthenticated from '@/hooks/useIsAuthenticated';
 import { useUpdateSquealMutation } from '@/hooks/useSqueals';
-import { useUser } from '@/lib/auth';
 import { formatNumber } from '@/utils';
 import type { squealRead_t } from '@/utils/types';
-import { formatDistanceToNowStrict } from 'date-fns';
+import { formatDistanceToNowStrict as formatDate } from 'date-fns';
 import { it } from 'date-fns/locale';
 import { Eye, Frown, Smile } from 'lucide-react';
 import { forwardRef, useEffect } from 'react';
@@ -25,18 +25,17 @@ const Message = forwardRef<HTMLDivElement, messageProps>(
       datetime,
       receivers,
     } = children;
-    const { data: authUser } = useUser();
-    const isAuthenticated = !!authUser;
+    const canReact = useIsAuthenticated();
 
     const { mutate: updateSqueal } = useUpdateSquealMutation();
     const reacted = false; //TODO: use real data
 
     useEffect(() => {
       // when the component is mounted count one view
-      updateSqueal({ id: _id, operation: 'viewed' });
+      // updateSqueal({ id: _id, operation: 'viewed' });
     }, []);
 
-    const date = formatDistanceToNowStrict(datetime, {
+    const date = formatDate(datetime, {
       addSuffix: true,
       locale: it,
     });
@@ -55,7 +54,7 @@ const Message = forwardRef<HTMLDivElement, messageProps>(
             {formatNumber(impressions)}
           </Muted>
         </section>
-        <section>
+        <section className="break-words">
           {body.type === 'text' && <P>{body.content}</P>}
           {body.type === 'media' && <img src={body.content} alt="post-image" />}
         </section>
@@ -64,7 +63,7 @@ const Message = forwardRef<HTMLDivElement, messageProps>(
           <Button
             className="mx-2"
             variant={reacted ? 'secondary' : 'ghost'}
-            disabled={!isAuthenticated || reacted}
+            disabled={!canReact || reacted}
             onClick={() => updateSqueal({ id: _id, operation: 'upvote' })}
           >
             <span className={reacted ? 'text-primary' : ''}>
@@ -76,7 +75,7 @@ const Message = forwardRef<HTMLDivElement, messageProps>(
           <Button
             className="mx-2"
             variant={reacted ? 'secondary' : 'ghost'}
-            disabled={!isAuthenticated || reacted}
+            disabled={!canReact || reacted}
             onClick={() => updateSqueal({ id: _id, operation: 'downvote' })}
           >
             <span className={reacted ? 'text-primary' : ''}>
