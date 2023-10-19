@@ -13,5 +13,4 @@ export const login = async (data: login_t): Promise<string> => {
 
 export const logout = async (): Promise<void> => {
   await axios.delete('/token');
-  // window.location.assign(window.location.origin);
 };

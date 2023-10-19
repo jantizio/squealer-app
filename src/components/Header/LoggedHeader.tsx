@@ -19,7 +19,8 @@ import {
   SheetTitle,
   SheetTrigger,
 } from '@/components/ui/sheet';
-import { useLogout, useUser } from '@/lib/auth';
+import { useLogout } from '@/hooks/useLogout';
+import { useUser } from '@/lib/auth';
 import { LogOut, Menu, Settings, User } from 'lucide-react';
 import type { Dispatch, SetStateAction } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -32,7 +33,7 @@ type HeaderProps = {
 export const LoggedHeader = ({ isHome, setFilter }: HeaderProps) => {
   const { data: authUser } = useUser();
   const navigate = useNavigate();
-  const { mutate: logoutUser } = useLogout();
+  const { logoutUser } = useLogout();
 
   return (
     <header className="order-first mx-auto my-3 flex w-4/5 flex-wrap items-center justify-between md:w-10/12 lg:justify-around">

@@ -1,4 +1,4 @@
-import { refreshAccessToken } from '@/api/auth';
+import { refreshAccessToken } from '@/api/token';
 import { BASE_URL } from '@/config';
 import Axios from 'axios';
 import { errorPayloadCheck } from '@/utils/type-guards';

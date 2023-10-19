@@ -11,13 +11,14 @@ import {
   SheetTrigger,
 } from '@/components/ui/sheet';
 import { Menu } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 type HeaderProps = {
   isHome?: boolean;
 };
 export const AnonymousHeader = ({ isHome }: HeaderProps) => {
   const navigate = useNavigate();
+  const location = useLocation();
 
   return (
     <header className="order-first my-3 flex w-full items-center justify-around">
@@ -54,8 +55,15 @@ export const AnonymousHeader = ({ isHome }: HeaderProps) => {
 
       <div className="flex items-center space-x-2">
         <nav className="flex items-center space-x-2">
-          <Button onClick={() => navigate('/login')}>Accedi</Button>
-          <Button onClick={() => navigate('/signup')} variant="secondary">
+          <Button
+            onClick={() => navigate('/login', { state: { from: location } })}
+          >
+            Accedi
+          </Button>
+          <Button
+            onClick={() => navigate('/signup', { state: { from: location } })}
+            variant="secondary"
+          >
             Iscriviti
           </Button>
         </nav>

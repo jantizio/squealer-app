@@ -1,5 +1,5 @@
 import { configureAuth } from './react-query-auth';
-import { login, logout } from '@/api/auth';
+import { login, logout } from '@/api/token';
 import { createUser, getUser } from '@/api/users';
 import Cookies from 'js-cookie';
 import type { login_t, userWrite_t } from '@/utils/types';
