@@ -1,11 +1,16 @@
 import { LoggedHeader } from '@/components/Header';
 import { MessageScroller } from '@/components/MessageScroller';
-import { Button } from '@/components/ui/button';
 import { PenSquare } from 'lucide-react';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDebounce } from 'usehooks-ts';
 import { ChannelsSidebar } from './ChannelsSidebar';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from '@/components/ui/tooltip';
 
 export const LoggedHome = () => {
   const [filter, setFilter] = useState('');
@@ -30,14 +35,21 @@ export const LoggedHome = () => {
         {/* Right sidebar */}
         <aside className="order-3 hidden w-full overflow-hidden lg:block lg:w-1/4"></aside>
       </div>
-      <Button
-        className="fixed bottom-3 right-3"
-        variant="unstyled"
-        size="icon"
-        onClick={() => navigate('/create')}
-      >
-        <PenSquare className="h-icon-lg w-icon-lg" />
-      </Button>
+
+      <TooltipProvider>
+        <Tooltip>
+          <TooltipTrigger
+            className="fixed bottom-3 right-3"
+            onClick={() => navigate('/create')}
+          >
+            <PenSquare className="h-icon-lg w-icon-lg" />
+          </TooltipTrigger>
+          <TooltipContent>
+            <p>Nuovo Squeal</p>
+          </TooltipContent>
+        </Tooltip>
+      </TooltipProvider>
+
       <footer className="order-last w-full p-4"></footer>
     </>
   );
