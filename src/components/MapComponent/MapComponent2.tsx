@@ -21,7 +21,11 @@ const test: GeoJsonObject = {
 //   });
 // };
 
-export function MapComponent() {
+type MapComponentProps = {
+  data?: FeatureCollection; // TODO: togliere optional
+};
+
+export function MapComponent({ data }: MapComponentProps) {
   return (
     <MapContainer center={[50.879, 4.6997]} zoom={13} className="h-[300px]">
       <TileLayer
@@ -29,21 +33,21 @@ export function MapComponent() {
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
       <GeoJSON
-        data={testJson}
+        data={data ?? testJson}
         onEachFeature={(feature, layer) => {
           console.log('feature', feature);
           console.log('layer', layer);
-          layer.bindPopup(feature.properties.name);
+          layer.bindPopup(feature.properties.popup);
         }}
-        style={(feature) => {
-          if (feature?.geometry.type === 'Point')
-            return {
-              fillColor: 'red',
-            };
-          return {
-            color: 'blue',
-          };
-        }}
+        // style={(feature) => {
+        //   if (feature?.geometry.type === 'Point')
+        //     return {
+        //       fillColor: 'red',
+        //     };
+        //   return {
+        //     color: 'blue',
+        //   };
+        // }}
       />
     </MapContainer>
   );
@@ -59,7 +63,7 @@ const testJson: FeatureCollection = {
         coordinates: [11.1215698, 46.0677293],
       },
       properties: {
-        name: "Fontana dell'Aquila",
+        popup: "Fontana dell'Aquila",
       },
     },
     {
@@ -78,7 +82,7 @@ const testJson: FeatureCollection = {
       },
       properties: {
         lanes: 1,
-        name: 'Via Rodolfo Belenzani',
+        popup: 'Via Rodolfo Belenzani',
       },
     },
     {
@@ -134,7 +138,7 @@ const testJson: FeatureCollection = {
         ],
       },
       properties: {
-        name: 'Piazza del Duomo',
+        popup: 'Piazza del Duomo',
         surface: 'cobblestone',
       },
     },

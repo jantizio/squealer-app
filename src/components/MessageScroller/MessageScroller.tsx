@@ -4,6 +4,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { useInfiniteScroll } from '@/hooks/useInfiniteScroll';
 import { AlertCircle, Loader2, Frown } from 'lucide-react';
 import { H1, Large } from '@/components/ui/typography';
+import type { squealRead_t } from '@/utils/types';
 
 type MessageScrollerProps = {
   filter?: string;
@@ -22,9 +23,11 @@ export const MessageScroller = ({
     channelName,
   });
 
-  const squealsList = data?.pages;
+  const squealsList2 = data?.pages;
 
-  if (squealsList) {
+  if (squealsList2) {
+    const squealsList = [...mockData, ...squealsList2];
+
     if (squealsList.length > 0)
       return (
         <div className="container mt-14">
@@ -77,3 +80,35 @@ export const MessageScroller = ({
     </div>
   );
 };
+
+const mockData: squealRead_t[] = [
+  {
+    _id: '1',
+    author: '@Giovanni',
+    body: {
+      type: 'geo',
+      content: {
+        type: 'FeatureCollection',
+        features: [
+          {
+            type: 'Feature',
+            properties: {
+              title: 'Mapbox',
+              popup: 'Washington, D.C.',
+            },
+            geometry: {
+              type: 'Point',
+              coordinates: [-77.032, 38.913],
+            },
+          },
+        ],
+      },
+    },
+    category: [],
+    datetime: new Date(),
+    impressions: 200000000,
+    negative_reaction: 0,
+    positive_reaction: 0,
+    receivers: ['§animals', '@marco'],
+  },
+];
