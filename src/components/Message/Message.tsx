@@ -8,7 +8,7 @@ import { formatDistanceToNowStrict as formatDate } from 'date-fns';
 import { it } from 'date-fns/locale';
 import { Eye, Frown, Smile } from 'lucide-react';
 import { forwardRef, useEffect } from 'react';
-import { MapComponent } from '../MapComponent/MapComponent2';
+import { MapComponent } from '@/components/MapComponent';
 
 type messageProps = {
   children: squealRead_t;
@@ -58,7 +58,13 @@ export const Message = forwardRef<HTMLDivElement, messageProps>(
         <section className="break-words">
           {body.type === 'text' && <P>{body.content}</P>}
           {body.type === 'media' && <img src={body.content} alt="post-image" />}
-          {body.type === 'geo' && <MapComponent data={body.content} />}
+          {body.type === 'geo' && (
+            <MapComponent
+              data={body.content}
+              center={body.content.center}
+              zoom={body.content.zoom}
+            />
+          )}
         </section>
         <section className="flex justify-end">
           {/* Buttons are ghost if unused, if reaction then secondary and reacted becomes primary */}

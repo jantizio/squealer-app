@@ -81,6 +81,7 @@ export const MessageScroller = ({
   );
 };
 
+// TODO: remove mock data
 const mockData: squealRead_t[] = [
   {
     _id: '1',
@@ -102,6 +103,7 @@ const mockData: squealRead_t[] = [
             },
           },
         ],
+        center: [12.492507, 41.890251],
       },
     },
     category: [],
