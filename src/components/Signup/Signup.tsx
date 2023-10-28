@@ -23,7 +23,6 @@ export const Signup = () => {
     resolver: zodResolver(registerFormSchema),
     defaultValues: {
       email: '',
-      propic: null,
       username: '',
       firstname: '',
       lastname: '',
