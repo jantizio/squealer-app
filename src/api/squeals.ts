@@ -70,8 +70,8 @@ export const updateSqueal = async ({
   id: string;
   operation: squealOperation_t;
 }): Promise<squealRead_t> => {
-  const response = await axios.patch<squealRead_t>(`/squeals/${id}`, {
+  const response = await axios.patch<unknown>(`/squeals/${id}`, {
     op: operation,
   });
-  return response.data;
+  return validate(response.data, squealReadSchema);
 };

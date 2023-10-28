@@ -10,6 +10,7 @@ import {
   useMutation,
   useQuery,
   useQueryClient,
+  type InfiniteData,
 } from '@tanstack/react-query';
 import { toast } from 'sonner';
 import { isValidationErrorLike } from 'zod-validation-error';
@@ -58,12 +59,19 @@ export const useUpdateSquealMutation = () => {
     mutationFn: updateSqueal,
     onSuccess: (newSqueal) => {
       // queryClient.invalidateQueries(squealsKey.lists()); //TODO: safe se sotto non va
-      queryClient.setQueriesData<squealRead_t[]>(
+      queryClient.setQueriesData<InfiniteData<squealRead_t[]>>(
         squealsKey.lists(),
         (oldData) => {
-          return oldData?.map((squeal) =>
-            squeal._id === newSqueal._id ? newSqueal : squeal,
+          const newPage = oldData?.pages.map((page) =>
+            page.map((squeal) =>
+              squeal._id === newSqueal._id ? newSqueal : squeal,
+            ),
           );
+
+          return {
+            pageParams: oldData?.pageParams ?? [],
+            pages: newPage ?? [],
+          };
         },
       );
     },

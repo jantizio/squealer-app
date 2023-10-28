@@ -10,8 +10,7 @@ export const getChannels = async ({
 }: ChannelsQueryContext['filter']): Promise<channel_t[]> => {
   const query = run(() => {
     if (filter === 'official') return '?official=true';
-    else if (filter === 'subscribed')
-      return '?type=public&official=false'; // TODO: use the right query
+    else if (filter === 'subscribed') return '?subscribed=true';
     else if (filter === 'direct')
       return '?type=private'; // TODO: use the right query
     else return '';
