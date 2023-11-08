@@ -9,7 +9,11 @@ type MapComponentProps = {
   zoom?: number;
 };
 
-export function MapComponent({ data, center, zoom }: MapComponentProps) {
+export function MapComponent({
+  data,
+  center,
+  zoom,
+}: Readonly<MapComponentProps>) {
   return (
     <MapContainer center={center} zoom={zoom ?? 13} className="h-[300px]">
       <TileLayer

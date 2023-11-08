@@ -43,7 +43,7 @@ export const TypeSelect = <
         <SelectContent>
           <SelectItem value="text">Testo</SelectItem>
           <SelectItem value="media">Immagine/Video</SelectItem>
-          <SelectItem value="geolocation">Geolocazione</SelectItem>
+          <SelectItem value="geo">Geolocazione</SelectItem>
         </SelectContent>
       </Select>
       <FormDescription>

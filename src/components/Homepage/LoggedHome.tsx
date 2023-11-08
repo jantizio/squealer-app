@@ -11,7 +11,6 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from '@/components/ui/tooltip';
-import { MapComponent, MapComponent2 } from '@/components/MapComponent';
 
 export const LoggedHome = () => {
   const [filter, setFilter] = useState('');
@@ -35,8 +34,6 @@ export const LoggedHome = () => {
 
         {/* Right sidebar */}
         <aside className="order-3 hidden w-full overflow-hidden lg:block lg:w-1/4">
-          <MapComponent />
-          <MapComponent2 />
         </aside>
       </div>
 
