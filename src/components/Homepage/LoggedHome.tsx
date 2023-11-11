@@ -33,7 +33,8 @@ export const LoggedHome = () => {
         </aside>
 
         {/* Right sidebar */}
-        <aside className="order-3 hidden w-full overflow-hidden lg:block lg:w-1/4"></aside>
+        <aside className="order-3 hidden w-full overflow-hidden lg:block lg:w-1/4">
+        </aside>
       </div>
 
       <TooltipProvider>

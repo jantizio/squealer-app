@@ -55,20 +55,19 @@ export const useSquealerQuota = () => {
         message: `Per le immagini o i video hai bisogno di ${nonTextQuota} caratteri di quota`,
         path: ['body.content'],
       },
+    )
+    .refine(
+      (data) => {
+        if (data.body.type === 'geo') {
+          return nonTextQuota <= quota.maxD - quota.actualD;
+        }
+        return true;
+      },
+      {
+        message: `Per la geolocalizzazione hai bisogno di ${nonTextQuota} caratteri di quota`,
+        path: ['body.content'],
+      },
     );
-  // TODO: refine per le geolocazioni
-  // .refine(
-  //   (data) => {
-  //     if (data.body.type === 'geolocation') {
-  //       return nonTextQuota <= quota.maxD - quota.actualD;
-  //     }
-  //     return true;
-  //   },
-  //   {
-  //     message: `Per la geolocalizzazione hai bisogno di ${nonTextQuota} caratteri di quota`,
-  //     path: ['body.content'],
-  //   },
-  // );
 
   return { quota, updatedsquealSchema };
 };

@@ -1,6 +1,7 @@
 import { addMedia } from '@/api/media';
 import { useUserContext } from '@/components/CurrentUserContext';
 import { LoggedHeader } from '@/components/Header/LoggedHeader';
+import { MapComponent } from '@/components/MapComponent';
 import { Button } from '@/components/ui/button';
 import { Form, FormField, FormItem, FormMessage } from '@/components/ui/form';
 import { useSquealerQuota } from '@/hooks/useSquealerQuota';
@@ -9,6 +10,7 @@ import { squealWriteSchema } from '@/schema/shared-schema/squealValidators';
 import { receiverString } from '@/schema/shared-schema/utils/global';
 import { validate } from '@/utils/validators';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useGeolocated } from 'react-geolocated';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { z } from 'zod';
@@ -18,6 +20,7 @@ import { ReceiverInput } from './ReceiverInput';
 import { ReceiversCheckbox } from './ReceiversCheckbox';
 import { TypeSelect } from './TypeSelect';
 import { UrlInput } from './UrlInput';
+import type { featureCollection_t } from '@/schema/shared-schema/utils/geojson';
 
 export const NewSqueal = () => {
   const authUser = useUserContext();
@@ -40,6 +43,15 @@ export const NewSqueal = () => {
       category: [],
     },
   });
+
+  const { coords, isGeolocationAvailable, isGeolocationEnabled, getPosition } =
+    useGeolocated({
+      positionOptions: {
+        enableHighAccuracy: true,
+      },
+      watchPosition: true,
+      isOptimisticGeolocationEnabled: false,
+    });
 
   function addReceiver() {
     const recv = squealform.getValues('receiver');
@@ -80,14 +92,28 @@ export const NewSqueal = () => {
         }
       }
 
-      createSqueal(validate(values, squealWriteSchema));
+      let formResult: object = {
+        ...values,
+      };
+      if (values.body.type === 'geo') {
+        formResult = {
+          ...formResult,
+          body: {
+            type: values.body.type,
+            content: values.body.geo,
+          },
+        };
+      }
+
+      createSqueal(validate(formResult, squealWriteSchema));
     },
     (err) => console.log('err', err),
   );
 
-  const currType = squealform.watch('body.type');
-  const currContent = squealform.watch('body.content');
-  const currMedia = squealform.watch('body.file');
+  const currType = squealform.getValues('body.type');
+  const currContent = squealform.getValues('body.content');
+  const currMedia = squealform.getValues('body.file');
+  const currGeo = squealform.getValues('body.geo');
   const form = squealform.watch();
 
   return (
@@ -177,7 +203,60 @@ export const NewSqueal = () => {
             </>
           )}
 
-          {/* {currType === 'geolocation' && <div>Geolocazione</div>} */}
+          {currType === 'geo' && (
+            // https://www.npmjs.com/package/react-geocode
+
+            <FormField
+              name="body.content"
+              control={squealform.control}
+              shouldUnregister={true}
+              render={() => {
+                return (
+                  <FormItem>
+                    <Button
+                      type="button"
+                      disabled={
+                        !isGeolocationAvailable || !isGeolocationEnabled
+                      }
+                      onClick={() => {
+                        getPosition();
+                        const newGeo: featureCollection_t = {
+                          type: 'FeatureCollection',
+                          features: [
+                            {
+                              type: 'Feature',
+                              properties: {
+                                popup: `posizione di ${authUser.username}`,
+                              },
+                              geometry: {
+                                type: 'Point',
+                                coordinates: [
+                                  coords?.longitude ?? 0,
+                                  coords?.latitude ?? 0,
+                                ],
+                              },
+                            },
+                          ],
+                          center: [
+                            coords?.latitude ?? 0,
+                            coords?.longitude ?? 0,
+                          ],
+                        };
+
+                        squealform.setValue('body.geo', newGeo);
+                      }}
+                    >
+                      Salva
+                    </Button>
+                    {!!currGeo && (
+                      <MapComponent center={currGeo.center} data={currGeo} />
+                    )}
+                    <FormMessage />
+                  </FormItem>
+                );
+              }}
+            />
+          )}
 
           <Button type="submit">Invia</Button>
         </form>

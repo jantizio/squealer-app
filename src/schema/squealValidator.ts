@@ -3,8 +3,10 @@ import {
   squealWriteSchema,
   mediaBody,
   textBody,
+  geoBody,
 } from './shared-schema/squealValidators';
 import { receiverString } from './shared-schema/utils/global';
+import { featureCollectionSchema } from './shared-schema/utils/geojson';
 
 export const squealFormSchema = squealWriteSchema
   .extend({
@@ -18,6 +20,10 @@ export const squealFormSchema = squealWriteSchema
             message: "Devi caricare un'immagine o un video",
           })
           .optional(),
+      }),
+      geoBody.extend({
+        content: z.literal(''),
+        geo: featureCollectionSchema,
       }),
     ]),
   })
