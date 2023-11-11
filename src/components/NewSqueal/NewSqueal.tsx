@@ -3,13 +3,7 @@ import { useUserContext } from '@/components/CurrentUserContext';
 import { LoggedHeader } from '@/components/Header/LoggedHeader';
 import { MapComponent } from '@/components/MapComponent';
 import { Button } from '@/components/ui/button';
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormMessage,
-} from '@/components/ui/form';
+import { Form, FormField, FormItem, FormMessage } from '@/components/ui/form';
 import { useSquealerQuota } from '@/hooks/useSquealerQuota';
 import { useCreateSquealMutation } from '@/hooks/useSqueals';
 import { squealWriteSchema } from '@/schema/shared-schema/squealValidators';
@@ -27,7 +21,6 @@ import { ReceiversCheckbox } from './ReceiversCheckbox';
 import { TypeSelect } from './TypeSelect';
 import { UrlInput } from './UrlInput';
 import type { featureCollection_t } from '@/schema/shared-schema/utils/geojson';
-import { Input } from '../ui/input';
 
 export const NewSqueal = () => {
   const authUser = useUserContext();
@@ -98,11 +91,21 @@ export const NewSqueal = () => {
           values.body.content = url;
         }
       }
+
+      let formResult: object = {
+        ...values,
+      };
       if (values.body.type === 'geo') {
-        values.body.content = values.body.geo;
+        formResult = {
+          ...formResult,
+          body: {
+            type: values.body.type,
+            content: values.body.geo,
+          },
+        };
       }
 
-      createSqueal(validate(values, squealWriteSchema));
+      createSqueal(validate(formResult, squealWriteSchema));
     },
     (err) => console.log('err', err),
   );
@@ -207,12 +210,9 @@ export const NewSqueal = () => {
               name="body.content"
               control={squealform.control}
               shouldUnregister={true}
-              render={({ field }) => {
+              render={() => {
                 return (
                   <FormItem>
-                    <FormControl>
-                      <Input type="hidden" {...field} />
-                    </FormControl>
                     <Button
                       type="button"
                       disabled={
@@ -226,7 +226,7 @@ export const NewSqueal = () => {
                             {
                               type: 'Feature',
                               properties: {
-                                popup: 'Sei qui',
+                                popup: `posizione di ${authUser.username}`,
                               },
                               geometry: {
                                 type: 'Point',
@@ -243,10 +243,6 @@ export const NewSqueal = () => {
                           ],
                         };
 
-                        squealform.setValue(
-                          'body.content',
-                          JSON.stringify(newGeo),
-                        );
                         squealform.setValue('body.geo', newGeo);
                       }}
                     >

@@ -3,7 +3,7 @@ import {
   squealWriteSchema,
   mediaBody,
   textBody,
-  geoBodyString,
+  geoBody,
 } from './shared-schema/squealValidators';
 import { receiverString } from './shared-schema/utils/global';
 import { featureCollectionSchema } from './shared-schema/utils/geojson';
@@ -21,8 +21,8 @@ export const squealFormSchema = squealWriteSchema
           })
           .optional(),
       }),
-      geoBodyString.extend({
-        content: z.string().min(1, { message: 'Devi inserire una posizione' }),
+      geoBody.extend({
+        content: z.literal(''),
         geo: featureCollectionSchema,
       }),
     ]),
