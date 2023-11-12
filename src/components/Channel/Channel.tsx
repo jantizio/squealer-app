@@ -12,20 +12,14 @@ import { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 
 export const Channel = () => {
-  const { channelName } = useParams<{ channelName: string }>();
+  const { channelName } = useParams();
+  if (!channelName) throw new Error('Channel name is required');
+
   const { data: authUser } = useUser();
   const isAuthenticated = !!authUser;
   const [exists, setExists] = useState(true);
 
-  //TODO: probabilmente il layout ora presente non va bene, lascio così per non fare modifiche inutili
-  // ma servirebbe un layout a 3 colonne. Le due laterali fisse e quella centrare con la scrollbar centrale
-
-  const { data: channel, error } = useChannelQuery(
-    channelName as string,
-    exists,
-  ); // TODO: un po' sus
-
-  if (!channelName) throw new Error('Channel name is required');
+  const { data: channel, error } = useChannelQuery(channelName, exists);
 
   useEffect(() => {
     if (
