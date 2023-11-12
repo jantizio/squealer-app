@@ -14,13 +14,13 @@ import {
 } from '@/components/ui/form';
 import { Plus } from 'lucide-react';
 
-type ReceiverInputProp<
+type Props<
   TFieldValues extends FieldValues = FieldValues,
   TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
-> = {
+> = Readonly<{
   field: ControllerRenderProps<TFieldValues, TName>;
   onClick: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
-};
+}>;
 
 export const ReceiverInput = <
   TFieldValues extends FieldValues,
@@ -28,7 +28,7 @@ export const ReceiverInput = <
 >({
   field,
   onClick,
-}: ReceiverInputProp<TFieldValues, TName>) => {
+}: Props<TFieldValues, TName>) => {
   return (
     <FormItem>
       <FormLabel>Destinatari</FormLabel>

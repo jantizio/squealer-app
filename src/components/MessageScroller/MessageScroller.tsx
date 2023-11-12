@@ -6,17 +6,13 @@ import { AlertCircle, Loader2, Frown } from 'lucide-react';
 import { H1, Large } from '@/components/ui/typography';
 import type { squealRead_t } from '@/utils/types';
 
-type MessageScrollerProps = {
+type Props = Readonly<{
   filter?: string;
   author?: string;
   channelName?: string;
-};
+}>;
 
-export const MessageScroller = ({
-  filter,
-  author,
-  channelName,
-}: MessageScrollerProps) => {
+export const MessageScroller = ({ filter, author, channelName }: Props) => {
   const { data, error, isFetchingNextPage, lastPostRef } = useInfiniteScroll({
     filter,
     author,

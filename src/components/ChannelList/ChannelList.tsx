@@ -5,17 +5,17 @@ import { cn } from '@/utils';
 import type { filter_t } from '@/utils/types';
 import { X } from 'lucide-react';
 
-type ChannelListProps = {
+type Props = Readonly<{
   filter?: filter_t;
   removeButton?: boolean;
   className?: string;
-};
+}>;
 
 export const ChannelList = ({
   filter,
   removeButton = false,
   className = '',
-}: ChannelListProps) => {
+}: Props) => {
   const { data } = useChannelsQuery(filter);
 
   const channelUnsub = () => {

@@ -12,13 +12,13 @@ import {
   FormDescription,
 } from '@/components/ui/form';
 
-type UrlInputProp<
+type Props<
   TFieldValues extends FieldValues = FieldValues,
   TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
-> = {
+> = Readonly<{
   field: ControllerRenderProps<TFieldValues, TName>;
   disabled?: boolean;
-};
+}>;
 
 export const UrlInput = <
   TFieldValues extends FieldValues,
@@ -26,7 +26,7 @@ export const UrlInput = <
 >({
   field,
   disabled,
-}: UrlInputProp<TFieldValues, TName>) => {
+}: Props<TFieldValues, TName>) => {
   return (
     <FormItem>
       <FormLabel>Inserisci link</FormLabel>

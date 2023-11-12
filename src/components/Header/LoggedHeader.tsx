@@ -25,12 +25,12 @@ import { LogOut, Menu, Settings, User } from 'lucide-react';
 import type { Dispatch, SetStateAction } from 'react';
 import { Link } from 'react-router-dom';
 
-type HeaderProps = {
+type Props = Readonly<{
   isHome?: boolean;
   setFilter?: Dispatch<SetStateAction<string>>;
-};
+}>;
 
-export const LoggedHeader = ({ isHome, setFilter }: HeaderProps) => {
+export const LoggedHeader = ({ isHome, setFilter }: Props) => {
   const { data: authUser } = useUser();
   const { logoutUser } = useLogout();
 

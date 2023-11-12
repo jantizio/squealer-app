@@ -5,12 +5,12 @@ import { Search } from 'lucide-react';
 import { type SetStateAction } from 'react';
 import { useForm } from 'react-hook-form';
 
-type SearchBarProps = {
+type Props = Readonly<{
   setFilter: React.Dispatch<SetStateAction<string>>;
   className?: string;
-};
+}>;
 
-export const SearchBar = ({ setFilter, className }: SearchBarProps) => {
+export const SearchBar = ({ setFilter, className }: Props) => {
   const searchForm = useForm<{ search: string }>({
     defaultValues: { search: '' },
   });

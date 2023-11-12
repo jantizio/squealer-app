@@ -7,11 +7,11 @@ import {
 import { ChannelList } from '@/components/ChannelList';
 import { cn } from '@/utils';
 
-type ChannelsSidebarProps = {
+type Props = Readonly<{
   className?: string;
-};
+}>;
 
-export const ChannelsSidebar = ({ className }: ChannelsSidebarProps) => {
+export const ChannelsSidebar = ({ className }: Props) => {
   return (
     <Accordion
       type="multiple"

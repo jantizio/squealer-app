@@ -3,11 +3,11 @@ import { Large } from '@/components/ui/typography';
 import { cn } from '@/utils';
 import { Link } from 'react-router-dom';
 
-type HeaderLogoProps = {
+type Props = Readonly<{
   responsive?: boolean;
-};
+}>;
 
-export const HeaderLogo = ({ responsive }: HeaderLogoProps) => {
+export const HeaderLogo = ({ responsive }: Props) => {
   return (
     <Link to="/">
       <div className="flex items-center">

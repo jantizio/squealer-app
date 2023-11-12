@@ -1,10 +1,10 @@
 import { createContext, useContext, useEffect, useMemo, useState } from 'react';
 
-type ThemeProviderProps = {
+type ThemeProviderProps = Readonly<{
   children: React.ReactNode;
   defaultTheme?: string;
   storageKey?: string;
-};
+}>;
 
 type ThemeProviderState = {
   theme: string;

@@ -13,13 +13,13 @@ import {
 import { Textarea } from '@/components/ui/textarea';
 import type { quota_t } from '@/utils/types';
 
-type BodyTextAreaProp<
+type Props<
   TFieldValues extends FieldValues = FieldValues,
   TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
-> = {
+> = Readonly<{
   field: ControllerRenderProps<TFieldValues, TName>;
   quota: quota_t;
-};
+}>;
 
 export const BodyTextArea = <
   TFieldValues extends FieldValues,
@@ -27,7 +27,7 @@ export const BodyTextArea = <
 >({
   field,
   quota,
-}: BodyTextAreaProp<TFieldValues, TName>) => {
+}: Props<TFieldValues, TName>) => {
   const { actualD, maxD } = quota;
   return (
     <FormItem>

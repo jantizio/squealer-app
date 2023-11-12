@@ -18,19 +18,19 @@ import {
   SelectItem,
 } from '@/components/ui/select';
 
-type receiverInputProp<
+type Props<
   TFieldValues extends FieldValues = FieldValues,
   TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
-> = {
+> = Readonly<{
   field: ControllerRenderProps<TFieldValues, TName>;
-};
+}>;
 
 export const TypeSelect = <
   TFieldValues extends FieldValues,
   TName extends FieldPath<TFieldValues>,
 >({
   field,
-}: receiverInputProp<TFieldValues, TName>) => {
+}: Props<TFieldValues, TName>) => {
   return (
     <FormItem>
       <FormLabel>Tipo</FormLabel>

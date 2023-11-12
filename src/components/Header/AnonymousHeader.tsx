@@ -13,10 +13,10 @@ import {
 import { Menu } from 'lucide-react';
 import { Link, useLocation } from 'react-router-dom';
 
-type HeaderProps = {
+type Props = Readonly<{
   isHome?: boolean;
-};
-export const AnonymousHeader = ({ isHome }: HeaderProps) => {
+}>;
+export const AnonymousHeader = ({ isHome }: Props) => {
   const location = useLocation();
 
   return (

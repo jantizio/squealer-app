@@ -14,14 +14,14 @@ import {
 import { Button } from '@/components/ui/button';
 import { X } from 'lucide-react';
 
-type MediaInputProp<
+type Props<
   TFieldValues extends FieldValues = FieldValues,
   TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
-> = {
+> = Readonly<{
   field: ControllerRenderProps<TFieldValues, TName>;
   disabled?: boolean;
   reset: () => void;
-};
+}>;
 
 export const MediaInput = <
   TFieldValues extends FieldValues,
@@ -30,7 +30,7 @@ export const MediaInput = <
   field,
   disabled,
   reset,
-}: MediaInputProp<TFieldValues, TName>) => {
+}: Props<TFieldValues, TName>) => {
   const { value, onChange, ...rest } = field;
   return (
     <FormItem>

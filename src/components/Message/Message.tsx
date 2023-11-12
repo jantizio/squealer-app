@@ -10,11 +10,11 @@ import { Eye, Frown, Smile } from 'lucide-react';
 import { forwardRef, useEffect } from 'react';
 import { MapComponent } from '@/components/MapComponent';
 
-type messageProps = {
+type Props = Readonly<{
   children: squealRead_t;
-};
+}>;
 
-export const Message = forwardRef<HTMLDivElement, messageProps>(
+export const Message = forwardRef<HTMLDivElement, Props>(
   ({ children }, ref) => {
     const {
       _id,

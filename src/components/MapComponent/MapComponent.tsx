@@ -3,17 +3,13 @@ import type { FeatureCollection } from 'geojson';
 import 'leaflet/dist/leaflet.css';
 import { GeoJSON, MapContainer, TileLayer } from 'react-leaflet';
 
-type MapComponentProps = {
+type Props = Readonly<{
   data: FeatureCollection;
   center: position_t;
   zoom?: number;
-};
+}>;
 
-export function MapComponent({
-  data,
-  center,
-  zoom,
-}: Readonly<MapComponentProps>) {
+export function MapComponent({ data, center, zoom }: Props) {
   return (
     <MapContainer center={center} zoom={zoom ?? 13} className="h-[300px]">
       <TileLayer
