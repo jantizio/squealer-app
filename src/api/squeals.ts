@@ -19,8 +19,9 @@ export const getSqueals = async ({
     ? `&channel=${encodeURIComponent(channelName)}`
     : '';
   const filterQuery = run(() => {
+    // TODO: this filter is changing, so we need to update this
     if (!filter) return '';
-    if (filter.startsWith('@')) return `&author=${encodeURIComponent(filter)}`;
+    if (filter.startsWith('@')) return `&mention=${encodeURIComponent(filter)}`;
     else return `&query=${encodeURIComponent(filter)}`;
   });
 

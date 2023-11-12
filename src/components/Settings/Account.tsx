@@ -1,3 +1,5 @@
+import { deleteUser } from '@/api/users';
+import { useUserContext } from '@/components/CurrentUserContext';
 import { Button } from '@/components/ui/button';
 import {
   Dialog,
@@ -20,8 +22,6 @@ import {
 import { Input } from '@/components/ui/input';
 import { H2, H3 } from '@/components/ui/typography';
 import { useLogout } from '@/hooks/useLogout';
-import { useUser } from '@/lib/auth';
-import { axios } from '@/lib/axios';
 import {
   changepswFormSchema,
   type changepswForm_t,
@@ -30,7 +30,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 
 export const Account = () => {
-  const { data: authUser } = useUser();
+  const authUser = useUserContext();
   const { logoutUser } = useLogout();
 
   const changePswdForm = useForm<changepswForm_t>({
@@ -38,14 +38,17 @@ export const Account = () => {
     defaultValues: { oldPassword: '', password: '', confirmPassword: '' },
   });
 
-  if (!authUser) return <div>Errore utente non definito</div>; //Should never happen
+  if (!authUser) {
+    throw new Error('CurrentUserContext: No value provided');
+  }
 
   const changepwsdHandler = changePswdForm.handleSubmit(async (values) => {
     alert(JSON.stringify(values));
   });
 
-  const deleteAccount = async () => {
-    axios.delete(`/users/${authUser?.username}`);
+  const deleteAccount = () => {
+    logoutUser({});
+    deleteUser(authUser.username);
     // TODO: gestire meglio l'errore
     // forse devo usare useMutation?
   };

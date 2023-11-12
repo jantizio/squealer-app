@@ -1,3 +1,4 @@
+import { useUserContext } from '@/components/CurrentUserContext';
 import { Button } from '@/components/ui/button';
 import {
   Form,
@@ -9,15 +10,16 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { H2, H3, P } from '@/components/ui/typography';
-import { useUser } from '@/lib/auth';
 import { useForm } from 'react-hook-form';
 
 export const SocialMediaManager = () => {
-  const { data: authUser } = useUser();
+  const authUser = useUserContext();
 
   const smmForm = useForm({ defaultValues: { SMM: '' } });
 
-  if (!authUser) return <div>Errore utente non definito</div>; //Should never happen
+  if (!authUser) {
+    throw new Error('CurrentUserContext: No value provided');
+  }
 
   const changeSmmHandler = smmForm.handleSubmit(async (values) => {
     // TODO: api call per cambiare il SMM
