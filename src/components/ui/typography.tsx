@@ -2,10 +2,10 @@ import { type ReactNode } from 'react';
 import { Link } from 'react-router-dom';
 import { cn } from '@/utils';
 
-type Props_t = {
+type Props_t = Readonly<{
   children: ReactNode;
   className?: string;
-};
+}>;
 
 export function H1({ children, className }: Props_t) {
   return (
@@ -139,7 +139,7 @@ export function Large({ children, className }: Props_t) {
 
 export function Small({ children, className }: Props_t) {
   return (
-    <small className={cn('text-sm font-medium leading-none', className)}>
+    <small className={cn('block text-sm font-medium leading-none', className)}>
       {children}
     </small>
   );
