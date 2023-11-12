@@ -77,7 +77,11 @@ export const LoggedHeader = ({ isHome, setFilter }: HeaderProps) => {
         <DropdownMenuContent>
           <DropdownMenuLabel>Il mio Account</DropdownMenuLabel>
           <DropdownMenuSeparator />
-          <DropdownMenuItem>
+          <DropdownMenuItem
+            onClick={() => {
+              navigate('/profile');
+            }}
+          >
             <User className="mr-2 h-4 w-4" />
             <span>Profilo</span>
           </DropdownMenuItem>
