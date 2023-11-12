@@ -42,8 +42,6 @@ export const Signup = () => {
         ...rest,
       };
 
-      // TODO: handle zod validation
-      console.log('data', newUser);
       registerUser(newUser);
     },
     (err) => console.log('err', err),

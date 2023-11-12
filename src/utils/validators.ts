@@ -16,14 +16,21 @@ function validateArray<T extends z.ZodTypeAny>(
           unionSeparator: 'oppure',
           issueSeparator: '\n',
         }).message,
-      ); //TODO: remove this log
+      );
     }
   }
 
   return validatedData;
 }
 
-// It overrides the default parse method for arrays
+/**
+ * If the schema and the data are both arrays,
+ * it will override the default parse method for arrays
+ *
+ * @param data data to validate
+ * @param schema schema to validate data against
+ * @returns clean data
+ */
 export function validate<T extends z.ZodTypeAny>(
   data: unknown,
   schema: T,

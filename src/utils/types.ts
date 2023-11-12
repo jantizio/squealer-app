@@ -24,17 +24,6 @@ type errorMessages_t = {
   generic: string;
 };
 
-// type serverResponse_t<T> = // TODO
-
-//     | {
-//         status: 'success';
-//         data: T;
-//       }
-//     | {
-//         status: 'error';
-//         message: string;
-//       };
-
 type QueryContextFromKeys<
   KeyFactory extends Record<string, QueryKey | ((...args: any[]) => QueryKey)>,
 > = {
@@ -58,7 +47,7 @@ export type {
   SquealsQueryContext,
   channel_t,
   errorMessages_t,
-  filter_t, //TODO: aggiungere il tipo per la geolocation
+  filter_t,
   log_t,
   login_t,
   quota_t,

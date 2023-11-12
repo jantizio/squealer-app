@@ -17,7 +17,6 @@ axios.interceptors.response.use(
   (response) => response,
   async (error) => {
     const prevRequest = error.config;
-    // TODO: definire bene il tipo di payload e il messaggio di errore
     const errorMessage = error.response?.data;
     const isTokenExpired =
       errorPayloadCheck(errorMessage) &&
@@ -38,10 +37,6 @@ axios.interceptors.response.use(
       return axios(prevRequest);
     }
 
-    //TODO: redirect to login page
-    // if (error.response.data.message.includes('Expired refresh token')) {
-    //   document.location.href = '/login';
-    // }
     return Promise.reject(error);
   },
 );

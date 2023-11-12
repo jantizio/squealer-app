@@ -23,20 +23,10 @@ export const Settings = () => {
       component: <Account />,
       hasPermission: true,
     },
-    // {
-    //   category: 'Canali',
-    //   // component: (
-    //   //   <ChannelList fetchChannels={fetchFollowedChannels} removeButton />
-    //   // ),
-    //   component: <div>Canali</div>,
-    //   hasPermission: true,
-    //   // TODO: aggiungere in qualche modo la possiblità di rimuovere i canali dai seguiti
-    // },
     {
       category: 'SMM',
       component: <SocialMediaManager />,
       hasPermission: authUser.type === 'professional',
-      // hasPermission: true,
     },
   ];
 

@@ -10,7 +10,11 @@ export const useLogout = () => {
       toast.success('Logout effettuato con successo');
       navigate('/');
     },
+    meta: {
+      errorMessages: {
+        generic: 'Qualcosa è andato storto, riprova più tardi',
+      },
+    },
   });
-  //TODO: add meta information to handle errors
   return { logoutUser: mutate, ...rest };
 };

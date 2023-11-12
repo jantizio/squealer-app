@@ -58,21 +58,17 @@ export const useUpdateSquealMutation = () => {
   return useMutation({
     mutationFn: updateSqueal,
     onSuccess: (newSqueal) => {
-      // queryClient.invalidateQueries(squealsKey.lists()); //TODO: safe se sotto non va
       queryClient.setQueriesData<InfiniteData<squealRead_t[]>>(
         squealsKey.lists(),
-        (oldData) => {
-          const newPage = oldData?.pages.map((page) =>
-            page.map((squeal) =>
-              squeal._id === newSqueal._id ? newSqueal : squeal,
-            ),
-          );
-
-          return {
-            pageParams: oldData?.pageParams ?? [],
-            pages: newPage ?? [],
-          };
-        },
+        (oldData) => ({
+          pageParams: oldData?.pageParams ?? [],
+          pages:
+            oldData?.pages.map((page) =>
+              page.map((squeal) =>
+                squeal._id === newSqueal._id ? newSqueal : squeal,
+              ),
+            ) ?? [],
+        }),
       );
     },
   });

@@ -33,7 +33,6 @@ export const Login = () => {
         username: `@${values.username}`,
         password: values.password,
       };
-      console.log('data', credentials); //TODO: remove log
 
       loginUser(credentials);
     },

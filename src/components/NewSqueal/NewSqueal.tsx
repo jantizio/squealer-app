@@ -75,8 +75,6 @@ export const NewSqueal = () => {
 
   const createSquealHandler = squealform.handleSubmit(
     async (values) => {
-      console.log('result', values); //TODO: remove log
-
       if (values.body.type === 'media' && values.body.file instanceof File) {
         // upload the file and get the url
         // then set the url as the content
@@ -93,12 +91,12 @@ export const NewSqueal = () => {
         }
       }
 
-      let formResult: object = {
+      let newSqueal: object = {
         ...values,
       };
       if (values.body.type === 'geo') {
-        formResult = {
-          ...formResult,
+        newSqueal = {
+          ...newSqueal,
           body: {
             type: values.body.type,
             content: values.body.geo,
@@ -106,7 +104,7 @@ export const NewSqueal = () => {
         };
       }
 
-      createSqueal(validate(formResult, squealWriteSchema));
+      createSqueal(validate(newSqueal, squealWriteSchema));
     },
     (err) => console.log('err', err),
   );
