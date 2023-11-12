@@ -1,4 +1,3 @@
-import { deleteUser } from '@/api/users';
 import { useUserContext } from '@/components/CurrentUserContext';
 import { Button } from '@/components/ui/button';
 import {
@@ -22,6 +21,7 @@ import {
 import { Input } from '@/components/ui/input';
 import { H2, H3 } from '@/components/ui/typography';
 import { useLogout } from '@/hooks/useLogout';
+import { useDeleteUserMutation } from '@/hooks/useUsers';
 import {
   changepswFormSchema,
   type changepswForm_t,
@@ -33,6 +33,8 @@ import { useForm } from 'react-hook-form';
 export const Account = () => {
   const authUser = useUserContext();
   const { logoutUser, isLoading: isLogoutLoading } = useLogout();
+  const { mutate: deleteUser, isLoading: isDeleteLoading } =
+    useDeleteUserMutation();
 
   const changePswdForm = useForm<changepswForm_t>({
     resolver: zodResolver(changepswFormSchema),
@@ -47,14 +49,7 @@ export const Account = () => {
     alert(JSON.stringify(values));
   });
 
-  const deleteAccount = () => {
-    logoutUser({});
-    deleteUser(authUser.username);
-    // TODO: gestire meglio l'errore
-    // forse devo usare useMutation?
-  };
-
-  const isLoading = false; //TODO: use real data from useMutation
+  const isChangepswLoading = false; //TODO: use real data from useMutation
 
   return (
     <>
@@ -137,8 +132,8 @@ export const Account = () => {
                     )}
                   />
                   <DialogFooter>
-                    <Button type="submit" disabled={isLoading}>
-                      {isLoading && (
+                    <Button type="submit" disabled={isChangepswLoading}>
+                      {isChangepswLoading && (
                         <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                       )}
                       Salva
@@ -164,10 +159,14 @@ export const Account = () => {
           <H3>Elimina Account</H3>
           <Button
             variant="destructive"
-            onClick={deleteAccount}
-            disabled={isLoading}
+            onClick={() => {
+              deleteUser(authUser.username);
+            }}
+            disabled={isDeleteLoading}
           >
-            {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+            {isDeleteLoading && (
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+            )}
             Elimina Account
           </Button>
         </section>
