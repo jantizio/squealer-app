@@ -7,9 +7,11 @@ import { Form, FormField, FormItem, FormMessage } from '@/components/ui/form';
 import { useSquealerQuota } from '@/hooks/useSquealerQuota';
 import { useCreateSquealMutation } from '@/hooks/useSqueals';
 import { squealWriteSchema } from '@/schema/shared-schema/squealValidators';
+import type { featureCollection_t } from '@/schema/shared-schema/utils/geojson';
 import { receiverString } from '@/schema/shared-schema/utils/global';
 import { validate } from '@/utils/validators';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { Loader2 } from 'lucide-react';
 import { useGeolocated } from 'react-geolocated';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
@@ -20,14 +22,13 @@ import { ReceiverInput } from './ReceiverInput';
 import { ReceiversCheckbox } from './ReceiversCheckbox';
 import { TypeSelect } from './TypeSelect';
 import { UrlInput } from './UrlInput';
-import type { featureCollection_t } from '@/schema/shared-schema/utils/geojson';
 
 export const NewSqueal = () => {
   const authUser = useUserContext();
   if (!authUser) {
     throw new Error('CurrentUserContext: No value provided');
   }
-  const { mutate: createSqueal } = useCreateSquealMutation();
+  const { mutate: createSqueal, isLoading } = useCreateSquealMutation();
   const { quota, updatedsquealSchema } = useSquealerQuota();
 
   type updatedSquealSchema_t = z.infer<typeof updatedsquealSchema>;
@@ -258,7 +259,10 @@ export const NewSqueal = () => {
             />
           )}
 
-          <Button type="submit">Invia</Button>
+          <Button type="submit" disabled={isLoading}>
+            {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+            Invia
+          </Button>
         </form>
       </Form>
       <pre>{JSON.stringify(form, null, 2)}</pre>

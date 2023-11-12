@@ -14,6 +14,7 @@ import { useLogin } from '@/hooks/useLogin';
 import { loginFormSchema, type loginForm_t } from '@/schema/loginValidator';
 import { type login_t } from '@/schema/shared-schema/loginValidator';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { Loader2 } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 
 export const Login = () => {
@@ -90,6 +91,7 @@ export const Login = () => {
             className="mx-auto mb-4 w-5/12"
             disabled={isLoading}
           >
+            {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
             Accedi
           </Button>
         </form>

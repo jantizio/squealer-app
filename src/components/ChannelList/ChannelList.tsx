@@ -38,7 +38,7 @@ export const ChannelList = ({
               onClick={() => channelUnsub()}
               variant="outline"
               size="icon"
-              className="border-destructive "
+              className="border-destructive"
             >
               <X />
             </Button>

@@ -23,7 +23,7 @@ import { useLogout } from '@/hooks/useLogout';
 import { useUser } from '@/lib/auth';
 import { LogOut, Menu, Settings, User } from 'lucide-react';
 import type { Dispatch, SetStateAction } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 type HeaderProps = {
   isHome?: boolean;
@@ -32,7 +32,6 @@ type HeaderProps = {
 
 export const LoggedHeader = ({ isHome, setFilter }: HeaderProps) => {
   const { data: authUser } = useUser();
-  const navigate = useNavigate();
   const { logoutUser } = useLogout();
 
   return (
@@ -42,7 +41,7 @@ export const LoggedHeader = ({ isHome, setFilter }: HeaderProps) => {
           // Hamburger menu for mobile
           <Sheet>
             <SheetTrigger asChild>
-              <Button variant="outline" className="md:hidden">
+              <Button variant="outline" size="icon" className="md:hidden">
                 <Menu />
               </Button>
             </SheetTrigger>
@@ -77,21 +76,17 @@ export const LoggedHeader = ({ isHome, setFilter }: HeaderProps) => {
         <DropdownMenuContent>
           <DropdownMenuLabel>Il mio Account</DropdownMenuLabel>
           <DropdownMenuSeparator />
-          <DropdownMenuItem
-            onClick={() => {
-              navigate('/profile');
-            }}
-          >
-            <User className="mr-2 h-4 w-4" />
-            <span>Profilo</span>
+          <DropdownMenuItem asChild>
+            <Link to="/profile">
+              <User className="mr-2 h-4 w-4" />
+              <span>Profilo</span>
+            </Link>
           </DropdownMenuItem>
-          <DropdownMenuItem
-            onClick={() => {
-              navigate('/settings');
-            }}
-          >
-            <Settings className="mr-2 h-4 w-4" />
-            <span>Impostazioni</span>
+          <DropdownMenuItem asChild>
+            <Link to="/settings">
+              <Settings className="mr-2 h-4 w-4" />
+              <span>Impostazioni</span>
+            </Link>
           </DropdownMenuItem>
           <DropdownMenuItem onClick={() => logoutUser({})}>
             <LogOut className="mr-2 h-4 w-4" />

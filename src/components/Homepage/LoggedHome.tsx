@@ -2,7 +2,7 @@ import { LoggedHeader } from '@/components/Header';
 import { MessageScroller } from '@/components/MessageScroller';
 import { PenSquare } from 'lucide-react';
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { useDebounce } from 'usehooks-ts';
 import { ChannelsSidebar } from './ChannelsSidebar';
 import {
@@ -15,7 +15,6 @@ import {
 export const LoggedHome = () => {
   const [filter, setFilter] = useState('');
   const debouncedFilter = useDebounce(filter, 500);
-  const navigate = useNavigate();
 
   return (
     <>
@@ -33,17 +32,15 @@ export const LoggedHome = () => {
         </aside>
 
         {/* Right sidebar */}
-        <aside className="order-3 hidden w-full overflow-hidden lg:block lg:w-1/4">
-        </aside>
+        <aside className="order-3 hidden w-full overflow-hidden lg:block lg:w-1/4"></aside>
       </div>
 
       <TooltipProvider>
         <Tooltip>
-          <TooltipTrigger
-            className="fixed bottom-3 right-3"
-            onClick={() => navigate('/create')}
-          >
-            <PenSquare className="h-icon-lg w-icon-lg" />
+          <TooltipTrigger className="fixed bottom-3 right-3" asChild>
+            <Link to="/create">
+              <PenSquare className="h-icon-lg w-icon-lg" />
+            </Link>
           </TooltipTrigger>
           <TooltipContent>
             <p>Nuovo Squeal</p>

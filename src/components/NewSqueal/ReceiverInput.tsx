@@ -36,7 +36,7 @@ export const ReceiverInput = <
         <FormControl>
           <Input {...field} />
         </FormControl>
-        <Button type="button" onClick={onClick} variant="outline">
+        <Button type="button" onClick={onClick} variant="outline" size="icon">
           <Plus />
         </Button>
       </section>

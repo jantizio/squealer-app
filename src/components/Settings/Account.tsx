@@ -27,11 +27,12 @@ import {
   type changepswForm_t,
 } from '@/schema/changepswValidator';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { Loader2 } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 
 export const Account = () => {
   const authUser = useUserContext();
-  const { logoutUser } = useLogout();
+  const { logoutUser, isLoading: isLogoutLoading } = useLogout();
 
   const changePswdForm = useForm<changepswForm_t>({
     resolver: zodResolver(changepswFormSchema),
@@ -53,6 +54,8 @@ export const Account = () => {
     // forse devo usare useMutation?
   };
 
+  const isLoading = false; //TODO: use real data from useMutation
+
   return (
     <>
       <H2>Gestisci il tuo account</H2>
@@ -61,7 +64,7 @@ export const Account = () => {
           <H3>Cambio password</H3>
           <Dialog>
             <DialogTrigger asChild>
-              <Button variant="default">Cambia</Button>
+              <Button>Cambia</Button>
             </DialogTrigger>
             <DialogContent className="sm:max-w-md">
               <DialogHeader>
@@ -134,7 +137,12 @@ export const Account = () => {
                     )}
                   />
                   <DialogFooter>
-                    <Button type="submit">Salva</Button>
+                    <Button type="submit" disabled={isLoading}>
+                      {isLoading && (
+                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                      )}
+                      Salva
+                    </Button>
                   </DialogFooter>
                 </form>
               </Form>
@@ -144,12 +152,22 @@ export const Account = () => {
 
         <section className="flex flex-wrap items-center gap-3">
           <H3>Logout</H3>
-          <Button onClick={() => logoutUser({})}>Logout</Button>
+          <Button onClick={() => logoutUser({})} disabled={isLogoutLoading}>
+            {isLogoutLoading && (
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+            )}
+            Logout
+          </Button>
         </section>
 
         <section className="flex flex-wrap items-center gap-3">
           <H3>Elimina Account</H3>
-          <Button variant="destructive" onClick={deleteAccount}>
+          <Button
+            variant="destructive"
+            onClick={deleteAccount}
+            disabled={isLoading}
+          >
+            {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
             Elimina Account
           </Button>
         </section>

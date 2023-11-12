@@ -17,6 +17,7 @@ import {
 } from '@/schema/registerValidator';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
+import { Loader2 } from 'lucide-react';
 
 export const Signup = () => {
   const signupForm = useForm<registerForm_t>({
@@ -30,7 +31,7 @@ export const Signup = () => {
       confirmPassword: '',
     },
   });
-  const { registerUser } = useRegister();
+  const { registerUser, isLoading } = useRegister();
 
   const signupHandler = signupForm.handleSubmit(
     (values) => {
@@ -147,7 +148,12 @@ export const Signup = () => {
               </FormItem>
             )}
           />
-          <Button type="submit" className="mx-auto mb-4 w-5/12">
+          <Button
+            type="submit"
+            className="mx-auto mb-4 w-5/12"
+            disabled={isLoading}
+          >
+            {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
             Registrati
           </Button>
         </form>

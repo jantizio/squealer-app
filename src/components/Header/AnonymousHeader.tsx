@@ -11,13 +11,12 @@ import {
   SheetTrigger,
 } from '@/components/ui/sheet';
 import { Menu } from 'lucide-react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 
 type HeaderProps = {
   isHome?: boolean;
 };
 export const AnonymousHeader = ({ isHome }: HeaderProps) => {
-  const navigate = useNavigate();
   const location = useLocation();
 
   return (
@@ -27,7 +26,7 @@ export const AnonymousHeader = ({ isHome }: HeaderProps) => {
           /* Hamburger menu for mobile */
           <Sheet>
             <SheetTrigger asChild>
-              <Button variant="outline" className="md:hidden">
+              <Button variant="outline" size="icon" className="md:hidden">
                 <Menu />
               </Button>
             </SheetTrigger>
@@ -55,16 +54,15 @@ export const AnonymousHeader = ({ isHome }: HeaderProps) => {
 
       <div className="flex items-center space-x-2">
         <nav className="flex items-center space-x-2">
-          <Button
-            onClick={() => navigate('/login', { state: { from: location } })}
-          >
-            Accedi
+          <Button asChild>
+            <Link to="/login" state={{ from: location }}>
+              Accedi
+            </Link>
           </Button>
-          <Button
-            onClick={() => navigate('/signup', { state: { from: location } })}
-            variant="secondary"
-          >
-            Iscriviti
+          <Button variant="secondary" asChild>
+            <Link to="/signup" state={{ from: location }}>
+              Iscriviti
+            </Link>
           </Button>
         </nav>
         <ModeToggle />

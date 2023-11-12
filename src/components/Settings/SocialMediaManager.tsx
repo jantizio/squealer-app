@@ -10,6 +10,7 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { H2, H3, P } from '@/components/ui/typography';
+import { Loader2 } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 
 export const SocialMediaManager = () => {
@@ -25,6 +26,8 @@ export const SocialMediaManager = () => {
     // TODO: api call per cambiare il SMM
     console.log(values.SMM);
   });
+
+  const isLoading = false; //TODO: use real data from useMutation
 
   return (
     <>
@@ -50,7 +53,10 @@ export const SocialMediaManager = () => {
                   </FormItem>
                 )}
               />
-              <Button type="submit">Salva</Button>
+              <Button type="submit" disabled={isLoading}>
+                {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                Salva
+              </Button>
             </form>
           </Form>
         </section>

@@ -46,7 +46,7 @@ export const MediaInput = <
             }}
             disabled={disabled}
           />
-          <Button onClick={reset} variant="outline">
+          <Button onClick={reset} variant="outline" size="icon">
             <X />
           </Button>
         </section>

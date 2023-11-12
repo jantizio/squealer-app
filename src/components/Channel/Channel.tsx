@@ -9,11 +9,10 @@ import { useUser } from '@/lib/auth';
 import { run } from '@/utils';
 import { AxiosError } from 'axios';
 import { useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 
 export const Channel = () => {
   const { channelName } = useParams<{ channelName: string }>();
-  const navigate = useNavigate();
   const { data: authUser } = useUser();
   const isAuthenticated = !!authUser;
   const [exists, setExists] = useState(true);
@@ -96,11 +95,8 @@ export const Channel = () => {
                           </>
                         )}
                     </Large>
-                    <Button
-                      variant="outline"
-                      onClick={() => navigate('/channels')}
-                    >
-                      Scopri altri canali
+                    <Button variant="outline" asChild>
+                      <Link to="/channels">Scopri altri canali</Link>
                     </Button>
                   </section>
                 </>
