@@ -1,55 +1,19 @@
 import { useUserContext } from '@/components/CurrentUserContext';
 import { Button } from '@/components/ui/button';
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from '@/components/ui/dialog';
-import {
-  Form,
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from '@/components/ui/form';
-import { Input } from '@/components/ui/input';
+import { Separator } from '@/components/ui/separator';
 import { H2, H3 } from '@/components/ui/typography';
 import { useLogout } from '@/hooks/useLogout';
-import { useDeleteUserMutation } from '@/hooks/useUsers';
-import {
-  changepswFormSchema,
-  type changepswForm_t,
-} from '@/schema/changepswValidator';
-import { zodResolver } from '@hookform/resolvers/zod';
 import { Loader2 } from 'lucide-react';
-import { useForm } from 'react-hook-form';
+import { ChangePswDialog } from './ChangePswDialog';
+import DeleteAccountDialog from './DeleteAccountDialog';
 
 export const Account = () => {
   const authUser = useUserContext();
   const { logoutUser, isLoading: isLogoutLoading } = useLogout();
-  const { mutate: deleteUser, isLoading: isDeleteLoading } =
-    useDeleteUserMutation();
-
-  const changePswdForm = useForm<changepswForm_t>({
-    resolver: zodResolver(changepswFormSchema),
-    defaultValues: { oldPassword: '', password: '', confirmPassword: '' },
-  });
 
   if (!authUser) {
     throw new Error('CurrentUserContext: No value provided');
   }
-
-  const changepwsdHandler = changePswdForm.handleSubmit(async (values) => {
-    alert(JSON.stringify(values));
-  });
-
-  const isChangepswLoading = false; //TODO: use real data from useMutation
 
   return (
     <>
@@ -57,93 +21,9 @@ export const Account = () => {
       <section className="mt-6 space-y-7">
         <section className="flex flex-wrap items-center gap-3">
           <H3>Cambio password</H3>
-          <Dialog>
-            <DialogTrigger asChild>
-              <Button>Cambia</Button>
-            </DialogTrigger>
-            <DialogContent className="sm:max-w-md">
-              <DialogHeader>
-                <DialogTitle>Cambia Password</DialogTitle>
-                <DialogDescription>
-                  Inserisci la tua nuova password, clicca salva quando hai
-                  finito
-                </DialogDescription>
-              </DialogHeader>
-              <Form {...changePswdForm}>
-                <form
-                  onSubmit={changepwsdHandler}
-                  className="flex flex-col gap-4 py-4"
-                >
-                  <FormField
-                    control={changePswdForm.control}
-                    name="oldPassword"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Vecchia Password</FormLabel>
-                        <FormControl>
-                          <Input
-                            {...field}
-                            type="password"
-                            placeholder="Inserisci la vecchia password..."
-                          />
-                        </FormControl>
-
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={changePswdForm.control}
-                    name="password"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Nuova Password</FormLabel>
-                        <FormControl>
-                          <Input
-                            {...field}
-                            type="password"
-                            placeholder="Inserisci la nuova password..."
-                          />
-                        </FormControl>
-                        <FormDescription>
-                          La password deve essere di almeno 8 caratteri. Deve
-                          avere un carattere maiuscolo, un numero e un simbolo
-                          speciale.
-                        </FormDescription>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={changePswdForm.control}
-                    name="confirmPassword"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Conferma nuova password</FormLabel>
-                        <FormControl>
-                          <Input
-                            {...field}
-                            type="password"
-                            placeholder="Conferma la nuova password..."
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  <DialogFooter>
-                    <Button type="submit" disabled={isChangepswLoading}>
-                      {isChangepswLoading && (
-                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                      )}
-                      Salva
-                    </Button>
-                  </DialogFooter>
-                </form>
-              </Form>
-            </DialogContent>
-          </Dialog>
+          <ChangePswDialog />
         </section>
+        <Separator className="mt-4" />
 
         <section className="flex flex-wrap items-center gap-3">
           <H3>Logout</H3>
@@ -154,21 +34,11 @@ export const Account = () => {
             Logout
           </Button>
         </section>
+        <Separator className="mt-4" />
 
         <section className="flex flex-wrap items-center gap-3">
           <H3>Elimina Account</H3>
-          <Button
-            variant="destructive"
-            onClick={() => {
-              deleteUser(authUser.username);
-            }}
-            disabled={isDeleteLoading}
-          >
-            {isDeleteLoading && (
-              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-            )}
-            Elimina Account
-          </Button>
+          <DeleteAccountDialog />
         </section>
       </section>
     </>

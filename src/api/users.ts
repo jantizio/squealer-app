@@ -19,7 +19,9 @@ export const createUser = async (data: userWrite_t): Promise<userRead_t> => {
 };
 
 export const deleteUser = async (username: string): Promise<void> => {
-  await axios.delete<userRead_t>(`/users/${username}`);
+  // await axios.delete<userRead_t>(`/users/${username}`);
+  await new Promise((resolve) => setTimeout(resolve, 1000)); // TODO: set the real api call
+  console.log('deleteUser', username);
 };
 
 export const getUsers = async (): Promise<userRead_t[]> => {
@@ -32,4 +34,18 @@ export const getUserByUsername = async (
 ): Promise<userRead_t> => {
   const response = await axios.get<userRead_t>(`/users/${username}`);
   return response.data;
+};
+
+export const changeUserPassword = async ({
+  username,
+  oldPassword,
+  password,
+}: {
+  username: string;
+  oldPassword: string;
+  password: string;
+}): Promise<void> => {
+  // await axios.patch(`/users/${username}/password`, { oldPassword, password });
+  await new Promise((resolve) => setTimeout(resolve, 1000)); // TODO: set the real api call
+  console.log('changeUserPassword', username, oldPassword, password);
 };
