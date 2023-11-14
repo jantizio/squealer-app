@@ -11,6 +11,7 @@ import {
 import { useUser } from '@/lib/auth';
 import { run } from '@/utils';
 import { AxiosError } from 'axios';
+import { Loader2 } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 
@@ -23,7 +24,7 @@ export const Channel = () => {
   const [exists, setExists] = useState(true);
 
   const { data: channel, error } = useChannelQuery(channelName, exists);
-  const { mutate } = useSubscribeChannelMutation();
+  const { mutate, isLoading } = useSubscribeChannelMutation();
 
   useEffect(() => {
     if (
@@ -48,13 +49,20 @@ export const Channel = () => {
           variant="secondary"
           size="sm"
           onClick={() => toggleSubscribe('unsubscribe')}
+          disabled={isLoading}
         >
+          {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
           Iscritto
         </Button>
       );
 
     return (
-      <Button size="sm" onClick={() => toggleSubscribe('subscribe')}>
+      <Button
+        size="sm"
+        onClick={() => toggleSubscribe('subscribe')}
+        disabled={isLoading}
+      >
+        {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
         Iscriviti
       </Button>
     );

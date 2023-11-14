@@ -43,5 +43,5 @@ export const subscribeChannel = async ({
 }): Promise<void> => {
   if (op === 'subscribe')
     await axios.patch(`/channels/${encodeURIComponent(channelName)}/subscribe`);
-  else return Promise.reject(new Error('not implemented')); //TODO: implement
+  else return Promise.reject(new Error('not implemented')); //TODO: implement unsubscribe
 };
