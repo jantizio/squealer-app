@@ -13,7 +13,10 @@ export const Discover = () => {
       <div className="flex overflow-hidden">
         {/* Main content */}
         <main className="order-2 w-full overflow-auto md:w-4/6 lg:w-1/2">
-          <ChannelList filter={isAuthenticated ? 'public' : 'official'} />
+          <ChannelList
+            filter={isAuthenticated ? 'public' : 'official'}
+            className="mx-auto max-w-md"
+          />
         </main>
 
         {/* Left sidebar */}

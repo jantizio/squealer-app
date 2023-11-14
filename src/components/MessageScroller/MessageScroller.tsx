@@ -60,7 +60,7 @@ export const MessageScroller = ({ filter, author, channelName }: Props) => {
         <AlertTitle>Errore</AlertTitle>
         <AlertDescription>
           Non sono riuscito a caricare i tuoi squeal!
-          {error && error instanceof Error ? ` Errore: ${error.message}` : ''}
+          {error instanceof Error ? ` Errore: ${error.message}` : ''}
         </AlertDescription>
       </Alert>
     );
