@@ -33,3 +33,15 @@ export const getChannel = async ({
   );
   return validate(response.data, channelSchema);
 };
+
+export const subscribeChannel = async ({
+  channelName,
+  op,
+}: {
+  channelName: string;
+  op: 'subscribe' | 'unsubscribe';
+}): Promise<void> => {
+  if (op === 'subscribe')
+    await axios.patch(`/channels/${encodeURIComponent(channelName)}/subscribe`);
+  else return Promise.reject(new Error('not implemented')); //TODO: implement
+};

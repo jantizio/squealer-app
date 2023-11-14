@@ -1,6 +1,6 @@
-import { getChannel, getChannels } from '@/api/channels';
+import { getChannel, getChannels, subscribeChannel } from '@/api/channels';
 import type { channel_t, filter_t } from '@/utils/types';
-import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
 export const channelsKey = {
   all: [{ scope: 'channels' }] as const,
@@ -35,5 +35,24 @@ export const useChannelQuery = (channelName: string, enabled?: boolean) => {
         .find((channel) => channel !== undefined);
     },
     enabled,
+  });
+};
+
+export const useSubscribeChannelMutation = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: subscribeChannel,
+    onSuccess: (_, { channelName, op }) => {
+      queryClient.setQueryData<channel_t>(
+        channelsKey.specific(channelName),
+        (old) => {
+          if (!old) return old;
+          return {
+            ...old,
+            subscribed: op === 'subscribe',
+          };
+        },
+      );
+    },
   });
 };

@@ -4,7 +4,10 @@ import { MessageScroller } from '@/components/MessageScroller';
 import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
 import { A, H1, Large, Muted } from '@/components/ui/typography';
-import { useChannelQuery } from '@/hooks/useChannels';
+import {
+  useChannelQuery,
+  useSubscribeChannelMutation,
+} from '@/hooks/useChannels';
 import { useUser } from '@/lib/auth';
 import { run } from '@/utils';
 import { AxiosError } from 'axios';
@@ -20,6 +23,7 @@ export const Channel = () => {
   const [exists, setExists] = useState(true);
 
   const { data: channel, error } = useChannelQuery(channelName, exists);
+  const { mutate } = useSubscribeChannelMutation();
 
   useEffect(() => {
     if (
@@ -31,17 +35,29 @@ export const Channel = () => {
     }
   }, [error]);
 
+  const toggleSubscribe = (op: 'subscribe' | 'unsubscribe') => {
+    mutate({ channelName, op });
+  };
+
   const subscribeButton = run(() => {
     if (!isAuthenticated) return <></>;
 
     if (channel?.subscribed)
       return (
-        <Button variant="secondary" size="sm">
+        <Button
+          variant="secondary"
+          size="sm"
+          onClick={() => toggleSubscribe('unsubscribe')}
+        >
           Iscritto
         </Button>
       );
 
-    return <Button size="sm">Iscriviti</Button>;
+    return (
+      <Button size="sm" onClick={() => toggleSubscribe('subscribe')}>
+        Iscriviti
+      </Button>
+    );
   });
 
   return (
