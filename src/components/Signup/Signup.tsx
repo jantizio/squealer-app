@@ -77,10 +77,12 @@ export const Signup = () => {
               <FormItem>
                 <FormLabel>Nome Utente</FormLabel>
                 <FormControl>
-                  <Input
-                    {...field}
-                    placeholder="Inserisci il tuo username..."
-                  />
+                  <div className="relative before:pointer-events-none before:absolute before:left-3 before:top-[20%] before:text-muted-foreground before:content-['@'] [&>input]:pl-7">
+                    <Input
+                      {...field}
+                      placeholder="Inserisci il tuo username..."
+                    />
+                  </div>
                 </FormControl>
                 <FormMessage />
               </FormItem>
