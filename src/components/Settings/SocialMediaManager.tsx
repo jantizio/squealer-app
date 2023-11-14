@@ -10,24 +10,35 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { H2, H3, P } from '@/components/ui/typography';
+import { useChangeSMMMutation } from '@/hooks/useUsers';
+import {
+  changeSMMFormSchema,
+  type changeSMMForm_t,
+} from '@/schema/changeSMMValidator';
+import { zodResolver } from '@hookform/resolvers/zod';
 import { Loader2 } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 
 export const SocialMediaManager = () => {
   const authUser = useUserContext();
 
-  const smmForm = useForm({ defaultValues: { SMM: '' } });
+  const smmForm = useForm<changeSMMForm_t>({
+    resolver: zodResolver(changeSMMFormSchema),
+    defaultValues: { SMM: '' },
+  });
+
+  const { mutate, isLoading } = useChangeSMMMutation();
 
   if (!authUser) {
     throw new Error('CurrentUserContext: No value provided');
   }
 
-  const changeSmmHandler = smmForm.handleSubmit(async (values) => {
-    // TODO: api call per cambiare il SMM
-    console.log(values.SMM);
+  const changeSmmHandler = smmForm.handleSubmit((values) => {
+    mutate({
+      username: authUser.username,
+      smm: `@${values.SMM}`,
+    });
   });
-
-  const isLoading = false; //TODO: use real data from useMutation
 
   return (
     <>
@@ -37,14 +48,19 @@ export const SocialMediaManager = () => {
         <section>
           <H3>Cambia Social media manager</H3>
           <Form {...smmForm}>
-            <form onSubmit={changeSmmHandler} className="mt-4">
+            <form onSubmit={changeSmmHandler} className="mt-4 space-y-2">
               <FormField
                 control={smmForm.control}
                 name="SMM"
                 render={({ field }) => (
                   <FormItem>
                     <FormControl>
-                      <Input {...field} minLength={3} maxLength={20} required />
+                      <div className="relative before:pointer-events-none before:absolute before:left-3 before:top-[20%] before:text-muted-foreground before:content-['@'] [&>input]:pl-7">
+                        <Input
+                          {...field}
+                          placeholder="username del tuo nuovo SMM"
+                        />
+                      </div>
                     </FormControl>
                     <FormDescription>
                       Inserisci l'username del tuo Social Media Manager

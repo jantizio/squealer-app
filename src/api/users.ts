@@ -49,3 +49,15 @@ export const changeUserPassword = async ({
   await new Promise((resolve) => setTimeout(resolve, 1000)); // TODO: set the real api call
   console.log('changeUserPassword', username, oldPassword, password);
 };
+
+export const changeUserSMM = async ({
+  username,
+  smm,
+}: {
+  username: string;
+  smm: `@${string}`;
+}): Promise<void> => {
+  // await axios.patch(`/users/${username}/smm`, { smm });
+  await new Promise((resolve) => setTimeout(resolve, 1000)); // TODO: set the real api call
+  console.log('changeUserSMM', username, smm);
+};

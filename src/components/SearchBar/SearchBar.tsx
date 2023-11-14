@@ -27,7 +27,7 @@ export const SearchBar = ({ setFilter, className }: Props) => {
           render={({ field }) => {
             return (
               <FormItem className="flex w-full items-center space-y-0">
-                <Search className="relative left-10 z-10 h-icon-md w-icon-md" />
+                <Search className="pointer-events-none relative left-10 z-10 h-icon-md w-icon-md " />
                 <FormControl>
                   <Input
                     {...field}
