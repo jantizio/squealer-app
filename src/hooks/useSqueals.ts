@@ -35,15 +35,14 @@ export const useSquealsQuery = (
   useInfiniteQuery({
     queryKey: squealsKey.filter(filter, channelName, author),
     queryFn: getSqueals,
+    initialPageParam: 0,
     getNextPageParam: (lastPage, allPages) => {
       return lastPage.length ? allPages.length : undefined;
     },
-    select: (data) => {
-      return {
-        ...data,
-        pages: data.pages.flat(),
-      };
-    },
+    select: (data) => ({
+      pages: data.pages.flat(),
+      pageParams: data.pageParams,
+    }),
   });
 
 export const useSquealQuery = (id: string) =>
@@ -59,7 +58,7 @@ export const useUpdateSquealMutation = () => {
     mutationFn: updateSqueal,
     onSuccess: (newSqueal) => {
       queryClient.setQueriesData<InfiniteData<squealRead_t[]>>(
-        squealsKey.lists(),
+        { queryKey: squealsKey.lists() },
         (oldData) => ({
           pageParams: oldData?.pageParams ?? [],
           pages:

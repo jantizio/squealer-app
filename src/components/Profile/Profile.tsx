@@ -12,16 +12,8 @@ export const Profile = () => {
     throw new Error('CurrentUserContext: No value provided');
   }
 
-  const {
-    username,
-    propic,
-    email,
-    firstname,
-    lastname,
-    type,
-    SMM,
-    quota,
-  } = authUser;
+  const { username, propic, email, firstname, lastname, type, SMM, quota } =
+    authUser;
 
   const actualD = quota.maxD - quota.actualD;
   const actualW = quota.maxW - quota.actualW;

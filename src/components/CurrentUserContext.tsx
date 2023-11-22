@@ -14,7 +14,7 @@ export const CurrentUserContextProvider = () => {
   const location = useLocation();
 
   // if is loading show loading page
-  if (currentUserQuery.isLoading) {
+  if (currentUserQuery.isPending) {
     return <p>Sto caricando...</p>;
   }
 

@@ -26,17 +26,20 @@ type errorMessages_t = {
 
 type QueryContextFromKeys<
   KeyFactory extends Record<string, QueryKey | ((...args: any[]) => QueryKey)>,
+  TPageParam = never,
 > = {
   [K in keyof KeyFactory]: KeyFactory[K] extends (...args: any[]) => QueryKey
-    ? QueryFunctionContext<ReturnType<KeyFactory[K]>>
+    ? QueryFunctionContext<ReturnType<KeyFactory[K]>, TPageParam>
     : KeyFactory[K] extends QueryKey
-    ? QueryFunctionContext<KeyFactory[K]>
+    ? QueryFunctionContext<KeyFactory[K], TPageParam>
     : never;
 };
 
 type ChannelsQueryContext = Prettify<QueryContextFromKeys<typeof channelsKey>>;
 
-type SquealsQueryContext = Prettify<QueryContextFromKeys<typeof squealsKey>>;
+type SquealsQueryContext<TPageParam = never> = Prettify<
+  QueryContextFromKeys<typeof squealsKey, TPageParam>
+>;
 
 type filter_t = 'official' | 'subscribed' | 'direct' | 'public' | '';
 
