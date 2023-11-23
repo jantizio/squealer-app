@@ -30,7 +30,7 @@ export const MessageScroller = ({ filter, author, channelName }: Props) => {
           {squealsList.map((squeal, i) => {
             const isLast = squealsList.length - 1 === i;
             return (
-              <Message key={squeal._id} ref={isLast ? lastPostRef : undefined}>
+              <Message key={squeal.id} ref={isLast ? lastPostRef : undefined}>
                 {squeal}
               </Message>
             );
@@ -80,7 +80,7 @@ export const MessageScroller = ({ filter, author, channelName }: Props) => {
 // TODO: remove mock data
 const mockData: squealRead_t[] = [
   {
-    _id: '1',
+    id: '1',
     author: '@Giovanni',
     body: {
       type: 'geo',

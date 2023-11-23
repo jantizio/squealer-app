@@ -65,7 +65,7 @@ export const useUpdateSquealMutation = () => {
           pages:
             oldData?.pages.map((page) =>
               page.map((squeal) =>
-                squeal._id === newSqueal._id ? newSqueal : squeal,
+                squeal.id === newSqueal.id ? newSqueal : squeal,
               ),
             ) ?? [],
         }),

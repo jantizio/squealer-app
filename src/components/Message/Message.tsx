@@ -17,7 +17,7 @@ type Props = Readonly<{
 export const Message = forwardRef<HTMLDivElement, Props>(
   ({ children }, ref) => {
     const {
-      _id,
+      id,
       author,
       body,
       impressions,
@@ -72,7 +72,7 @@ export const Message = forwardRef<HTMLDivElement, Props>(
             className="mx-2"
             variant={reacted ? 'secondary' : 'ghost'}
             disabled={!canReact || reacted}
-            onClick={() => updateSqueal({ id: _id, operation: 'upvote' })}
+            onClick={() => updateSqueal({ id: id, operation: 'upvote' })}
           >
             <span className={reacted ? 'text-primary' : ''}>
               <Smile className="mr-2 inline h-[1.5em] w-[1.5em]" />
@@ -84,7 +84,7 @@ export const Message = forwardRef<HTMLDivElement, Props>(
             className="mx-2"
             variant={reacted ? 'secondary' : 'ghost'}
             disabled={!canReact || reacted}
-            onClick={() => updateSqueal({ id: _id, operation: 'downvote' })}
+            onClick={() => updateSqueal({ id: id, operation: 'downvote' })}
           >
             <span className={reacted ? 'text-primary' : ''}>
               <Frown className="mr-2 inline h-[1.5em] w-[1.5em]" />
