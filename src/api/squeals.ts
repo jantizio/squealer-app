@@ -11,8 +11,8 @@ import { z } from 'zod';
 
 export const getSqueals = async ({
   queryKey: [{ filter, channelName, author }],
-  pageParam: page = 0,
-}: SquealsQueryContext['filter']): Promise<squealRead_t[]> => {
+  pageParam: page,
+}: SquealsQueryContext<number>['filter']): Promise<squealRead_t[]> => {
   const authorQuery = author ? `&author=${encodeURIComponent(author)}` : '';
   const channelQuery = channelName
     ? `&channel=${encodeURIComponent(channelName)}`

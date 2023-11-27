@@ -27,8 +27,8 @@ export const SocialMediaManager = () => {
     defaultValues: { SMM: '' },
   });
 
-  const { mutate, isLoading } = useChangeSMMMutation();
-  const { mutate: removeSMM, isLoading: isRemoveLoading } =
+  const { mutate, isPending } = useChangeSMMMutation();
+  const { mutate: removeSMM, isPending: isRemovePending } =
     useRemoveSMMMutation();
 
   if (!authUser) {
@@ -71,8 +71,8 @@ export const SocialMediaManager = () => {
                   </FormItem>
                 )}
               />
-              <Button type="submit" disabled={isLoading}>
-                {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+              <Button type="submit" disabled={isPending}>
+                {isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                 Salva
               </Button>
             </form>
@@ -90,9 +90,9 @@ export const SocialMediaManager = () => {
             onClick={() => {
               removeSMM({ username: authUser.username });
             }}
-            disabled={isRemoveLoading}
+            disabled={isRemovePending}
           >
-            {isRemoveLoading && (
+            {isRemovePending && (
               <Loader2 className="mr-2 h-4 w-4 animate-spin" />
             )}
             Rimuovi

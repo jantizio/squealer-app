@@ -28,7 +28,7 @@ export const NewSqueal = () => {
   if (!authUser) {
     throw new Error('CurrentUserContext: No value provided');
   }
-  const { mutate: createSqueal, isLoading } = useCreateSquealMutation();
+  const { mutate: createSqueal, isPending } = useCreateSquealMutation();
   const { quota, updatedsquealSchema } = useSquealerQuota();
 
   type updatedSquealSchema_t = z.infer<typeof updatedsquealSchema>;
@@ -257,8 +257,8 @@ export const NewSqueal = () => {
             />
           )}
 
-          <Button type="submit" disabled={isLoading}>
-            {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+          <Button type="submit" disabled={isPending}>
+            {isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
             Invia
           </Button>
         </form>

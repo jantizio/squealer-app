@@ -31,7 +31,7 @@ export const Signup = () => {
       confirmPassword: '',
     },
   });
-  const { registerUser, isLoading } = useRegister();
+  const { registerUser, isPending } = useRegister();
 
   const signupHandler = signupForm.handleSubmit(
     (values) => {
@@ -151,9 +151,9 @@ export const Signup = () => {
           <Button
             type="submit"
             className="mx-auto mb-4 w-5/12"
-            disabled={isLoading}
+            disabled={isPending}
           >
-            {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+            {isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
             Registrati
           </Button>
         </form>

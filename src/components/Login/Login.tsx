@@ -25,7 +25,7 @@ export const Login = () => {
       password: '',
     },
   });
-  const { loginUser, isLoading } = useLogin();
+  const { loginUser, isPending } = useLogin();
 
   const loginUserHandler = loginForm.handleSubmit(
     (values) => {
@@ -90,9 +90,9 @@ export const Login = () => {
           <Button
             type="submit"
             className="mx-auto mb-4 w-5/12"
-            disabled={isLoading}
+            disabled={isPending}
           >
-            {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+            {isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
             Accedi
           </Button>
         </form>

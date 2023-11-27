@@ -17,7 +17,7 @@ import { useState } from 'react';
 
 const DeleteAccountDialog = () => {
   const authUser = useUserContext();
-  const { mutateAsync: deleteUser, isLoading } = useDeleteUserMutation();
+  const { mutateAsync: deleteUser, isPending } = useDeleteUserMutation();
   const [open, setOpen] = useState(false);
 
   if (!authUser) {
@@ -47,9 +47,9 @@ const DeleteAccountDialog = () => {
               await deleteUser(authUser.username).catch();
               setOpen(false);
             }}
-            disabled={isLoading}
+            disabled={isPending}
           >
-            {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+            {isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
             Continua
           </AlertDialogAction>
         </AlertDialogFooter>

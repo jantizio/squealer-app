@@ -9,7 +9,7 @@ import DeleteAccountDialog from './DeleteAccountDialog';
 
 export const Account = () => {
   const authUser = useUserContext();
-  const { logoutUser, isLoading: isLogoutLoading } = useLogout();
+  const { logoutUser, isPending: isLogoutLoading } = useLogout();
 
   if (!authUser) {
     throw new Error('CurrentUserContext: No value provided');

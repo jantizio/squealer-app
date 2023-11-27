@@ -27,7 +27,7 @@ export const useChannelQuery = (channelName: string, enabled?: boolean) => {
     initialData: () => {
       // seeding data to the cache has the problem that the data might be undefined in success state
       return queryClient
-        .getQueriesData<channel_t[]>(channelsKey.lists())
+        .getQueriesData<channel_t[]>({ queryKey: channelsKey.lists() })
         .map(
           ([, channels]) =>
             channels?.find((channel) => channel.name === channelName),

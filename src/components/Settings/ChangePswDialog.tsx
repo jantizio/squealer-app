@@ -34,7 +34,7 @@ export const ChangePswDialog = () => {
   if (!authUser) {
     throw new Error('CurrentUserContext: No value provided');
   }
-  const { mutate, isLoading, isSuccess } = useChangePasswordMutation();
+  const { mutate, isPending, isSuccess } = useChangePasswordMutation();
 
   const changePswdForm = useForm<changepswForm_t>({
     resolver: zodResolver(changepswFormSchema),
@@ -132,8 +132,8 @@ export const ChangePswDialog = () => {
               )}
             />
             <DialogFooter>
-              <Button type="submit" disabled={isLoading}>
-                {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+              <Button type="submit" disabled={isPending}>
+                {isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                 Salva
               </Button>
             </DialogFooter>
