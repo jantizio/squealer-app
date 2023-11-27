@@ -10,7 +10,7 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { H2, H3, P } from '@/components/ui/typography';
-import { useChangeSMMMutation } from '@/hooks/useUsers';
+import { useChangeSMMMutation, useRemoveSMMMutation } from '@/hooks/useUsers';
 import {
   changeSMMFormSchema,
   type changeSMMForm_t,
@@ -28,6 +28,8 @@ export const SocialMediaManager = () => {
   });
 
   const { mutate, isLoading } = useChangeSMMMutation();
+  const { mutate: removeSMM, isLoading: isRemoveLoading } =
+    useRemoveSMMMutation();
 
   if (!authUser) {
     throw new Error('CurrentUserContext: No value provided');
@@ -36,7 +38,7 @@ export const SocialMediaManager = () => {
   const changeSmmHandler = smmForm.handleSubmit((values) => {
     mutate({
       username: authUser.username,
-      smm: `@${values.SMM}`,
+      SMM: `@${values.SMM}`,
     });
   });
 
@@ -84,6 +86,17 @@ export const SocialMediaManager = () => {
               ? `Il tuo Social Media Manager è ${authUser.SMM}`
               : 'Non hai un Social Media Manager'}
           </P>
+          <Button
+            onClick={() => {
+              removeSMM({ username: authUser.username });
+            }}
+            disabled={isRemoveLoading}
+          >
+            {isRemoveLoading && (
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+            )}
+            Rimuovi
+          </Button>
         </section>
       </section>
     </>

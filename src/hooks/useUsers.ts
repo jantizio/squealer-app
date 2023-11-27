@@ -1,4 +1,9 @@
-import { changeUserPassword, changeUserSMM, deleteUser } from '@/api/users';
+import {
+  changeUserPassword,
+  changeUserSMM,
+  deleteUser,
+  removeUserSMM,
+} from '@/api/users';
 import { useLogout } from '@/lib/auth';
 import type { userRead_t } from '@/utils/types';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
@@ -47,7 +52,29 @@ export const useChangeSMMMutation = () => {
         ['authenticated-user'],
         (oldData) => {
           if (!oldData) return oldData;
-          return { ...oldData, SMM: variables.smm };
+          return { ...oldData, SMM: variables.SMM };
+        },
+      );
+    },
+    meta: {
+      errorMessages: {
+        generic: 'Qualcosa è andato storto, riprova più tardi',
+      },
+    },
+  });
+};
+
+export const useRemoveSMMMutation = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: removeUserSMM,
+    onSuccess: () => {
+      toast.success('Social Media Manager rimosso con successo');
+      queryClient.setQueryData<userRead_t>(
+        ['authenticated-user'],
+        (oldData) => {
+          if (!oldData) return oldData;
+          return { ...oldData, SMM: null };
         },
       );
     },
