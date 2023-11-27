@@ -1,6 +1,5 @@
 import { axios } from '@/lib/axios';
 import { squealReadSchema } from '@/schema/shared-schema/squealValidators';
-import { run } from '@/utils';
 import type {
   SquealsQueryContext,
   squealOperation_t,
@@ -18,12 +17,8 @@ export const getSqueals = async ({
   const channelQuery = channelName
     ? `&channel=${encodeURIComponent(channelName)}`
     : '';
-  const filterQuery = run(() => {
-    // TODO: this filter is changing, so we need to update this
-    if (!filter) return '';
-    if (filter.startsWith('@')) return `&mention=${encodeURIComponent(filter)}`;
-    else return `&query=${encodeURIComponent(filter)}`;
-  });
+  
+  const filterQuery = filter ? `&query=${encodeURIComponent(filter)}` : '';
 
   const response = await axios.get<unknown[]>(
     `/squeals/?page=${page}${authorQuery}${channelQuery}${filterQuery}`,

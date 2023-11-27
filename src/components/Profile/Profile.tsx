@@ -20,9 +20,7 @@ export const Profile = () => {
     lastname,
     type,
     SMM,
-    verified,
     quota,
-    subscriptions,
   } = authUser;
 
   const actualD = quota.maxD - quota.actualD;
