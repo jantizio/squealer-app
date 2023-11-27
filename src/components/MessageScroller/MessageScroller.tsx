@@ -1,10 +1,9 @@
 import { Message } from '@/components/Message';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Skeleton } from '@/components/ui/skeleton';
-import { useInfiniteScroll } from '@/hooks/useInfiniteScroll';
-import { AlertCircle, Loader2, Frown } from 'lucide-react';
 import { H1, Large } from '@/components/ui/typography';
-import type { squealRead_t } from '@/utils/types';
+import { useInfiniteScroll } from '@/hooks/useInfiniteScroll';
+import { AlertCircle, Frown, Loader2 } from 'lucide-react';
 
 type Props = Readonly<{
   filter?: string;
@@ -19,11 +18,9 @@ export const MessageScroller = ({ filter, author, channelName }: Props) => {
     channelName,
   });
 
-  const squealsList2 = data?.pages;
+  const squealsList = data?.pages;
 
-  if (squealsList2) {
-    const squealsList = [...mockData, ...squealsList2];
-
+  if (squealsList) {
     if (squealsList.length > 0)
       return (
         <div className="container mt-14">
@@ -76,37 +73,3 @@ export const MessageScroller = ({ filter, author, channelName }: Props) => {
     </div>
   );
 };
-
-// TODO: remove mock data
-const mockData: squealRead_t[] = [
-  {
-    id: '1',
-    author: '@Giovanni',
-    body: {
-      type: 'geo',
-      content: {
-        type: 'FeatureCollection',
-        features: [
-          {
-            type: 'Feature',
-            properties: {
-              title: 'Mapbox',
-              popup: 'Washington, D.C.',
-            },
-            geometry: {
-              type: 'Point',
-              coordinates: [-77.032, 38.913],
-            },
-          },
-        ],
-        center: [12.492507, 41.890251],
-      },
-    },
-    category: [],
-    datetime: new Date(),
-    impressions: 200000000,
-    negative_reaction: 0,
-    positive_reaction: 0,
-    receivers: ['§animals', '@marco'],
-  },
-];
