@@ -4,7 +4,7 @@ import { QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import { Toaster as SonnerToaster } from 'sonner';
+import { Toaster as SonnerToaster } from '@/components/ui/sonner';
 import App from './App.tsx';
 import './index.css';
 
@@ -13,7 +13,7 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
     <QueryClientProvider client={queryClient}>
       <ThemeProvider>
         <App />
-        <SonnerToaster richColors position="bottom-left" />
+        <SonnerToaster position="bottom-left" />
       </ThemeProvider>
       <ReactQueryDevtools initialIsOpen={false} />
     </QueryClientProvider>
