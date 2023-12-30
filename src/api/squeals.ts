@@ -17,7 +17,7 @@ export const getSqueals = async ({
   const channelQuery = channelName
     ? `&channel=${encodeURIComponent(channelName)}`
     : '';
-  
+
   const filterQuery = filter ? `&query=${encodeURIComponent(filter)}` : '';
 
   const response = await axios.get<unknown[]>(

@@ -1,12 +1,8 @@
 import { z } from 'zod';
-import {
-  squealWriteSchema,
-  mediaBody,
-  textBody,
-  geoBody,
-} from './shared-schema/squealValidators';
-import { receiverString } from './shared-schema/utils/global';
+import { squealWriteSchema } from './shared-schema/squealValidators';
 import { featureCollectionSchema } from './shared-schema/utils/geojson';
+import { receiverString } from './shared-schema/utils/global';
+import { geoBody, mediaBody, textBody } from './shared-schema/utils/squealBody';
 
 export const squealFormSchema = squealWriteSchema
   .extend({
