@@ -30,3 +30,13 @@ export function formatNumber(num: number) {
     ? (num / item.value).toFixed(0).replace(rx, '$1') + item.symbol
     : '0';
 }
+
+import { formatDistanceToNowStrict } from 'date-fns';
+import { it } from 'date-fns/locale';
+
+export function formatDate(date: Date | string) {
+  return formatDistanceToNowStrict(new Date(date), {
+    addSuffix: true,
+    locale: it,
+  });
+}

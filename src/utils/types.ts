@@ -9,6 +9,10 @@ import type {
   squealWrite_t,
 } from '@/schema/shared-schema/squealValidators';
 import type {
+  commentRead_t,
+  commentWrite_t,
+} from '@/schema/shared-schema/commentValidators';
+import type {
   userRead_t,
   userWrite_t,
 } from '@/schema/shared-schema/userValidators';
@@ -56,6 +60,8 @@ export type {
   quota_t,
   squealRead_t,
   squealWrite_t,
+  commentRead_t,
+  commentWrite_t,
   userRead_t,
   userType_t,
   userWrite_t,

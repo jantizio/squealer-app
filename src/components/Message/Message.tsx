@@ -1,14 +1,19 @@
+import { CommentList } from '@/components/CommentList';
+import { MapComponent } from '@/components/MapComponent';
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from '@/components/ui/accordion';
 import { Button } from '@/components/ui/button';
 import { Large, Muted, P } from '@/components/ui/typography';
 import { useIsAuthenticated } from '@/hooks/useIsAuthenticated';
 import { useUpdateSquealMutation } from '@/hooks/useSqueals';
-import { formatNumber } from '@/utils';
+import { formatDate, formatNumber } from '@/utils';
 import type { squealRead_t } from '@/utils/types';
-import { formatDistanceToNowStrict as formatDate } from 'date-fns';
-import { it } from 'date-fns/locale';
 import { Eye, Frown, Smile } from 'lucide-react';
 import { forwardRef, useEffect } from 'react';
-import { MapComponent } from '@/components/MapComponent';
 
 type Props = Readonly<{
   children: squealRead_t;
@@ -25,6 +30,7 @@ export const Message = forwardRef<HTMLDivElement, Props>(
       positive_reaction,
       datetime,
       receivers,
+      comments,
     } = children;
     const canReact = useIsAuthenticated();
 
@@ -33,13 +39,10 @@ export const Message = forwardRef<HTMLDivElement, Props>(
 
     useEffect(() => {
       // when the component is mounted count one view
-      // updateSqueal({ id: _id, operation: 'viewed' });
+      // updateSqueal({ id, operation: 'viewed' });
     }, []);
 
-    const date = formatDate(datetime, {
-      addSuffix: true,
-      locale: it,
-    });
+    const date = formatDate(datetime);
 
     //simbolo: •
     return (
@@ -57,7 +60,7 @@ export const Message = forwardRef<HTMLDivElement, Props>(
         </section>
         <section className="break-words">
           {body.type === 'text' && <P>{body.content}</P>}
-          {body.type === 'media' && <img src={body.content} alt="post-image" />}
+          {body.type === 'media' && <img src={body.content} alt="" />}
           {body.type === 'geo' && (
             <MapComponent
               data={body.content}
@@ -92,6 +95,16 @@ export const Message = forwardRef<HTMLDivElement, Props>(
             </span>
           </Button>
         </section>
+        {comments.length > 0 && (
+          <Accordion type="single" collapsible>
+            <AccordionItem value="comments" className="border-b-0 border-t">
+              <AccordionTrigger>Commenti</AccordionTrigger>
+              <AccordionContent asChild>
+                <CommentList comments={comments} />
+              </AccordionContent>
+            </AccordionItem>
+          </Accordion>
+        )}
       </article>
     );
   },

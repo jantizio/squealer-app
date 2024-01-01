@@ -19,7 +19,6 @@ export const useInfiniteScroll = ({ filter, author, channelName }: options) => {
     intObserver.current = new IntersectionObserver(
       (posts: IntersectionObserverEntry[]) => {
         if (posts[0]?.isIntersecting && queryObj.hasNextPage) {
-          console.log("vicini all'ultimo post");
           queryObj.fetchNextPage();
         }
       },
