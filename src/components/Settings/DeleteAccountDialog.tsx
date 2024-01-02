@@ -17,7 +17,7 @@ import { useState } from 'react';
 
 const DeleteAccountDialog = () => {
   const authUser = useUserContext();
-  const { mutateAsync: deleteUser, isPending } = useDeleteUserMutation();
+  const { mutate: deleteUser, isPending } = useDeleteUserMutation();
   const [open, setOpen] = useState(false);
 
   if (!authUser) {
@@ -42,10 +42,13 @@ const DeleteAccountDialog = () => {
           <AlertDialogCancel>Annulla</AlertDialogCancel>
           <AlertDialogAction
             variant="destructive"
-            onClick={async (event) => {
+            onClick={(event) => {
               event.preventDefault();
-              await deleteUser(authUser.username).catch();
-              setOpen(false);
+              deleteUser(authUser.username, {
+                onSuccess() {
+                  setOpen(false);
+                },
+              });
             }}
             disabled={isPending}
           >

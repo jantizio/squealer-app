@@ -7,6 +7,7 @@ import { cn, formatDate } from '@/utils';
 import type { commentRead_t } from '@/utils/types';
 import { MessageSquare } from 'lucide-react';
 import { useState } from 'react';
+import { CommentForm } from '@/components/CommentForm';
 
 type Props = Readonly<{
   children: commentRead_t;
@@ -14,8 +15,9 @@ type Props = Readonly<{
 }>;
 
 export const Comment = ({ children, className }: Props) => {
-  const { author, body, comments, datetime } = children;
+  const { author, body, comments, datetime, id } = children;
   const [isHidden, setIsHidden] = useState(false);
+  const [isReplying, setIsReplying] = useState(false);
 
   const date = formatDate(datetime);
 
@@ -51,9 +53,21 @@ export const Comment = ({ children, className }: Props) => {
         )}
         {!isHidden && (
           <section>
-            <Button variant="ghost" size="icon">
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={() => setIsReplying((p) => !p)}
+            >
               <MessageSquare />
             </Button>
+          </section>
+        )}
+        {isReplying && (
+          <section>
+            <CommentForm
+              referenceID={id}
+              onSuccessfulComment={() => setIsReplying(false)}
+            />
           </section>
         )}
         {!isHidden && <CommentList comments={comments} />}

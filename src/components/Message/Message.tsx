@@ -109,7 +109,10 @@ export const Message = forwardRef<HTMLDivElement, Props>(
         </section>
         {isReplying && (
           <section>
-            <CommentForm referenceID={id} />
+            <CommentForm
+              referenceID={id}
+              onSuccessfulComment={() => setIsReplying(false)}
+            />
           </section>
         )}
         {comments.length > 0 && (

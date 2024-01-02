@@ -24,9 +24,10 @@ import { toast } from 'sonner';
 
 type Props = Readonly<{
   referenceID: string;
+  onSuccessfulComment?: () => void;
 }>;
 
-export const CommentForm = (props: Props) => {
+export const CommentForm = ({ referenceID, onSuccessfulComment }: Props) => {
   const currentUserQuery = useUser();
   const { mutate, isPending } = useCreateCommentMutation();
 
@@ -35,7 +36,7 @@ export const CommentForm = (props: Props) => {
     resolver: zodResolver(updatedsquealSchema),
     defaultValues: {
       body: { type: 'text', content: '' },
-      reference: props.referenceID,
+      reference: referenceID,
     },
   });
 
@@ -74,7 +75,11 @@ export const CommentForm = (props: Props) => {
       },
     };
 
-    mutate(validate(newComment, commentWriteSchema));
+    mutate(validate(newComment, commentWriteSchema), {
+      onSuccess: () => {
+        onSuccessfulComment?.();
+      },
+    });
   });
 
   const currType = commentForm.getValues('body.type');
