@@ -1,9 +1,9 @@
 import type { quota_t } from '@/utils/types';
-import { squealFormSchema } from '@/schema/squealValidator';
 import { useUser } from '@/lib/auth';
 import { nonTextQuota } from '@/config';
+import type { ZodTypeAny } from 'zod';
 
-export const useSquealerQuota = () => {
+export const useSquealerQuota = <T extends ZodTypeAny>(schema: T) => {
   const { data: authUser } = useUser();
 
   const defaultData: quota_t = {
@@ -32,7 +32,7 @@ export const useSquealerQuota = () => {
   if (authUser) quota = authUser.quota;
 
   // modify the schema to check the quota
-  const updatedsquealSchema = squealFormSchema
+  const updatedsquealSchema = schema
     .refine(
       (data) => {
         if (data.body.type === 'text')

@@ -1,3 +1,4 @@
+import { CommentForm } from '@/components/CommentForm';
 import { CommentList } from '@/components/CommentList';
 import { MapComponent } from '@/components/MapComponent';
 import {
@@ -12,8 +13,8 @@ import { useIsAuthenticated } from '@/hooks/useIsAuthenticated';
 import { useUpdateSquealMutation } from '@/hooks/useSqueals';
 import { formatDate, formatNumber } from '@/utils';
 import type { squealRead_t } from '@/utils/types';
-import { Eye, Frown, Smile } from 'lucide-react';
-import { forwardRef, useEffect } from 'react';
+import { Eye, Frown, MessageSquare, Smile } from 'lucide-react';
+import { forwardRef, useEffect, useState } from 'react';
 
 type Props = Readonly<{
   children: squealRead_t;
@@ -36,6 +37,8 @@ export const Message = forwardRef<HTMLDivElement, Props>(
 
     const { mutate: updateSqueal } = useUpdateSquealMutation();
     const reacted = false; //TODO: use real data
+
+    const [isReplying, setIsReplying] = useState(false);
 
     useEffect(() => {
       // when the component is mounted count one view
@@ -70,12 +73,21 @@ export const Message = forwardRef<HTMLDivElement, Props>(
           )}
         </section>
         <section className="flex justify-end">
+          <Button
+            className="mx-2"
+            variant="ghost"
+            disabled={!canReact}
+            onClick={() => setIsReplying((p) => !p)}
+          >
+            <MessageSquare className="inline h-[1.5em] w-[1.5em]" />
+          </Button>
+
           {/* Buttons are ghost if unused, if reaction then secondary and reacted becomes primary */}
           <Button
             className="mx-2"
             variant={reacted ? 'secondary' : 'ghost'}
             disabled={!canReact || reacted}
-            onClick={() => updateSqueal({ id: id, operation: 'upvote' })}
+            onClick={() => updateSqueal({ id, operation: 'upvote' })}
           >
             <span className={reacted ? 'text-primary' : ''}>
               <Smile className="mr-2 inline h-[1.5em] w-[1.5em]" />
@@ -87,7 +99,7 @@ export const Message = forwardRef<HTMLDivElement, Props>(
             className="mx-2"
             variant={reacted ? 'secondary' : 'ghost'}
             disabled={!canReact || reacted}
-            onClick={() => updateSqueal({ id: id, operation: 'downvote' })}
+            onClick={() => updateSqueal({ id, operation: 'downvote' })}
           >
             <span className={reacted ? 'text-primary' : ''}>
               <Frown className="mr-2 inline h-[1.5em] w-[1.5em]" />
@@ -95,6 +107,11 @@ export const Message = forwardRef<HTMLDivElement, Props>(
             </span>
           </Button>
         </section>
+        {isReplying && (
+          <section>
+            <CommentForm referenceID={id} />
+          </section>
+        )}
         {comments.length > 0 && (
           <Accordion type="single" collapsible>
             <AccordionItem value="comments" className="border-b-0 border-t">

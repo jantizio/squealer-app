@@ -9,13 +9,16 @@ import { useCreateSquealMutation } from '@/hooks/useSqueals';
 import { squealWriteSchema } from '@/schema/shared-schema/squealValidators';
 import type { featureCollection_t } from '@/schema/shared-schema/utils/geojson';
 import { receiverString } from '@/schema/shared-schema/utils/global';
+import {
+  squealFormSchema,
+  type squealSchema_t,
+} from '@/schema/squealValidator';
 import { validate } from '@/utils/validators';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Loader2 } from 'lucide-react';
 import { useGeolocated } from 'react-geolocated';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
-import { z } from 'zod';
 import { BodyTextArea } from './BodyTextArea';
 import { MediaInput } from './MediaInput';
 import { ReceiverInput } from './ReceiverInput';
@@ -29,11 +32,9 @@ export const NewSqueal = () => {
     throw new Error('CurrentUserContext: No value provided');
   }
   const { mutate: createSqueal, isPending } = useCreateSquealMutation();
-  const { quota, updatedsquealSchema } = useSquealerQuota();
+  const { quota, updatedsquealSchema } = useSquealerQuota(squealFormSchema);
 
-  type updatedSquealSchema_t = z.infer<typeof updatedsquealSchema>;
-
-  const squealform = useForm<updatedSquealSchema_t>({
+  const squealform = useForm<squealSchema_t>({
     mode: 'onChange',
     resolver: zodResolver(updatedsquealSchema),
     defaultValues: {
@@ -91,18 +92,14 @@ export const NewSqueal = () => {
         }
       }
 
-      let newSqueal: object = {
+      const newSqueal: object = {
         ...values,
+        body: {
+          type: values.body.type,
+          content:
+            values.body.type === 'geo' ? values.body.geo : values.body.content,
+        },
       };
-      if (values.body.type === 'geo') {
-        newSqueal = {
-          ...newSqueal,
-          body: {
-            type: values.body.type,
-            content: values.body.geo,
-          },
-        };
-      }
 
       createSqueal(validate(newSqueal, squealWriteSchema));
     },
