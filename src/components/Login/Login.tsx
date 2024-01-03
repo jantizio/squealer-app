@@ -9,7 +9,7 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import { H1 } from '@/components/ui/typography';
+import { A, H1 } from '@/components/ui/typography';
 import { useLogin } from '@/hooks/useLogin';
 import { loginFormSchema, type loginForm_t } from '@/schema/loginValidator';
 import { type login_t } from '@/schema/shared-schema/loginValidator';
@@ -86,6 +86,11 @@ export const Login = () => {
               </FormItem>
             )}
           />
+          <div className="flex justify-end">
+            <A href="/reset_password" className="text-sm text-muted-foreground">
+              Hai dimenticato la password?
+            </A>
+          </div>
 
           <Button
             type="submit"

@@ -1,13 +1,15 @@
 import {
+  askForResetPassword,
   changeUserPassword,
   changeUserSMM,
   deleteUser,
   removeUserSMM,
+  resetPassword,
 } from '@/api/users';
-import { useLogout } from '@/lib/auth';
+import { useLogin, useLogout } from '@/lib/auth';
 import type { userRead_t } from '@/utils/types';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
 
 export const useDeleteUserMutation = () => {
@@ -80,6 +82,44 @@ export const useRemoveSMMMutation = () => {
     },
     meta: {
       errorMessages: {
+        generic: 'Qualcosa è andato storto, riprova più tardi',
+      },
+    },
+  });
+};
+
+export const useAskForPasswordResetMutation = () =>
+  useMutation({
+    mutationFn: askForResetPassword,
+    meta: {
+      errorMessages: {
+        400: 'Email o username non inseriti',
+        404: 'Utente non trovato',
+        generic: 'Qualcosa è andato storto, riprova più tardi',
+      },
+    },
+  });
+
+export const useResetPasswordMutation = () => {
+  const { mutate: login } = useLogin();
+  const location = useLocation();
+  const navigate = useNavigate();
+  const from = location.state?.from ?? '/';
+
+  return useMutation({
+    mutationFn: resetPassword,
+    onSuccess: (_, variables) => {
+      toast.success('Password cambiata con successo');
+      // there is implicit knowledge here that usernameOrEmail is a username
+      login({
+        username: variables.usernameOrEmail as `@${string}`,
+        password: variables.password,
+      });
+      navigate(from);
+    },
+    meta: {
+      errorMessages: {
+        400: 'Autorizzazione fallita, riprova più tardi',
         generic: 'Qualcosa è andato storto, riprova più tardi',
       },
     },

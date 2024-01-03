@@ -8,6 +8,7 @@ import { NewSqueal } from '@/components/NewSqueal';
 import { Profile } from '@/components/Profile';
 import { Settings } from '@/components/Settings';
 import { Signup } from '@/components/Signup';
+import { ResetPassword } from '@/components/ResetPassword';
 import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 
 function App() {
@@ -22,6 +23,7 @@ const router = createBrowserRouter([
       { index: true, element: <Homepage /> },
       { path: 'login', element: <Login /> },
       { path: 'signup', element: <Signup /> },
+      { path: 'reset_password', element: <ResetPassword /> },
       {
         path: 'channels/',
         children: [

@@ -66,3 +66,27 @@ export const removeUserSMM = async ({
 }): Promise<void> => {
   await axios.delete(`/users/${username}/smm`);
 };
+
+export const askForResetPassword = async ({
+  usernameOrEmail,
+}: {
+  usernameOrEmail: string;
+}): Promise<{ message: string; link: string }> => {
+  const response = await axios.post(`/users/${usernameOrEmail}/password_reset`);
+  return response.data;
+};
+
+export const resetPassword = async ({
+  usernameOrEmail,
+  password,
+  token,
+}: {
+  usernameOrEmail: string;
+  password: string;
+  token: string;
+}): Promise<void> => {
+  await axios.post(`/users/${usernameOrEmail}/password_reset`, {
+    password,
+    token,
+  });
+};
