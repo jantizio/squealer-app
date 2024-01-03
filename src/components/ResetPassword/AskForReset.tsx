@@ -1,4 +1,5 @@
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { Button } from '@/components/ui/button';
 import {
   Form,
   FormControl,
@@ -9,20 +10,24 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import { A } from '@/components/ui/typography';
+import { A, H1 } from '@/components/ui/typography';
 import { useAskForPasswordResetMutation } from '@/hooks/useUsers';
 import { emailString, userString } from '@/schema/shared-schema/utils/global';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { AlertTriangle, Loader2 } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
-import { Button } from '../ui/button';
 
 const schema = z.object({
   usernameOrEmail: userString.or(emailString),
 });
 
 export const AskForReset = () => {
-  const { mutate: askForReset, data } = useAskForPasswordResetMutation();
+  const {
+    mutate: askForReset,
+    data,
+    isPending,
+  } = useAskForPasswordResetMutation();
   const askForResetPasswordForm = useForm<z.infer<typeof schema>>({
     resolver: zodResolver(schema),
     defaultValues: {
@@ -31,7 +36,6 @@ export const AskForReset = () => {
   });
 
   const onSubmit = askForResetPasswordForm.handleSubmit((data) => {
-    console.log(data);
     askForReset(data, {
       onSuccess(data) {
         console.log(data);
@@ -42,7 +46,12 @@ export const AskForReset = () => {
   return (
     <>
       <Form {...askForResetPasswordForm}>
-        <form onSubmit={onSubmit}>
+        <form
+          onSubmit={onSubmit}
+          className="mx-auto flex max-w-lg flex-col rounded-md border bg-accent [&>*]:p-4"
+        >
+          <H1>Resetta la password</H1>
+
           <FormField
             control={askForResetPasswordForm.control}
             name="usernameOrEmail"
@@ -64,17 +73,23 @@ export const AskForReset = () => {
               </FormItem>
             )}
           />
-          <Button type="submit">Cambia password</Button>
+          <Button
+            type="submit"
+            className="mx-auto mb-4 w-5/12"
+            disabled={isPending}
+          >
+            {isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+            Cambia password
+          </Button>
         </form>
       </Form>
       {!!data && (
-        <Alert>
+        <Alert variant="attention" className="mx-auto mt-2 max-w-md">
+          <AlertTriangle className="h-4 w-4" />
           <AlertTitle>Link per il reset</AlertTitle>
           <AlertDescription>
             Per semplicità questo è il link che riceveresti nella mail:{' '}
-            <A href={data.link} external>
-              Clicca qui
-            </A>
+            <A href={`/reset_password?token=${data.token}`}>Clicca qui</A>
           </AlertDescription>
         </Alert>
       )}

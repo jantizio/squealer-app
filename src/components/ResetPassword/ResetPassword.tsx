@@ -6,6 +6,9 @@ export const ResetPassword = () => {
   const [searchParams] = useSearchParams();
   const token = searchParams.get('token');
 
-  if (!token) return <AskForReset />;
-  else return <InsertPassword token={token} />;
+  return (
+    <main className="container my-14">
+      {token ? <InsertPassword token={token} /> : <AskForReset />}
+    </main>
+  );
 };

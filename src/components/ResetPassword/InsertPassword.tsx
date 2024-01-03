@@ -1,24 +1,26 @@
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { Button } from '@/components/ui/button';
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
+import { H1 } from '@/components/ui/typography';
 import { useResetPasswordMutation } from '@/hooks/useUsers';
-import { useMemo } from 'react';
-import jwtDecode from 'jwt-decode';
 import {
   changepswFormSchema,
   type changepswForm_t,
 } from '@/schema/changepswValidator';
-import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Input } from '@/components/ui/input';
-import { Button } from '@/components/ui/button';
-import {
-  Form,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormControl,
-  FormMessage,
-  FormDescription,
-} from '@/components/ui/form';
-import { Loader2 } from 'lucide-react';
+import jwtDecode from 'jwt-decode';
+import { AlertCircle, Loader2 } from 'lucide-react';
+import { useMemo } from 'react';
+import { useForm } from 'react-hook-form';
 
 type Props = Readonly<{
   token: string;
@@ -42,10 +44,18 @@ export const InsertPassword = ({ token }: Props) => {
     },
   });
 
-  if (!tokenPayload) return <>Errore token non valido</>; // TODO: better error handling
+  if (!tokenPayload)
+    return (
+      <Alert variant="destructive" className="container mt-14 w-11/12 max-w-md">
+        <AlertCircle className="h-4 w-4" />
+        <AlertTitle>Errore</AlertTitle>
+        <AlertDescription>
+          Autenticazione non riuscita, torna indietro e riprova.
+        </AlertDescription>
+      </Alert>
+    );
 
   const resetPswHandler = resetPasswordForm.handleSubmit((data) => {
-    console.log(data);
     resetPsw({
       usernameOrEmail: tokenPayload.username,
       password: data.password,
@@ -55,7 +65,12 @@ export const InsertPassword = ({ token }: Props) => {
 
   return (
     <Form {...resetPasswordForm}>
-      <form onSubmit={resetPswHandler} className="flex flex-col gap-4 py-4">
+      <form
+        onSubmit={resetPswHandler}
+        className="mx-auto flex max-w-lg flex-col rounded-md border bg-accent [&>*]:p-4"
+      >
+        <H1>Resetta la password</H1>
+
         <FormField
           control={resetPasswordForm.control}
           name="password"
@@ -95,7 +110,11 @@ export const InsertPassword = ({ token }: Props) => {
           )}
         />
 
-        <Button type="submit" disabled={isPending}>
+        <Button
+          type="submit"
+          className="mx-auto mb-4 w-5/12"
+          disabled={isPending}
+        >
           {isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
           Salva
         </Button>

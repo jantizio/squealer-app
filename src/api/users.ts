@@ -71,7 +71,7 @@ export const askForResetPassword = async ({
   usernameOrEmail,
 }: {
   usernameOrEmail: string;
-}): Promise<{ message: string; link: string }> => {
+}): Promise<{ message: string; link: string; token: string }> => {
   const response = await axios.post(`/users/${usernameOrEmail}/password_reset`);
   return response.data;
 };
