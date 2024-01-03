@@ -9,6 +9,7 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
+import { InputAt } from '@/components/ui/input-at';
 import { A, H1 } from '@/components/ui/typography';
 import { useLogin } from '@/hooks/useLogin';
 import { loginFormSchema, type loginForm_t } from '@/schema/loginValidator';
@@ -54,12 +55,10 @@ export const Login = () => {
               <FormItem>
                 <FormLabel>Nome Utente</FormLabel>
                 <FormControl>
-                  <div className="relative before:pointer-events-none before:absolute before:left-3 before:top-[20%] before:text-muted-foreground before:content-['@'] [&>input]:pl-7">
-                    <Input
-                      {...field}
-                      placeholder="Inserisci il tuo username..."
-                    />
-                  </div>
+                  <InputAt
+                    {...field}
+                    placeholder="Inserisci il tuo username..."
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>

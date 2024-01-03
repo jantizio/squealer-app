@@ -8,7 +8,7 @@ import {
   FormItem,
   FormMessage,
 } from '@/components/ui/form';
-import { Input } from '@/components/ui/input';
+import { InputAt } from '@/components/ui/input-at';
 import { H2, H3, P } from '@/components/ui/typography';
 import { useChangeSMMMutation, useRemoveSMMMutation } from '@/hooks/useUsers';
 import {
@@ -57,12 +57,10 @@ export const SocialMediaManager = () => {
                 render={({ field }) => (
                   <FormItem>
                     <FormControl>
-                      <div className="relative before:pointer-events-none before:absolute before:left-3 before:top-[20%] before:text-muted-foreground before:content-['@'] [&>input]:pl-7">
-                        <Input
-                          {...field}
-                          placeholder="username del tuo nuovo SMM"
-                        />
-                      </div>
+                      <InputAt
+                        {...field}
+                        placeholder="username del tuo nuovo SMM"
+                      />
                     </FormControl>
                     <FormDescription>
                       Inserisci l'username del tuo Social Media Manager

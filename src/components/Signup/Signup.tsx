@@ -8,16 +8,17 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
+import { InputAt } from '@/components/ui/input-at';
 import { H1 } from '@/components/ui/typography';
 import { useRegister } from '@/hooks/useRegister';
-import type { userWrite_t } from '@/utils/types';
 import {
   registerFormSchema,
   type registerForm_t,
 } from '@/schema/registerValidator';
+import type { userWrite_t } from '@/utils/types';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useForm } from 'react-hook-form';
 import { Loader2 } from 'lucide-react';
+import { useForm } from 'react-hook-form';
 
 export const Signup = () => {
   const signupForm = useForm<registerForm_t>({
@@ -77,12 +78,10 @@ export const Signup = () => {
               <FormItem>
                 <FormLabel>Nome Utente</FormLabel>
                 <FormControl>
-                  <div className="relative before:pointer-events-none before:absolute before:left-3 before:top-[20%] before:text-muted-foreground before:content-['@'] [&>input]:pl-7">
-                    <Input
-                      {...field}
-                      placeholder="Inserisci il tuo username..."
-                    />
-                  </div>
+                  <InputAt
+                    {...field}
+                    placeholder="Inserisci il tuo username..."
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
