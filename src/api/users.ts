@@ -43,9 +43,10 @@ export const changeUserPassword = async ({
   oldPassword: string;
   password: string;
 }): Promise<void> => {
-  // await axios.patch(`/users/${username}/password`, { oldPassword, password });
-  await new Promise((resolve) => setTimeout(resolve, 1000)); // TODO: set the real api call
-  console.log('changeUserPassword', username, oldPassword, password);
+  await axios.patch(`/users/${username}/password`, {
+    oldPassword,
+    newPassword: password,
+  });
 };
 
 export const changeUserSMM = async ({
