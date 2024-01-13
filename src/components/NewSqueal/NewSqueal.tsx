@@ -40,9 +40,7 @@ export const NewSqueal = () => {
     defaultValues: {
       receiver: '',
       receivers: [],
-      author: authUser.username,
       body: { type: 'text', content: '' },
-      category: [],
     },
   });
 
