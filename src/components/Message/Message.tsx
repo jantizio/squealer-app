@@ -8,13 +8,14 @@ import {
   AccordionTrigger,
 } from '@/components/ui/accordion';
 import { Button } from '@/components/ui/button';
-import { Large, Muted, P } from '@/components/ui/typography';
+import { A, Large, Muted, P } from '@/components/ui/typography';
 import { useIsAuthenticated } from '@/hooks/useIsAuthenticated';
 import { useUpdateSquealMutation } from '@/hooks/useSqueals';
+import { urlRegex } from '@/schema/shared-schema/utils/regex';
 import { formatDate, formatNumber } from '@/utils';
 import type { squealRead_t } from '@/utils/types';
 import { Eye, Frown, MessageSquare, Smile } from 'lucide-react';
-import { forwardRef, useEffect, useState } from 'react';
+import { forwardRef, useEffect, useMemo, useState } from 'react';
 
 type Props = Readonly<{
   children: squealRead_t;
@@ -32,11 +33,11 @@ export const Message = forwardRef<HTMLDivElement, Props>(
       datetime,
       receivers,
       comments,
+      reacted,
     } = children;
     const canReact = useIsAuthenticated();
 
     const { mutate: updateSqueal } = useUpdateSquealMutation();
-    const reacted = false; //TODO: use real data
 
     const [isReplying, setIsReplying] = useState(false);
 
@@ -46,6 +47,20 @@ export const Message = forwardRef<HTMLDivElement, Props>(
     }, []);
 
     const date = formatDate(datetime);
+
+    const contentWithLinks = useMemo(() => {
+      if (body.type !== 'text') return [];
+      const segments = body.content.split(urlRegex);
+      return segments.map((segment) =>
+        urlRegex.test(segment) ? (
+          <A key={id + segment} href={segment} external>
+            {segment}
+          </A>
+        ) : (
+          segment
+        ),
+      );
+    }, [body.content]);
 
     //simbolo: •
     return (
@@ -62,8 +77,10 @@ export const Message = forwardRef<HTMLDivElement, Props>(
           </Muted>
         </section>
         <section className="break-words">
-          {body.type === 'text' && <P>{body.content}</P>}
-          {body.type === 'media' && <img src={body.content} alt="" className='mx-auto' />}
+          {body.type === 'text' && <P>{contentWithLinks}</P>}
+          {body.type === 'media' && (
+            <img src={body.content} alt="" className="mx-auto" />
+          )}
           {body.type === 'geo' && (
             <MapComponent
               data={body.content}

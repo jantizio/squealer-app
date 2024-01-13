@@ -1,13 +1,14 @@
+import { CommentForm } from '@/components/CommentForm';
 import { CommentList } from '@/components/CommentList';
 import { MapComponent } from '@/components/MapComponent';
 import { Button } from '@/components/ui/button';
 import { ButtonLine } from '@/components/ui/button-line';
-import { Muted, P } from '@/components/ui/typography';
+import { A, Muted, P } from '@/components/ui/typography';
+import { urlRegex } from '@/schema/shared-schema/utils/regex';
 import { cn, formatDate } from '@/utils';
 import type { commentRead_t } from '@/utils/types';
 import { MessageSquare } from 'lucide-react';
-import { useState } from 'react';
-import { CommentForm } from '@/components/CommentForm';
+import { useMemo, useState } from 'react';
 
 type Props = Readonly<{
   children: commentRead_t;
@@ -20,6 +21,20 @@ export const Comment = ({ children, className }: Props) => {
   const [isReplying, setIsReplying] = useState(false);
 
   const date = formatDate(datetime);
+
+  const contentWithLinks = useMemo(() => {
+    if (body.type !== 'text') return [];
+    const segments = body.content.split(urlRegex);
+    return segments.map((segment) =>
+      urlRegex.test(segment) ? (
+        <A key={id + segment} href={segment} external>
+          {segment}
+        </A>
+      ) : (
+        segment
+      ),
+    );
+  }, [body.content]);
 
   return (
     <div className="flex">
@@ -40,8 +55,10 @@ export const Comment = ({ children, className }: Props) => {
         </section>
         {!isHidden && (
           <section className="break-words">
-            {body.type === 'text' && <P>{body.content}</P>}
-            {body.type === 'media' && <img src={body.content} alt="" />}
+            {body.type === 'text' && <P>{contentWithLinks}</P>}
+            {body.type === 'media' && (
+              <img src={body.content} alt="" className="mx-auto" />
+            )}
             {body.type === 'geo' && (
               <MapComponent
                 data={body.content}

@@ -73,18 +73,6 @@ export function A({
   href,
   external,
 }: Props_t & { href: string; external?: boolean }) {
-  if (external)
-    return (
-      <a
-        href={href}
-        className={cn(
-          'font-medium text-primary underline underline-offset-4',
-          className,
-        )}
-      >
-        {children}
-      </a>
-    );
   return (
     <Link
       to={href}
@@ -92,6 +80,8 @@ export function A({
         'font-medium text-primary underline underline-offset-4',
         className,
       )}
+      target={external ? '_blank' : undefined}
+      rel={external ? 'noopener noreferrer' : undefined}
     >
       {children}
     </Link>
