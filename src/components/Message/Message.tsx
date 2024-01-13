@@ -63,7 +63,7 @@ export const Message = forwardRef<HTMLDivElement, Props>(
         </section>
         <section className="break-words">
           {body.type === 'text' && <P>{body.content}</P>}
-          {body.type === 'media' && <img src={body.content} alt="" />}
+          {body.type === 'media' && <img src={body.content} alt="" className='mx-auto' />}
           {body.type === 'geo' && (
             <MapComponent
               data={body.content}
