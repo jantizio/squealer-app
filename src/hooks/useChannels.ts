@@ -43,6 +43,7 @@ export const useSubscribeChannelMutation = () => {
   return useMutation({
     mutationFn: subscribeChannel,
     onSuccess: (_, { channelName, op }) => {
+      // change subscribed/unsubscribed state in the cache
       queryClient.setQueryData<channel_t>(
         channelsKey.specific(channelName),
         (old) => {
@@ -53,6 +54,11 @@ export const useSubscribeChannelMutation = () => {
           };
         },
       );
+
+      // change the list of subscribed channels in the cache
+      queryClient.invalidateQueries({
+        queryKey: channelsKey.filter('subscribed'),
+      });
     },
   });
 };
