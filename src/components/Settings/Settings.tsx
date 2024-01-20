@@ -3,6 +3,7 @@ import { LoggedHeader } from '@/components/Header/LoggedHeader';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { H1 } from '@/components/ui/typography';
 import { Account } from './Account';
+import { Preferences } from './Preferences';
 import { SocialMediaManager } from './SocialMediaManager';
 
 type settingsPage = {
@@ -21,6 +22,11 @@ export const Settings = () => {
     {
       category: 'Account',
       component: <Account />,
+      hasPermission: true,
+    },
+    {
+      category: 'Preferenze',
+      component: <Preferences />,
       hasPermission: true,
     },
     {
