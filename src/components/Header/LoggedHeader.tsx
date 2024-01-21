@@ -88,6 +88,22 @@ export const LoggedHeader = ({ isHome, setFilter }: Props) => {
               <span>Impostazioni</span>
             </Link>
           </DropdownMenuItem>
+          {authUser?.type === 'professional' && (
+            <DropdownMenuItem asChild>
+              <Link to="/smm" reloadDocument>
+                <Settings className="mr-2 h-4 w-4" />
+                <span>Social Media Manager App</span>
+              </Link>
+            </DropdownMenuItem>
+          )}
+          {authUser?.type === 'moderator' && (
+            <DropdownMenuItem asChild>
+              <Link to="/mod" reloadDocument>
+                <Settings className="mr-2 h-4 w-4" />
+                <span>Moderator App</span>
+              </Link>
+            </DropdownMenuItem>
+          )}
           <DropdownMenuItem onClick={() => logoutUser({})}>
             <LogOut className="mr-2 h-4 w-4" />
             <span>Esci</span>
