@@ -55,6 +55,11 @@ export const getSqueal = async ({
   return validate(response.data, squealReadSchema);
 };
 
+export const getNotifications = async (): Promise<squealRead_t[]> => {
+  const response = await axios.get<unknown>('/users/me/notifications');
+  return validate(response.data, z.array(squealReadSchema));
+};
+
 export const deleteSqueal = async (id: string): Promise<void> => {
   await axios.delete(`/squeals/${id}`);
 };

@@ -1,5 +1,6 @@
 import {
   createSqueal,
+  getNotifications,
   getSqueal,
   getSqueals,
   updateSqueal,
@@ -17,6 +18,8 @@ import { isValidationErrorLike } from 'zod-validation-error';
 
 export const squealsKey = {
   all: [{ scope: 'squeals' }] as const,
+  notifications: () =>
+    [{ ...squealsKey.all[0], type: 'notifications' }] as const,
   lists: () => [{ ...squealsKey.all[0], type: 'lists' }] as const,
   filter: (
     filter: string = '',
@@ -49,6 +52,12 @@ export const useSquealQuery = (id: string) =>
   useQuery({
     queryKey: squealsKey.specific(id),
     queryFn: getSqueal,
+  });
+
+export const useNotificationsQuery = () =>
+  useQuery({
+    queryKey: squealsKey.notifications(),
+    queryFn: getNotifications,
   });
 
 export const useUpdateSquealMutation = () => {
