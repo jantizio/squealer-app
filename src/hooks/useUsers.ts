@@ -1,5 +1,6 @@
 import {
   askForResetPassword,
+  buyUserQuota,
   changeUserPassword,
   changeUserSMM,
   deleteUser,
@@ -125,3 +126,19 @@ export const useResetPasswordMutation = () => {
     },
   });
 };
+
+export const buyQuotaMutation = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: buyUserQuota,
+    onSuccess: (newUser) => {
+      queryClient.setQueryData(['authenticated-user'], newUser);
+      toast.success('Quota acquistata con successo');
+    },
+    meta: {
+      errorMessages: {
+        generic: 'Qualcosa è andato storto, riprova più tardi',
+      },
+    },
+  });
+}

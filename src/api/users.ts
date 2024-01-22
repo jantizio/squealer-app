@@ -1,5 +1,7 @@
 import { axios } from '@/lib/axios';
-import type { userRead_t, userWrite_t, login_t } from '@/utils/types';
+import { userReadSchema } from '@/schema/shared-schema/userValidators';
+import type { login_t, userRead_t, userWrite_t } from '@/utils/types';
+import { validate } from '@/utils/validators';
 
 export const getUser = async (
   username?: login_t['username'],
@@ -89,4 +91,21 @@ export const resetPassword = async ({
     password,
     token,
   });
+};
+
+export const buyUserQuota = async ({
+  maxD,
+  maxW,
+  maxM
+}: {
+  maxD: number;
+  maxW: number;
+  maxM: number;
+}): Promise<userRead_t> => {
+  const response = await axios.post(`/users/me/quota/buy`, {
+    maxD,
+    maxW,
+    maxM
+  });
+  return validate(response.data, userReadSchema);
 };
