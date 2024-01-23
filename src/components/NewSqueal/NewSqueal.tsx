@@ -4,6 +4,8 @@ import { LoggedHeader } from '@/components/Header/LoggedHeader';
 import { MapComponent } from '@/components/MapComponent';
 import { Button } from '@/components/ui/button';
 import { Form, FormField, FormItem, FormMessage } from '@/components/ui/form';
+import { Separator } from '@/components/ui/separator';
+import { H1, H2 } from '@/components/ui/typography';
 import { useSquealerQuota } from '@/hooks/useSquealerQuota';
 import { useCreateSquealMutation } from '@/hooks/useSqueals';
 import { squealWriteSchema } from '@/schema/shared-schema/squealValidators';
@@ -108,15 +110,15 @@ export const NewSqueal = () => {
   const currContent = squealform.getValues('body.content');
   const currMedia = squealform.getValues('body.file');
   const currGeo = squealform.getValues('body.geo');
-  const form = squealform.watch();
 
   return (
     <>
       <LoggedHeader />
+      <H1 className="mb-7 text-center">Scrivi Nuovo Squeal</H1>
       <Form {...squealform}>
         <form
           onSubmit={createSquealHandler}
-          className="container grid w-full gap-2"
+          className="container grid w-full max-w-2xl gap-2"
         >
           <FormField
             control={squealform.control}
@@ -258,7 +260,10 @@ export const NewSqueal = () => {
           </Button>
         </form>
       </Form>
-      <pre>{JSON.stringify(form, null, 2)}</pre>
+      <Separator className="mx-auto my-5 max-w-lg" />
+      <H2 className="mb-7 border-none text-center">
+        Oppure manda una posizione temporizzata
+      </H2>
     </>
   );
 };
