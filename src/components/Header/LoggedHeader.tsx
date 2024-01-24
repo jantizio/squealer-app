@@ -73,7 +73,7 @@ export const LoggedHeader = ({ isHome, setFilter }: Props) => {
       <section className="flex md:order-last">
         {isHome && (
           <Popover>
-            <PopoverTrigger>
+            <PopoverTrigger asChild>
               <Button variant="outline" size="icon" className="md:ml-3">
                 {notifications === undefined ? <Bell /> : <BellDot />}
               </Button>
