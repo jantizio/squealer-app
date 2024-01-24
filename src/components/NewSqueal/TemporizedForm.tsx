@@ -129,6 +129,16 @@ export const TemporizedForm = () => {
             ),
             cookieOptions,
           );
+
+          const thisInterval = setInterval(
+            () => {
+              console.log('send squeal', newTempSquealCookie.referenceID);
+              if (new Date() > newTempSquealCookie.endTime) {
+                clearInterval(thisInterval);
+              }
+            },
+            newTempSquealCookie.interval * 60 * 1000,
+          );
         },
       });
     },

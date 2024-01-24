@@ -6,5 +6,5 @@ export const nonTextQuota = 80; //TODO: it should be 125
 export const tempSquealCookieKey = 'temporizedSqueals';
 export const cookieOptions: CookieAttributes = {
   expires: new Date(2147483647 * 1000), // arbitrarily large expiration date
-  sameSite: 'Strict',
+  sameSite: 'Lax',
 };
