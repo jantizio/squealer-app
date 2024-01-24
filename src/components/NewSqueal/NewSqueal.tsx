@@ -27,6 +27,7 @@ import { ReceiverInput } from './ReceiverInput';
 import { ReceiversCheckbox } from './ReceiversCheckbox';
 import { TypeSelect } from './TypeSelect';
 import { UrlInput } from './UrlInput';
+import { TemporizedForm } from './TemporizedForm';
 
 export const NewSqueal = () => {
   const authUser = useUserContext();
@@ -134,9 +135,9 @@ export const NewSqueal = () => {
             render={({ field }) => {
               return (
                 <FormItem>
-                  {field.value.map((receiver) => (
+                  {field.value.map((receiver, i) => (
                     <FormField
-                      key={receiver}
+                      key={receiver + i}
                       control={squealform.control}
                       name="receivers"
                       render={({ field }) => (
@@ -264,6 +265,7 @@ export const NewSqueal = () => {
       <H2 className="mb-7 border-none text-center">
         Oppure manda una posizione temporizzata
       </H2>
+      <TemporizedForm />
     </>
   );
 };

@@ -1,7 +1,7 @@
 import { z } from 'zod';
 import { squealWriteSchema } from './shared-schema/squealValidators';
 import { featureCollectionSchema } from './shared-schema/utils/geojson';
-import { receiverString } from './shared-schema/utils/global';
+import { receiverString, receiversArray } from './shared-schema/utils/global';
 import { geoBody, mediaBody, textBody } from './shared-schema/utils/squealBody';
 import { commentWriteSchema } from './shared-schema/commentValidators';
 
@@ -71,3 +71,28 @@ export const commentFormSchema = commentWriteSchema
   });
 
 export type commentSchema_t = z.infer<typeof commentFormSchema>;
+
+export const temporizedSquealFormSchema = z.object({
+  coords: z.object({
+    latitude: z.number(),
+    longitude: z.number(),
+  }),
+  receivers: receiversArray,
+  receiver: z.union([receiverString, z.literal('')]),
+  intervalTime: z.preprocess(
+    (val) => Number(val),
+    z.number().int().positive().min(1, { message: 'Il minimo è 1 minuto' }),
+  ),
+  endtime: z.string().refine(
+    (val) => {
+      const date = new Date(val);
+      return date > new Date();
+    },
+    { message: 'Questa data è già passata' },
+  ),
+  referenceID: z.string().optional(),
+});
+
+export type temporizedSquealSchema_t = z.infer<
+  typeof temporizedSquealFormSchema
+>;

@@ -45,5 +45,3 @@ export const ReceiverInput = <
     </FormItem>
   );
 };
-
-export default ReceiverInput;
