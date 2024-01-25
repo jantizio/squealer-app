@@ -11,8 +11,7 @@ export const getChannels = async ({
   const query = run(() => {
     if (filter === 'official') return '?official=true';
     else if (filter === 'subscribed') return '?subscribed=true';
-    else if (filter === 'direct')
-      return '?type=private'; // TODO: use the right query
+    else if (filter === 'direct') return '?type=direct';
     else return '';
   });
 

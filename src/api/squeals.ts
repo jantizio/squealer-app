@@ -14,11 +14,17 @@ export const getSqueals = async ({
   queryKey: [{ filter, channelName, author }],
   pageParam: page,
 }: SquealsQueryContext<number>['filter']): Promise<squealRead_t[]> => {
+  if (channelName.startsWith('@')) {
+    const response = await axios.get<unknown[]>(
+      `/squeals/?page=${page}&from=${encodeURIComponent(channelName)}`,
+    );
+    return validate(response.data, z.array(squealReadSchema));
+  }
+
   const authorQuery = author ? `&author=${encodeURIComponent(author)}` : '';
   const channelQuery = channelName
     ? `&channel=${encodeURIComponent(channelName)}`
     : '';
-
   const filterQuery = filter ? `&query=${encodeURIComponent(filter)}` : '';
 
   const response = await axios.get<unknown[]>(

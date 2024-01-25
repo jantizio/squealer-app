@@ -49,7 +49,7 @@ export const Channel = () => {
           variant="secondary"
           size="sm"
           onClick={() => toggleSubscribe('unsubscribe')}
-          disabled={isPending}
+          disabled={isPending || channel.type === 'direct'}
         >
           {isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
           Iscritto
@@ -60,7 +60,7 @@ export const Channel = () => {
       <Button
         size="sm"
         onClick={() => toggleSubscribe('subscribe')}
-        disabled={isPending}
+        disabled={isPending || channel?.type === 'direct'}
       >
         {isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
         Iscriviti
