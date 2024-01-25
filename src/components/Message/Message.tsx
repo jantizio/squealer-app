@@ -97,6 +97,7 @@ export const Message = forwardRef<HTMLDivElement, Props>(
             variant="ghost"
             disabled={!canReact}
             onClick={() => setIsReplying((p) => !p)}
+            aria-label="commento"
           >
             <MessageSquare className="inline h-[1.5em] w-[1.5em]" />
           </Button>
@@ -107,6 +108,7 @@ export const Message = forwardRef<HTMLDivElement, Props>(
             variant={reacted ? 'secondary' : 'ghost'}
             disabled={!canReact || reacted}
             onClick={() => updateSqueal({ id, operation: 'upvote' })}
+            aria-label="reazione positiva"
           >
             <span className={reacted ? 'text-primary' : ''}>
               <Smile className="mr-2 inline h-[1.5em] w-[1.5em]" />
@@ -119,6 +121,7 @@ export const Message = forwardRef<HTMLDivElement, Props>(
             variant={reacted ? 'secondary' : 'ghost'}
             disabled={!canReact || reacted}
             onClick={() => updateSqueal({ id, operation: 'downvote' })}
+            aria-label="reazione negativa"
           >
             <span className={reacted ? 'text-primary' : ''}>
               <Frown className="mr-2 inline h-[1.5em] w-[1.5em]" />

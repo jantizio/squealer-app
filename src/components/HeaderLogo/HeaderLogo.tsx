@@ -9,9 +9,9 @@ type Props = Readonly<{
 
 export const HeaderLogo = ({ responsive }: Props) => {
   return (
-    <Link to="/">
+    <Link to="/" aria-label="home">
       <div className="flex items-center">
-        <SquealerLogo className="h-12 w-12" />
+        <SquealerLogo className="h-12 w-12" aria-label="squealer logo" />
         <Large className={cn('m-2', { 'hidden sm:block': responsive })}>
           Squealer
         </Large>

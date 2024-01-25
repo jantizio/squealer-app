@@ -50,7 +50,12 @@ export const LoggedHeader = ({ isHome, setFilter }: Props) => {
           // Hamburger menu for mobile
           <Sheet>
             <SheetTrigger asChild>
-              <Button variant="outline" size="icon" className="md:hidden">
+              <Button
+                variant="outline"
+                size="icon"
+                className="md:hidden"
+                aria-label="menu"
+              >
                 <Menu />
               </Button>
             </SheetTrigger>
@@ -74,7 +79,12 @@ export const LoggedHeader = ({ isHome, setFilter }: Props) => {
         {isHome && (
           <Popover>
             <PopoverTrigger asChild>
-              <Button variant="outline" size="icon" className="md:ml-3">
+              <Button
+                variant="outline"
+                size="icon"
+                className="md:ml-3"
+                aria-label="notifiche"
+              >
                 {notifications === undefined ? <Bell /> : <BellDot />}
               </Button>
             </PopoverTrigger>

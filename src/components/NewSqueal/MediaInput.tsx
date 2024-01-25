@@ -46,7 +46,12 @@ export const MediaInput = <
             }}
             disabled={disabled}
           />
-          <Button onClick={reset} variant="outline" size="icon">
+          <Button
+            onClick={reset}
+            variant="outline"
+            size="icon"
+            aria-label="elimina media"
+          >
             <X />
           </Button>
         </section>

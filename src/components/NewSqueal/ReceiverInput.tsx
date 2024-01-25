@@ -36,7 +36,13 @@ export const ReceiverInput = <
         <FormControl>
           <Input {...field} />
         </FormControl>
-        <Button type="button" onClick={onClick} variant="outline" size="icon">
+        <Button
+          type="button"
+          onClick={onClick}
+          variant="outline"
+          size="icon"
+          aria-label="aggiungi destinatario"
+        >
           <Plus />
         </Button>
       </section>

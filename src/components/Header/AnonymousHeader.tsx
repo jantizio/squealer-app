@@ -26,7 +26,12 @@ export const AnonymousHeader = ({ isHome }: Props) => {
           /* Hamburger menu for mobile */
           <Sheet>
             <SheetTrigger asChild>
-              <Button variant="outline" size="icon" className="md:hidden">
+              <Button
+                variant="outline"
+                size="icon"
+                className="md:hidden"
+                aria-label="menu"
+              >
                 <Menu />
               </Button>
             </SheetTrigger>
