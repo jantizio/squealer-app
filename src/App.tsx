@@ -12,54 +12,78 @@ import { Signup } from '@/components/Signup';
 import { cookieOptions, tempSquealCookieKey } from '@/config';
 import { cookieValidator } from '@/schema/cookieValidator';
 import Cookies from 'js-cookie';
+import { useEffect } from 'react';
 import { RouterProvider, createBrowserRouter } from 'react-router-dom';
+import { useUpdateGeoPointMutation } from './hooks/useSqueals';
 
 function App() {
   /**
    * Ogni volta che l'app si carica deve controllare i cookie per gli squeal temporizzati e se ci sono fare:
    * - rinfrescare il cookie, quindi aggiornare il tempo di scadenza
    * - controllare se è il momento di inviare uno squeal e se si inviarlo
-   * - aggiornare il lastupdate dello squeal
    * - rimuove gli squeal scaduti, tramite endtime
    */
 
-  const cookie = cookieValidator.safeParse(Cookies.get(tempSquealCookieKey));
+  const { mutate: updateGeoPoint } = useUpdateGeoPointMutation();
 
-  if (cookie.success) {
+  useEffect(() => {
+    const cookie = cookieValidator.safeParse(Cookies.get(tempSquealCookieKey));
     const intervalRecord: Record<string, NodeJS.Timeout> = {};
-    Cookies.set(
-      tempSquealCookieKey,
-      JSON.stringify(cookie.data),
-      cookieOptions,
-    );
-    for (const tempSqueal of cookie.data) {
-      if (new Date() > tempSqueal.endTime) {
-        // remove squeal
-        clearInterval(intervalRecord[tempSqueal.referenceID]);
-        delete intervalRecord[tempSqueal.referenceID];
-        cookie.data = cookie.data.filter(
-          (squeal) => squeal.referenceID !== tempSqueal.referenceID,
-        );
-      } else {
-        // setup interval for squeal
-        intervalRecord[tempSqueal.referenceID] = setInterval(
-          () => {
-            console.log('send squeal', tempSqueal.referenceID);
-            if (new Date() > tempSqueal.endTime) {
-              clearInterval(intervalRecord[tempSqueal.referenceID]);
-              delete intervalRecord[tempSqueal.referenceID];
-            }
-          },
-          tempSqueal.interval * 60 * 1000,
-        );
+
+    if (cookie.success) {
+      Cookies.set(
+        tempSquealCookieKey,
+        JSON.stringify(cookie.data),
+        cookieOptions,
+      );
+
+      for (const timedSqueal of cookie.data) {
+        if (new Date() > timedSqueal.endTime) {
+          // remove squeal
+          clearInterval(intervalRecord[timedSqueal.referenceID]);
+          delete intervalRecord[timedSqueal.referenceID];
+          cookie.data = cookie.data.filter(
+            (squeal) => squeal.referenceID !== timedSqueal.referenceID,
+          );
+        } else {
+          // setup interval for squeal
+          intervalRecord[timedSqueal.referenceID] = setInterval(
+            () => {
+              if (new Date() > timedSqueal.endTime) {
+                clearInterval(intervalRecord[timedSqueal.referenceID]);
+                return;
+              }
+              navigator.geolocation.getCurrentPosition(
+                (pos) => {
+                  updateGeoPoint({
+                    id: timedSqueal.referenceID,
+                    coords: {
+                      latitude: pos.coords.latitude,
+                      longitude: pos.coords.longitude,
+                    },
+                  });
+                },
+                (err) => console.log(err),
+              );
+            },
+            timedSqueal.interval * 60 * 1000,
+          );
+        }
       }
+
+      Cookies.set(
+        tempSquealCookieKey,
+        JSON.stringify(cookie.data),
+        cookieOptions,
+      );
     }
-    Cookies.set(
-      tempSquealCookieKey,
-      JSON.stringify(cookie.data),
-      cookieOptions,
-    );
-  }
+
+    return () => {
+      for (const interval of Object.values(intervalRecord)) {
+        clearInterval(interval);
+      }
+    };
+  }, []);
 
   return <RouterProvider router={router} />;
 }

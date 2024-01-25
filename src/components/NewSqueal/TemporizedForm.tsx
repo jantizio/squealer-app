@@ -85,7 +85,6 @@ export const TemporizedForm = () => {
         longitude: coords?.longitude ?? 0,
       };
       values.referenceID = undefined;
-      console.log(values);
 
       const newSqueal: squealWrite_t = {
         receivers: values.receivers,
@@ -112,7 +111,6 @@ export const TemporizedForm = () => {
           },
         },
       };
-      console.log(newSqueal);
       mutate(validate(newSqueal, squealWriteSchema), {
         onSuccess(data) {
           // save a cookie with info for the temporized squeal
@@ -142,13 +140,18 @@ export const TemporizedForm = () => {
                 return;
               }
 
-              updateGeoPoint({
-                id: newTempSquealCookie.referenceID,
-                coords: {
-                  latitude: coords?.latitude ?? 0,
-                  longitude: coords?.longitude ?? 0,
+              navigator.geolocation.getCurrentPosition(
+                (pos) => {
+                  updateGeoPoint({
+                    id: newTempSquealCookie.referenceID,
+                    coords: {
+                      latitude: pos.coords.latitude,
+                      longitude: pos.coords.longitude,
+                    },
+                  });
                 },
-              });
+                (err) => console.log(err),
+              );
             },
             newTempSquealCookie.interval * 60 * 1000,
           );
