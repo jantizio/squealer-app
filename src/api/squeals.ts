@@ -1,5 +1,6 @@
 import { axios } from '@/lib/axios';
 import { squealReadSchema } from '@/schema/shared-schema/squealValidators';
+import { type temporizedSquealSchema_t } from '@/schema/squealValidator';
 import type {
   SquealsQueryContext,
   squealOperation_t,
@@ -73,6 +74,19 @@ export const updateSqueal = async ({
 }): Promise<squealRead_t> => {
   const response = await axios.patch<unknown>(`/squeals/${id}`, {
     op: operation,
+  });
+  return validate(response.data, squealReadSchema);
+};
+
+export const updateGeoPoint = async ({
+  id,
+  coords,
+}: {
+  id: string;
+  coords: temporizedSquealSchema_t['coords'];
+}): Promise<squealRead_t> => {
+  const response = await axios.patch<unknown>(`/squeals/${id}/geopoint`, {
+    coords,
   });
   return validate(response.data, squealReadSchema);
 };

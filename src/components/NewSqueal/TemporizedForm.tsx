@@ -10,7 +10,10 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { cookieOptions, tempSquealCookieKey } from '@/config';
-import { useCreateSquealMutation } from '@/hooks/useSqueals';
+import {
+  useCreateSquealMutation,
+  useUpdateGeoPointMutation,
+} from '@/hooks/useSqueals';
 import { cookieValidator, type cookieSchema_t } from '@/schema/cookieValidator';
 import { squealWriteSchema } from '@/schema/shared-schema/squealValidators';
 import { receiverString } from '@/schema/shared-schema/utils/global';
@@ -37,6 +40,8 @@ export const TemporizedForm = () => {
       watchPosition: true,
       isOptimisticGeolocationEnabled: false,
     });
+
+  const { mutate: updateGeoPoint } = useUpdateGeoPointMutation();
 
   const temporizedSquealForm = useForm<temporizedSquealSchema_t>({
     mode: 'onChange',
@@ -103,7 +108,7 @@ export const TemporizedForm = () => {
                 },
               },
             ],
-            center: [values.coords.longitude, values.coords.latitude],
+            center: [values.coords.latitude, values.coords.longitude],
           },
         },
       };
@@ -132,10 +137,18 @@ export const TemporizedForm = () => {
 
           const thisInterval = setInterval(
             () => {
-              console.log('send squeal', newTempSquealCookie.referenceID);
               if (new Date() > newTempSquealCookie.endTime) {
                 clearInterval(thisInterval);
+                return;
               }
+
+              updateGeoPoint({
+                id: newTempSquealCookie.referenceID,
+                coords: {
+                  latitude: coords?.latitude ?? 0,
+                  longitude: coords?.longitude ?? 0,
+                },
+              });
             },
             newTempSquealCookie.interval * 60 * 1000,
           );

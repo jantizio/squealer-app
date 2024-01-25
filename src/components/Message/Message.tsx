@@ -36,7 +36,7 @@ export const Message = forwardRef<HTMLDivElement, Props>(
       reacted,
       category,
     } = children;
-    const canReact = useIsAuthenticated() && !category.includes("automatic");
+    const canReact = useIsAuthenticated() && !category.includes('automatic');
 
     const { mutate: updateSqueal } = useUpdateSquealMutation();
 
@@ -84,6 +84,7 @@ export const Message = forwardRef<HTMLDivElement, Props>(
           )}
           {body.type === 'geo' && (
             <MapComponent
+              key={body.content.features.length}
               data={body.content}
               center={body.content.center}
               zoom={body.content.zoom}

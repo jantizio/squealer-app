@@ -3,6 +3,7 @@ import {
   getNotifications,
   getSqueal,
   getSqueals,
+  updateGeoPoint,
   updateSqueal,
 } from '@/api/squeals';
 import type { squealRead_t } from '@/utils/types';
@@ -96,3 +97,25 @@ export const useCreateSquealMutation = () =>
       },
     },
   });
+
+export const useUpdateGeoPointMutation = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: updateGeoPoint,
+    onSuccess: (newSqueal) => {
+      queryClient.setQueriesData<InfiniteData<squealRead_t[]>>(
+        { queryKey: squealsKey.lists() },
+        (oldData) => ({
+          pageParams: oldData?.pageParams ?? [],
+          pages:
+            oldData?.pages.map((page) =>
+              page.map((squeal) =>
+                squeal.id === newSqueal.id ? newSqueal : squeal,
+              ),
+            ) ?? [],
+        }),
+      );
+    },
+  });
+};
