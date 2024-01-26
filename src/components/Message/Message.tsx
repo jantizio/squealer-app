@@ -34,6 +34,7 @@ export const Message = forwardRef<HTMLDivElement, Props>(
       receivers,
       comments,
       reacted,
+      isViewed,
       category,
     } = children;
     const canReact = useIsAuthenticated() && !category.includes('automatic');
@@ -44,7 +45,7 @@ export const Message = forwardRef<HTMLDivElement, Props>(
 
     useEffect(() => {
       // when the component is mounted count one view
-      if (canReact) updateSqueal({ id, operation: 'viewed' });
+      if (canReact && !isViewed) updateSqueal({ id, operation: 'viewed' });
     }, []);
 
     const date = formatDate(datetime);
