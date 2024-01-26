@@ -9,6 +9,7 @@ export const registerFormSchema = userWriteSchema
   .extend({
     confirmPassword: z.string(),
     username: standardString,
+    isProfessional: z.boolean(),
   })
   .refine((values) => values.password === values.confirmPassword, {
     path: ['confirmPassword'],

@@ -1,7 +1,9 @@
 import { Button } from '@/components/ui/button';
+import { Checkbox } from '@/components/ui/checkbox';
 import {
   Form,
   FormControl,
+  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -28,6 +30,7 @@ export const Signup = () => {
       username: '',
       firstname: '',
       lastname: '',
+      isProfessional: false,
       password: '',
       confirmPassword: '',
     },
@@ -36,9 +39,9 @@ export const Signup = () => {
 
   const signupHandler = signupForm.handleSubmit(
     (values) => {
-      const { confirmPassword, username, ...rest } = values;
+      const { confirmPassword, username, isProfessional, ...rest } = values;
       const newUser: userWrite_t = {
-        type: 'standard',
+        type: isProfessional ? 'professional' : 'standard',
         username: `@${username}`,
         ...rest,
       };
@@ -49,7 +52,7 @@ export const Signup = () => {
   );
 
   return (
-    <main className="container my-14">
+    <main className="container my-14 pb-7">
       <Form {...signupForm}>
         <form
           onSubmit={signupHandler}
@@ -126,6 +129,10 @@ export const Signup = () => {
                     placeholder="Inserisci la tua password..."
                   />
                 </FormControl>
+                <FormDescription>
+                  La password deve essere di almeno 8 caratteri. Deve avere un
+                  carattere maiuscolo, un numero e un simbolo speciale.
+                </FormDescription>
                 <FormMessage />
               </FormItem>
             )}
@@ -144,6 +151,27 @@ export const Signup = () => {
                   />
                 </FormControl>
                 <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={signupForm.control}
+            name="isProfessional"
+            render={({ field }) => (
+              <FormItem className="flex flex-row items-start space-x-3 space-y-0 p-4">
+                <FormControl>
+                  <Checkbox
+                    checked={field.value}
+                    onCheckedChange={field.onChange}
+                  />
+                </FormControl>
+                <div className="space-y-1 leading-none">
+                  <FormLabel>Vuoi creare un account professionale?</FormLabel>
+                  <FormDescription>
+                    Un account professionale ti permetterà di accedere a
+                    funzionalità per influencer e social media manager.
+                  </FormDescription>
+                </div>
               </FormItem>
             )}
           />
