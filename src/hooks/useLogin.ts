@@ -1,6 +1,7 @@
 import { addLog } from '@/api/logs';
 import { useLogin as useLoginLib } from '@/lib/auth';
 import type { log_t } from '@/utils/types';
+import { useQueryClient } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
@@ -9,9 +10,11 @@ export const useLogin = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const from = location.state?.from ?? '/';
+  const queryClient = useQueryClient();
 
   const { mutate, ...rest } = useLoginLib({
     onSuccess() {
+      queryClient.clear();
       toast.success('Login effettuato con successo');
       navigate(from);
     },
