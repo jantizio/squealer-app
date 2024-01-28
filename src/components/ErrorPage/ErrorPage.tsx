@@ -1,6 +1,7 @@
+import { Button } from '@/components/ui/button';
+import { H1, Muted, P } from '@/components/ui/typography';
 import { errorMessage } from '@/utils/type-guards';
 import { useRouteError } from 'react-router-dom';
-import { H1, Muted, P } from '@/components/ui/typography';
 
 export const ErrorPage = () => {
   const error = useRouteError();
@@ -8,8 +9,11 @@ export const ErrorPage = () => {
   return (
     <div className="mx-auto mt-52 text-center">
       <H1>Oops!</H1>
-      <P>Sorry, an unexpected error has occurred.</P>
+      <P>Si è verificato un errore inaspettato</P>
       <Muted>{errorMessage(error)}</Muted>
+      <Button className="mt-4" onClick={() => window.location.reload()}>
+        Riprova
+      </Button>
     </div>
   );
 };
