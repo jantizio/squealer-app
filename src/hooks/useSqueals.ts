@@ -14,6 +14,7 @@ import {
   useQueryClient,
   type InfiniteData,
 } from '@tanstack/react-query';
+import { useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
 import { isValidationErrorLike } from 'zod-validation-error';
 
@@ -72,7 +73,7 @@ export const useUpdateSquealMutation = () => {
         (oldData) => ({
           pageParams: oldData?.pageParams ?? [],
           pages:
-            oldData?.pages.map((page) =>
+            oldData?.pages?.map((page) =>
               page.map((squeal) =>
                 squeal.id === newSqueal.id ? newSqueal : squeal,
               ),
@@ -83,9 +84,14 @@ export const useUpdateSquealMutation = () => {
   });
 };
 
-export const useCreateSquealMutation = () =>
-  useMutation({
+export const useCreateSquealMutation = () => {
+  const navigate = useNavigate();
+  return useMutation({
     mutationFn: createSqueal,
+    onSuccess() {
+      toast.success('Squeal postato!');
+      navigate('/');
+    },
     onError(error) {
       if (isValidationErrorLike(error)) {
         return toast.error(error.message);
@@ -97,6 +103,7 @@ export const useCreateSquealMutation = () =>
       },
     },
   });
+};
 
 export const useUpdateGeoPointMutation = () => {
   const queryClient = useQueryClient();
@@ -109,7 +116,7 @@ export const useUpdateGeoPointMutation = () => {
         (oldData) => ({
           pageParams: oldData?.pageParams ?? [],
           pages:
-            oldData?.pages.map((page) =>
+            oldData?.pages?.map((page) =>
               page.map((squeal) =>
                 squeal.id === newSqueal.id ? newSqueal : squeal,
               ),
