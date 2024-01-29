@@ -17,7 +17,6 @@ export const queryClient = new QueryClient({
         if (isValidationErrorLike(error)) {
           toast.error(error.message);
         }
-        toast.error('TODO errore');
       }
     },
   }),
